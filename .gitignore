@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+use_case_examples
+numerical_experiments/LongitudinalUpstrap
+numerical_experiments/data_processed
+numerical_experiments/results
+numerical_experiments/Rmd
