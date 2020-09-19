@@ -1,0 +1,14 @@
+
+git add .
+git commit -m 'update'
+git push -u origin master
+
+qrsh -l mem_free=50G,h_vmem=50G,h_stack=256M
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript
+git pull
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-09-19-estimate_ci_coverage_N0_N1
+
+qsub -cwd -l mem_free=50G,h_vmem=50G,h_stack=256M -N estN0_N1 -t 1-30 estimate_ci_coverage_N0_N1
+
