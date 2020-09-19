@@ -13,7 +13,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 ## args
 # arg_str <- "N0_100_N1_150_R_50_BBOOT_10000"
-as.character(args[1])
+arg_str <- as.character(args[1])
 
 ## fixed params
 #project_dir <- "/Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript"
