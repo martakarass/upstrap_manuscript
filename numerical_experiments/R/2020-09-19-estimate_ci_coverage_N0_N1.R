@@ -49,7 +49,7 @@ mat_out_rrs <- matrix(NA, nrow = R, ncol = 11)
 t_all_1 <- Sys.time()
 
 for (rr in 1:R){
-  print(rr)
+  # print(rr)
   
   # simulate observed sample
   vals      <- rnorm(n = N0, mean = 0, sd = 1)
