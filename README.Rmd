@@ -11,4 +11,4 @@ knitr::opts_chunk$set(
 )
 ```
 
-# upstrap_manuscript
+# Upstrap manuscript
