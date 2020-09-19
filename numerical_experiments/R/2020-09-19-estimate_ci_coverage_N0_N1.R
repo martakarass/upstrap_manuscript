@@ -17,7 +17,7 @@ arg_str <- as.character(args[1])
 
 ## fixed params
 #project_dir <- "/Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript"
-project_dir <- "/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments"
+project_dir <- "/users/mkaras/_PROJECTS/upstrap_manuscript"
 
 # derivative args
 N0 <- strsplit(arg_str, split = "_")[[1]][2]
