@@ -1,0 +1,29 @@
+
+git add .
+git commit -m 'update'
+git push -u origin master
+
+
+
+# running array job on cluster  ------------------------------------
+
+qrsh -l 
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript
+git pull
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-10-02-upstrap_estimate_sd
+
+qsub -cwd -l -N est_sd -t 1-30 upstrap_estimate_sd
+
+
+
+# zipping directory with results and downloading --------------------
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
+rm 2020-09-19-estimate_ci_coverage_N0_N1_results.zip 
+zip -r 2020-09-19-estimate_ci_coverage_N0_N1_results.zip 2020-09-19-estimate_ci_coverage_N0_N1_results
+
+get /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results.zip /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results.zip 
+
+
