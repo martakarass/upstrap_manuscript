@@ -29,7 +29,7 @@ N1 <- as.numeric(N1)
 R  <- as.numeric(R)
 B_boot  <- as.numeric(B_boot)
 out_fname <- paste0(arg_str, ".csv")
-out_fpath <- paste0(project_dir,"/numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results/", out_fname)
+out_fpath <- paste0(project_dir,"/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results/", out_fname)
 # message with derivative args values
 message(paste0(c("N0", "N1", "R", "B_boot"), collapse = ", "))
 message(paste0(c(N0, N1, R, B_boot), collapse = ", "))

@@ -9,3 +9,10 @@ numerical_experiments/data_processed
 numerical_experiments/results
 numerical_experiments/Rmd
 Icon
+
+# Exclude everything from the folder content, but do not exclude the folder itself
+numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results/*
+!numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results/.gitkeep 
+
+numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results/*
+!numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results/.gitkeep 

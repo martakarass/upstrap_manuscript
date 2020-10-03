@@ -1,0 +1,149 @@
+---
+title: "SE of SE(X-bar) - follow-up 1"
+author: 'Marta Karas'
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Methods: se of se(X-bar)
+
+We agree that
+
+$$
+\begin{aligned}
+\hat{S E}\left(\bar{X}_{1}\right) & =\hat{s}_{1} / \sqrt{n_{1}} \\
+\operatorname{Var}\left[\hat{S E}\left(\bar{X}_{1}\right)\right] & =\operatorname{Var}\left[\hat{s}_{1} / \sqrt{n_{1}}\right]=\operatorname{Var}\left(\hat{s}_{1}\right) / n_{1}
+\end{aligned}
+$$
+
+#### Approximate solution (Marta's attempt)
+
+Assuming $X_i \sim N(\mu, \sigma^2)$, we arrived at 
+
+$$
+\begin{aligned}
+\operatorname{Var}\left(\hat{s}_{1}\right)
+&  \approx \sqrt{Var(s_1^2)} \\
+\operatorname{Var}\left[\hat{S E}\left(\bar{X}_{1}\right)\right]
+&  \approx  \left( \sqrt{\operatorname{Var}\left(\hat{s}_{1}^{2}\right)} \right) / n_1
+= \sqrt{\frac{2 \sigma^{4}}{\left(n_1-1\right) n_1^{2}}} \\
+& = \frac{\sigma^2}{n_1} \cdot \sqrt{\frac{2}{\left(n_1-1\right) }}% \\
+%& =  \frac{\sigma^2}{n_1} \cdot c_{4}(n_1) \cdot \frac{\Gamma((n_1-1) / 2)}{\Gamma(n_1 / 2)}
+\end{aligned}
+$$
+
+#### Exact solution (Lacey's attempt)
+
+Below we will use notation
+
+$$
+\begin{aligned}
+c_{4} & = \sqrt{\frac{2}{n-1}} \cdot  \frac{\Gamma\left(\frac{n}{2}\right)}{\Gamma\left(\frac{n-1}{2}\right)} = \frac{E(\chi_{n_1-1})}{\sqrt{n-1}} \\
+\Rightarrow E(\chi_{n_1-1}) & = c_{4} \cdot \sqrt{n-1} \\
+\Rightarrow \left( E(\chi_{n_1-1}) \right)^2 & = c_{4}^2 \cdot (n-1).
+\end{aligned}
+$$
+
+Assuming $X_i \sim N(\mu, \sigma^2)$, we arrived at 
+
+$$
+\begin{aligned}
+\operatorname{Var}\left(\hat{s}_{1}\right) / n_{1}
+& = \operatorname{Var}\left(  \frac{\chi_{n_1-1} \sigma}{\sqrt{n_1-1}} \right)  / n_{1} \\
+& = \frac{\sigma^2}{n_1(n_1-1)} \cdot Var(\chi_{n_1-1}) \\
+& = \frac{\sigma^2}{n_1(n_1-1)} \cdot \left[(n_1-1) - \left( E(\chi_{n_1-1}) \right)^2 \right] \\
+& = \frac{\sigma^2}{n_1(n_1-1)} \cdot \left[(n_1-1) - c_{4}^2 \cdot (n-1) \right] \\
+& = \frac{\sigma^2}{n_1} \cdot \left(1 - c_{4}^2 \right)
+\end{aligned}
+$$
+
+Note the above aligns with [wiki article *Unbiased estimation of standard deviation*](https://en.wikipedia.org/wiki/Unbiased_estimation_of_standard_deviation) which states
+
+$$
+\begin{aligned}
+ sd(\hat{s_1}) = \sigma\sqrt{1 - c^2_4}
+\end{aligned}
+$$
+
+#### The difference between the two approaches
+
+We see that the two solutions are off
+$$
+\begin{aligned}
+\frac{\sigma^{2}}{n_{1}} \cdot \sqrt{\frac{2}{\left(n_{1}-1\right)}} \neq \frac{\sigma^{2}}{n_{1}} \cdot\left(1-c_{4}^{2}\right)
+\end{aligned}
+$$
+
+Let's check what are the numerical values of those scalars.
+
+
+## Checks with code 
+
+* Note, that for large $n$, function `gamma` is not executable, hence computing $var(\chi_{n_1-1})$ is not executable
+
+```{r}
+options(scipen=999)
+
+chi_var <- function(k){
+  k - (sqrt(2) * gamma((k+1)/2) / gamma(k/2))^2
+}
+
+n_grid <- seq(from = 100, to = 1000, by = 100)
+unlist(gamma(n_grid/2))
+chi_var(n_grid)
+```
+
+* There is [c4](https://www.rdocumentation.org/packages/IQCC/versions/1.0/topics/c4) function tho, which is also not executable
+
+```{r, message=FALSE}
+# install.packages("IQCC")
+library(IQCC)
+c4(n_grid)
+```
+
+* Compare the scalars from the above 
+
+```{r}
+scalar_1 <- function(n){
+  sqrt(2/(n-1))
+}
+
+scalar_2 <- function(n){
+  1 - (c4(n))^2
+}
+n_grid <- seq(20, 200, by = 20)
+```
+
+```{r}
+round(scalar_1(n_grid), 5)
+round(scalar_2(n_grid), 5)
+```
+
+## Methods: se and var of se(X)
+
+Assuming $X_i \sim N(\mu, \sigma^2)$, we can pull from the above
+
+$$
+\begin{aligned}
+\operatorname{Var}\left(\hat{s}_{1}\right) 
+& = \sigma^2 \cdot \left(1 - c_{4}^2 \right), \\
+\operatorname{sd}\left(\hat{s}_{1}\right) 
+& = \sigma \cdot \sqrt{1 - c_{4}^2}.
+\end{aligned}
+$$
+
+where $c_4(n)$ can be approximated as 
+
+$$
+\begin{aligned}
+c_{4}(n)=\sqrt{\frac{2}{n-1} \frac{\Gamma\left(\frac{n}{2}\right)}{\Gamma\left(\frac{n-1}{2}\right)}}=1-\frac{1}{4 n}-\frac{7}{32 n^{2}}-\frac{19}{128 n^{3}}+O\left(n^{-4}\right)
+\end{aligned}
+$$
+
