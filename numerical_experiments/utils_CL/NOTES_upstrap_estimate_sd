@@ -7,23 +7,26 @@ git push -u origin master
 
 # running array job on cluster  ------------------------------------
 
-qrsh -l 
+qrsh  
 
 cd /users/mkaras/_PROJECTS/upstrap_manuscript
 git pull
 
 cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-10-02-upstrap_estimate_sd
 
-qsub -cwd -l -N est_sd -t 1-30 upstrap_estimate_sd
+qsub -cwd -l mem_free=4G,h_vmem=4G -N est_sd -t 1-28 upstrap_estimate_sd
+qsub -cwd -l mem_free=30G,h_vmem=30G -N est_sd -t 29-30 upstrap_estimate_sd
 
 
+Error: cannot allocate vector of size 1.5 Gb
 
 # zipping directory with results and downloading --------------------
 
 cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
-rm 2020-09-19-estimate_ci_coverage_N0_N1_results.zip 
-zip -r 2020-09-19-estimate_ci_coverage_N0_N1_results.zip 2020-09-19-estimate_ci_coverage_N0_N1_results
+rm 2020-10-02-upstrap_estimate_sd_results.zip 
+zip -r 2020-10-02-upstrap_estimate_sd_results.zip 2020-10-02-upstrap_estimate_sd_results
 
-get /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results.zip /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results.zip 
+get /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results.zip /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results.zip 
+
 
 

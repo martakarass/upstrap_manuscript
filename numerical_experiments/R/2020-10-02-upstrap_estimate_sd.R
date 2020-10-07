@@ -16,6 +16,7 @@ args = commandArgs(trailingOnly=TRUE)
 # rm(list = ls())
 arg_str <- as.character(args[1])
 # arg_str <- "N0_100_N1_150_R_50_BBOOT_10000"
+# arg_str <- "N0_1000_N1_10000_R_100000_BBOOT_10000"
 
 ## fixed params
 # project_dir <- "/Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript"
@@ -111,7 +112,7 @@ out_R_boot_stat_sds   <- rep(NA, R)
 # perform R repetitions of the experiment
 set.seed(1)
 t_start <- Sys.time()
-for (rr in 1:R){
+for (rr in 1:R){ # rr <- 1
   # simulate observed sample
   vals <- rnorm(n = n0, mean = 0, sd = 1)
   # generate "B_boot" number of resamples
