@@ -1,0 +1,15 @@
+#!/bin/bash
+# Author: Marta Karas <mkaras2@jhu.edu>
+
+# File path to file with job-specific simulation params
+ARG1_LIST=/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/utils_CL/2020-11-23-ttest_normal_mean_params.txt
+
+# Define job-specific simulation param set by reading particular line of 
+# ARG1_LIST files list; the "particular line" is determined by array job index value
+# (see https://jhpce.jhu.edu/question/how-do-i-run-array-jobs-on-the-jhpce-cluster/)
+ARG1=`awk "NR==$SGE_TASK_ID {print $1}" $ARG1_LIST`
+
+# Run R script 
+module load R
+Rscript --vanilla /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/R/2020-11-23-ttest_normal_mean_CL.R $ARG1
+

@@ -29,4 +29,27 @@ zip -r 2020-10-02-upstrap_estimate_sd_results.zip 2020-10-02-upstrap_estimate_sd
 get /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results.zip /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results.zip 
 
 
+# running array job on cluster  ------------------------------------
+
+qrsh  
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript
+git pull
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-10-06-upstrap_estimate_sd
+
+qsub -cwd -l mem_free=2G,h_vmem=2G -N est_sd -t 1-25 upstrap_estimate_sd
+
+
+Error: cannot allocate vector of size 1.5 Gb
+
+# zipping directory with results and downloading --------------------
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
+rm 2020-10-02-upstrap_estimate_sd_results.zip 
+zip -r 2020-10-02-upstrap_estimate_sd_results.zip 2020-10-02-upstrap_estimate_sd_results
+
+get /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results.zip /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results.zip 
+
+
 

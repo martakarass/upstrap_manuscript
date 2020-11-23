@@ -1,0 +1,40 @@
+
+ssh -X mkaras@jhpce01.jhsph.edu
+
+@TODO 
+
+cd /users/mkaras/_PROJECTS/ukbiobank_pain/data
+rm -r all_corr_triu_regionsDenoised
+rm -r all_corr_triu_regionsDenoisedNoGs
+
+[jhpce01 /users/mkaras/_PROJECTS]$ du -hs *
+4.8M	acc_thresh_metric
+1.2G	gripeer-numerical-experiments
+997K	large_data_set_testing
+12G	ukbiobank_pain
+4.1M	upstrap_manuscript
+7.4G	walking_segmentation
+
+# ------------------------------------------------------------------------------
+
+ 
+1. make dir for resuls
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
+mkdir 2020-11-23-ttest_normal_mean
+
+2. generate file with parameters
+"/Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/numerical_experiments/utils_CL/"
+
+3. generate R script to read parameters, use it, and save output 
+
+4. generate the bash script that executes the code as array job 
+- create folder bash_CL/2020-11-23-ttest_normal_mean
+- create and edit file bash_CL/2020-11-23-ttest_normal_mean/ttest_normal_mean
+
+5. commit changes locally
+
+6. pull changes from the cluster 
+
+
+
