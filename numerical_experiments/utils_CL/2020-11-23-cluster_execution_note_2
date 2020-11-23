@@ -36,5 +36,23 @@ mkdir 2020-11-23-ttest_normal_mean
 
 6. pull changes from the cluster 
 
+ssh -X mkaras@jhpce01.jhsph.edu
+cd /users/mkaras/_PROJECTS/upstrap_manuscript
+git pull
+
+7. run array job 
+
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-11-23-ttest_normal_mean
+qsub -cwd -l mem_free=50G,h_vmem=50G,h_stack=256M -N estN0_N1 -t 1-30 estimate_ci_coverage_N0_N1
+
+qsub -cwd -N ttest_T -t 1-1 ttest_normal_mean
+
+- Look up the logs: 
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-11-23-ttest_normal_mean
+ls -lS
+
+- Look up the results: 
+cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
+
 
 

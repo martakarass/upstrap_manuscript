@@ -75,8 +75,7 @@ mat_out_upstrap_fpath    <- paste0(results_dir, "/out_upstrap_repidx1_", rep_idx
 
 print("Starting the simulation...")
 t1 <- Sys.time()
-for (i in 1:5){
-# for (i in 1:3){
+for (i in 1:rep_n){
   # set seed unique across all jobs 
   rep_idx_i <- rep_idx_1 + (i - 1)
   set.seed(rep_idx_i)
