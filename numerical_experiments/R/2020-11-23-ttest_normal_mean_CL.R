@@ -76,6 +76,7 @@ mat_out_upstrap_fpath    <- paste0(results_dir, "/out_upstrap_repidx1_", rep_idx
 print("Starting the simulation...")
 t1 <- Sys.time()
 for (i in 1:rep_n){
+  print(paste0("i: ", i))
   # set seed unique across all jobs 
   rep_idx_i <- rep_idx_1 + (i - 1)
   set.seed(rep_idx_i)
@@ -96,7 +97,7 @@ for (i in 1:rep_n){
   mat_out_upstrap[i, ] <- apply(boot_resamples_i_rejectH0[, n1_grid], 2, mean)
   mat_out_upstrap[i, ] <- round(mat_out_upstrap[i, ], 5)
   # save to file every 100
-  if (i %% 50 == 0){
+  if (i %% 100 == 0){
     fwrite(as.data.table(mat_out_powerttest), mat_out_powerttest_fpath)
     fwrite(as.data.table(mat_out_upstrap),    mat_out_upstrap_fpath)
     secs_passed <- round(as.numeric(Sys.time() - t1, unit = "secs"))
