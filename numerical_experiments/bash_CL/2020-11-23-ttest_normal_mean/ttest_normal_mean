@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Marta Karas <mkaras2@jhu.edu>
 
-# File path to file with job-specific simulation params
+# File path to file with job-specific simulation parameters
 ARG1_LIST=/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/utils_CL/2020-11-23-ttest_normal_mean_params.txt
 
 # Define job-specific simulation param set by reading particular line of 
