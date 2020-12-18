@@ -62,8 +62,7 @@ mat_out <- matrix(NA, nrow = B_boot, ncol = n1_grid_l)
 t1 <- Sys.time()
 # iterate over boostrap repetitions 
 for (B_boot_idx in 1:B_boot){
-  if (B_boot_idx %% 10 == 0) print(paste0("B_boot_idx: ", B_boot_idx))
-  print(B_boot_idx)
+  if (B_boot_idx %% 100 == 0) print(paste0("B_boot_idx: ", B_boot_idx))
   ## upsample data for current boot repetition
   dat_subjid_x1_b <- sample(x = dat_subjid_x1, size = n1_max, replace = TRUE)
   dat_subjid_x0_b <- sample(x = dat_subjid_x0, size = n1_max, replace = TRUE)
