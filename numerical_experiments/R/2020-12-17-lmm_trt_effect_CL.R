@@ -1,15 +1,17 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 
-print("Started installation of needed packages...")
-install.packages("lme4", repos = "http://cran.us.r-project.org")
-install.packages("lmerTest", repos = "http://cran.us.r-project.org")
-install.packages("here", repos = "http://cran.us.r-project.org")
-print("Installed needed packages.")
+# print("Started installation of needed packages...")
+# install.packages("lme4", repos = "http://cran.us.r-project.org")
+# install.packages("lmerTest", repos = "http://cran.us.r-project.org")
+# install.packages("here", repos = "http://cran.us.r-project.org")
+# print("Installed needed packages.")
+print("Started loading needed packages...")
 library(lme4)
 library(lmerTest)
 library(here)
 library(matrixStats)
+print("Loaded needed packages.")
 
 # read the arguments
 arg_str <- as.character(args[1]) # arg_str <- "1"
