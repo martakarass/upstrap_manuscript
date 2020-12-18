@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 
-# print("Started installation of needed packages...")
-# install.packages("lme4")
-# install.packages("lmerTest")
-# install.packages("here")
-# print("Installed needed packages.")
+print("Started installation of needed packages...")
+install.packages("lme4")
+install.packages("lmerTest")
+install.packages("here")
+print("Installed needed packages.")
 library(lme4)
 library(lmerTest)
 library(here)
