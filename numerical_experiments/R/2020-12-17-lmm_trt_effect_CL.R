@@ -1,19 +1,15 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 
-# install if needed and then load packages 
-assure_packages<-function(...) {
-  libs<-unlist(list(...))
-  req<-unlist(lapply(libs,require,character.only=TRUE))
-  need<-libs[req==FALSE]
-  if(length(need)>0){ 
-    install.packages(need)
-    lapply(need,require,character.only=TRUE)
-  }
-}
-print("Started installation of needed packages...")
-assure_packages("lme4","lmerTest","matrixStats", "here")
-print("Installed needed packages.")
+# print("Started installation of needed packages...")
+# install.packages("lme4")
+# install.packages("lmerTest")
+# install.packages("here")
+# print("Installed needed packages.")
+library(lme4)
+library(lmerTest)
+library(here)
+library(matrixStats)
 
 # read the arguments
 arg_str <- as.character(args[1]) # arg_str <- "1"
