@@ -34,7 +34,7 @@ n1_max  <- 100
 n1_grid   <- seq(from = n1_min, to = n1_max, by = 5)
 n1_grid_l <- length(n1_grid)
 ## upstrap
-B_boot <- 100
+B_boot <- 1000
 n0 <- 50  
 
 
