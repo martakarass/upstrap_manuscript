@@ -2,9 +2,9 @@
 args = commandArgs(trailingOnly=TRUE)
 
 print("Started installation of needed packages...")
-install.packages("lme4")
-install.packages("lmerTest")
-install.packages("here")
+install.packages("lme4", repos = "http://cran.us.r-project.org")
+install.packages("lmerTest", repos = "http://cran.us.r-project.org")
+install.packages("here", repos = "http://cran.us.r-project.org")
 print("Installed needed packages.")
 library(lme4)
 library(lmerTest)
