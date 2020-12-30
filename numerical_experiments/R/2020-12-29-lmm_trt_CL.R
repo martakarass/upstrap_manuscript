@@ -27,8 +27,8 @@ N       <- 50   # sample size of each of the two arms
 ni      <- 3
 N1_min  <- 50
 N1_max  <- 100
-B_boot  <- 10 # TODO
-innerloop_N <- 3 # TODO
+B_boot  <- 1000 # TODO
+innerloop_N <- 100 # TODO
 
 # make object to store simulation results
 mat_out <- data.frame()
