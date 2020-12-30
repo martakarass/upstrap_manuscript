@@ -3,13 +3,13 @@
 .RData
 .DS_Store
 .Ruserdata
-use_case_examples
-numerical_experiments/LongitudinalUpstrap
-numerical_experiments/data_processed
-numerical_experiments/results
-numerical_experiments/results_CL
-numerical_experiments/utils_CL_notes
-numerical_experiments/Rmd
+use_case_examples/
+numerical_experiments/LongitudinalUpstrap/
+numerical_experiments/data_processed/
+numerical_experiments/results/
+numerical_experiments/results_CL/
+numerical_experiments/utils_CL_notes/
+numerical_experiments/Rmd/
 Icon
 
 # Exclude everything from the folder content, but do not exclude the folder itself
