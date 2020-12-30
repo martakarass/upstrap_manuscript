@@ -2,6 +2,6 @@
 # Author: Marta Karas <mkaras2@jhu.edu>
 
 # Run R script 
-module load R
+module load conda_R
 Rscript --vanilla /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/R/2020-12-29-lmm_trt_CL.R $SGE_TASK_ID
 
