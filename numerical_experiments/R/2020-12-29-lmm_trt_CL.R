@@ -9,7 +9,7 @@ library(here)
 library(matrixStats)
 library(dplyr)
 library(geepack)
-print("Loaded needed packages.")
+message("Loaded needed packages.")
 
 # read the command line arguments
 arg_str <- as.character(args[1]) 
@@ -159,9 +159,9 @@ for (innerloop_idx in 1:innerloop_N){
   
   # save current results
   saveRDS(object = mat_out, file = out_fpath)
-  print(paste0("SAVED CURRENT STATE."))
+  message(paste0("SAVED CURRENT STATE."))
 }
 
 # save final result to file 
 saveRDS(object = mat_out, file = out_fpath)
-print(paste0("SAVED AND FINISHED."))
+message(paste0("SAVED AND FINISHED."))
