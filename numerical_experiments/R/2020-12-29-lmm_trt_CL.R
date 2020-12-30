@@ -153,9 +153,13 @@ for (innerloop_idx in 1:innerloop_N){
   mat_out_tmp$out_boot_GEE <- rowMeans(mat_out_boot_GEE, na.rm = TRUE)
   
   # ----------------------------------------------------------------------------
-  # store resutls to master file
+  # store results to master file
   mat_out <- rbind(mat_out, mat_out_tmp)
   rm(mat_out_tmp)
+  
+  # save current results
+  saveRDS(object = mat_out, file = out_fpath)
+  print(paste0("SAVED CURRENT STATE."))
 }
 
 # save final result to file 
