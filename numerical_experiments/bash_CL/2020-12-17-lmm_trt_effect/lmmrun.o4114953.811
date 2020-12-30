@@ -1,0 +1,25 @@
+[1] "Started loading needed packages..."
+[1] "Loaded needed packages."
+[1] "B_boot_idx: 100"
+[1] "B_boot_idx: 200"
+[1] "B_boot_idx: 300"
+[1] "B_boot_idx: 400"
+[1] "B_boot_idx: 500"
+[1] "B_boot_idx: 600"
+[1] "B_boot_idx: 700"
+[1] "B_boot_idx: 800"
+[1] "B_boot_idx: 900"
+[1] "B_boot_idx: 1000"
+   power_vec n1_vec repidx_vec
+1      0.680     50        811
+2      0.721     55        811
+3      0.753     60        811
+4      0.778     65        811
+5      0.803     70        811
+6      0.830     75        811
+7      0.845     80        811
+8      0.859     85        811
+9      0.884     90        811
+10     0.914     95        811
+11     0.927    100        811
+[1] "SAVED AND FINISHED."

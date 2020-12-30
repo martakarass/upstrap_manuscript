@@ -1,0 +1,114 @@
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+B_boot_idx: 10 [1%], 12 secs
+B_boot_idx: 20 [2%], 24 secs
+B_boot_idx: 30 [3%], 36 secs
+B_boot_idx: 40 [4%], 48 secs
+B_boot_idx: 50 [5%], 60 secs
+B_boot_idx: 60 [6%], 72 secs
+B_boot_idx: 70 [7%], 84 secs
+B_boot_idx: 80 [8%], 95 secs
+B_boot_idx: 90 [9%], 108 secs
+B_boot_idx: 100 [10%], 119 secs
+B_boot_idx: 110 [11%], 131 secs
+B_boot_idx: 120 [12%], 143 secs
+B_boot_idx: 130 [13%], 154 secs
+B_boot_idx: 140 [14%], 166 secs
+B_boot_idx: 150 [15%], 177 secs
+B_boot_idx: 160 [16%], 189 secs
+B_boot_idx: 170 [17%], 200 secs
+B_boot_idx: 180 [18%], 212 secs
+B_boot_idx: 190 [19%], 224 secs
+B_boot_idx: 200 [20%], 235 secs
+B_boot_idx: 210 [21%], 247 secs
+B_boot_idx: 220 [22%], 259 secs
+B_boot_idx: 230 [23%], 270 secs
+B_boot_idx: 240 [24%], 281 secs
+B_boot_idx: 250 [25%], 292 secs
+B_boot_idx: 260 [26%], 304 secs
+B_boot_idx: 270 [27%], 316 secs
+B_boot_idx: 280 [28%], 327 secs
+B_boot_idx: 290 [29%], 340 secs
+B_boot_idx: 300 [30%], 352 secs
+B_boot_idx: 310 [31%], 363 secs
+B_boot_idx: 320 [32%], 375 secs
+B_boot_idx: 330 [33%], 386 secs
+B_boot_idx: 340 [34%], 397 secs
+B_boot_idx: 350 [35%], 409 secs
+B_boot_idx: 360 [36%], 421 secs
+B_boot_idx: 370 [37%], 433 secs
+B_boot_idx: 380 [38%], 444 secs
+B_boot_idx: 390 [39%], 456 secs
+B_boot_idx: 400 [40%], 467 secs
+B_boot_idx: 410 [41%], 479 secs
+B_boot_idx: 420 [42%], 491 secs
+B_boot_idx: 430 [43%], 502 secs
+B_boot_idx: 440 [44%], 514 secs
+B_boot_idx: 450 [45%], 526 secs
+B_boot_idx: 460 [46%], 537 secs
+B_boot_idx: 470 [47%], 548 secs
+B_boot_idx: 480 [48%], 560 secs
+B_boot_idx: 490 [49%], 571 secs
+B_boot_idx: 500 [50%], 583 secs
+B_boot_idx: 510 [51%], 595 secs
+B_boot_idx: 520 [52%], 607 secs
+B_boot_idx: 530 [53%], 619 secs
+B_boot_idx: 540 [54%], 631 secs
+B_boot_idx: 550 [55%], 643 secs
+B_boot_idx: 560 [56%], 655 secs
+B_boot_idx: 570 [57%], 666 secs
+B_boot_idx: 580 [58%], 678 secs
+B_boot_idx: 590 [59%], 690 secs
+B_boot_idx: 600 [60%], 701 secs
+B_boot_idx: 610 [61%], 713 secs
+B_boot_idx: 620 [62%], 725 secs
+B_boot_idx: 630 [63%], 737 secs
+B_boot_idx: 640 [64%], 748 secs
+B_boot_idx: 650 [65%], 760 secs
+B_boot_idx: 660 [66%], 772 secs
+B_boot_idx: 670 [67%], 784 secs
+B_boot_idx: 680 [68%], 795 secs
+B_boot_idx: 690 [69%], 848 secs
+B_boot_idx: 700 [70%], 859 secs
+B_boot_idx: 710 [71%], 870 secs
+B_boot_idx: 720 [72%], 882 secs
+B_boot_idx: 730 [73%], 893 secs
+B_boot_idx: 740 [74%], 905 secs
+B_boot_idx: 750 [75%], 917 secs
+B_boot_idx: 760 [76%], 928 secs
+B_boot_idx: 770 [77%], 940 secs
+B_boot_idx: 780 [78%], 951 secs
+B_boot_idx: 790 [79%], 962 secs
+B_boot_idx: 800 [80%], 974 secs
+B_boot_idx: 810 [81%], 985 secs
+B_boot_idx: 820 [82%], 997 secs
+B_boot_idx: 830 [83%], 1009 secs
+B_boot_idx: 840 [84%], 1020 secs
+B_boot_idx: 850 [85%], 1032 secs
+B_boot_idx: 860 [86%], 1044 secs
+B_boot_idx: 870 [87%], 1055 secs
+B_boot_idx: 880 [88%], 1067 secs
+B_boot_idx: 890 [89%], 1078 secs
+B_boot_idx: 900 [90%], 1090 secs
+B_boot_idx: 910 [91%], 1101 secs
+B_boot_idx: 920 [92%], 1112 secs
+B_boot_idx: 930 [93%], 1124 secs
+B_boot_idx: 940 [94%], 1135 secs
+B_boot_idx: 950 [95%], 1146 secs
+B_boot_idx: 960 [96%], 1157 secs
+B_boot_idx: 970 [97%], 1201 secs
+B_boot_idx: 980 [98%], 1213 secs
+B_boot_idx: 990 [99%], 1225 secs
+B_boot_idx: 1000 [100%], 1236 secs
+B_boot_idx: 1000 [100%], 1236 secs

@@ -1,0 +1,117 @@
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+B_boot_idx: 10 [1%], 10 secs
+B_boot_idx: 20 [2%], 17 secs
+B_boot_idx: 30 [3%], 25 secs
+B_boot_idx: 40 [4%], 33 secs
+B_boot_idx: 50 [5%], 40 secs
+B_boot_idx: 60 [6%], 48 secs
+B_boot_idx: 70 [7%], 55 secs
+B_boot_idx: 80 [8%], 63 secs
+B_boot_idx: 90 [9%], 70 secs
+B_boot_idx: 100 [10%], 78 secs
+B_boot_idx: 110 [11%], 85 secs
+B_boot_idx: 120 [12%], 93 secs
+B_boot_idx: 130 [13%], 100 secs
+B_boot_idx: 140 [14%], 108 secs
+B_boot_idx: 150 [15%], 116 secs
+B_boot_idx: 160 [16%], 123 secs
+B_boot_idx: 170 [17%], 130 secs
+B_boot_idx: 180 [18%], 138 secs
+B_boot_idx: 190 [19%], 145 secs
+B_boot_idx: 200 [20%], 153 secs
+B_boot_idx: 210 [21%], 160 secs
+B_boot_idx: 220 [22%], 168 secs
+B_boot_idx: 230 [23%], 175 secs
+B_boot_idx: 240 [24%], 183 secs
+B_boot_idx: 250 [25%], 190 secs
+B_boot_idx: 260 [26%], 198 secs
+B_boot_idx: 270 [27%], 205 secs
+B_boot_idx: 280 [28%], 213 secs
+B_boot_idx: 290 [29%], 220 secs
+B_boot_idx: 300 [30%], 228 secs
+B_boot_idx: 310 [31%], 235 secs
+B_boot_idx: 320 [32%], 243 secs
+B_boot_idx: 330 [33%], 250 secs
+B_boot_idx: 340 [34%], 258 secs
+B_boot_idx: 350 [35%], 266 secs
+B_boot_idx: 360 [36%], 273 secs
+B_boot_idx: 370 [37%], 280 secs
+B_boot_idx: 380 [38%], 288 secs
+B_boot_idx: 390 [39%], 295 secs
+B_boot_idx: 400 [40%], 303 secs
+B_boot_idx: 410 [41%], 310 secs
+B_boot_idx: 420 [42%], 318 secs
+B_boot_idx: 430 [43%], 325 secs
+B_boot_idx: 440 [44%], 333 secs
+B_boot_idx: 450 [45%], 340 secs
+B_boot_idx: 460 [46%], 348 secs
+B_boot_idx: 470 [47%], 355 secs
+B_boot_idx: 480 [48%], 363 secs
+B_boot_idx: 490 [49%], 370 secs
+B_boot_idx: 500 [50%], 378 secs
+B_boot_idx: 510 [51%], 386 secs
+B_boot_idx: 520 [52%], 393 secs
+B_boot_idx: 530 [53%], 401 secs
+B_boot_idx: 540 [54%], 408 secs
+B_boot_idx: 550 [55%], 416 secs
+B_boot_idx: 560 [56%], 424 secs
+B_boot_idx: 570 [57%], 431 secs
+B_boot_idx: 580 [58%], 439 secs
+B_boot_idx: 590 [59%], 446 secs
+B_boot_idx: 600 [60%], 454 secs
+B_boot_idx: 610 [61%], 461 secs
+B_boot_idx: 620 [62%], 468 secs
+B_boot_idx: 630 [63%], 476 secs
+B_boot_idx: 640 [64%], 483 secs
+B_boot_idx: 650 [65%], 491 secs
+B_boot_idx: 660 [66%], 498 secs
+B_boot_idx: 670 [67%], 506 secs
+B_boot_idx: 680 [68%], 514 secs
+B_boot_idx: 690 [69%], 521 secs
+B_boot_idx: 700 [70%], 529 secs
+B_boot_idx: 710 [71%], 536 secs
+B_boot_idx: 720 [72%], 544 secs
+B_boot_idx: 730 [73%], 551 secs
+B_boot_idx: 740 [74%], 559 secs
+B_boot_idx: 750 [75%], 567 secs
+B_boot_idx: 760 [76%], 574 secs
+B_boot_idx: 770 [77%], 582 secs
+B_boot_idx: 780 [78%], 589 secs
+B_boot_idx: 790 [79%], 597 secs
+B_boot_idx: 800 [80%], 604 secs
+B_boot_idx: 810 [81%], 611 secs
+B_boot_idx: 820 [82%], 619 secs
+B_boot_idx: 830 [83%], 626 secs
+B_boot_idx: 840 [84%], 634 secs
+B_boot_idx: 850 [85%], 641 secs
+B_boot_idx: 860 [86%], 649 secs
+B_boot_idx: 870 [87%], 656 secs
+B_boot_idx: 880 [88%], 664 secs
+B_boot_idx: 890 [89%], 672 secs
+B_boot_idx: 900 [90%], 679 secs
+B_boot_idx: 910 [91%], 687 secs
+B_boot_idx: 920 [92%], 694 secs
+B_boot_idx: 930 [93%], 702 secs
+B_boot_idx: 940 [94%], 709 secs
+B_boot_idx: 950 [95%], 717 secs
+B_boot_idx: 960 [96%], 725 secs
+B_boot_idx: 970 [97%], 732 secs
+B_boot_idx: 980 [98%], 740 secs
+B_boot_idx: 990 [99%], 747 secs
+B_boot_idx: 1000 [100%], 755 secs
+Warning message:
+In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 0.00687652 (tol = 0.002, component 1)
+B_boot_idx: 1000 [100%], 755 secs
