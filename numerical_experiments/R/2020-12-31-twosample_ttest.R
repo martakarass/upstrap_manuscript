@@ -28,7 +28,7 @@ mu <- 0.3
 simga2 <- 1
 
 # number of repetitions
-rep_n <- 100
+rep_n <- 1000 * 10
 B_boot <- 1000
 
 
