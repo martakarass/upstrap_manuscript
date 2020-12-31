@@ -6,6 +6,9 @@
 #' (2) we simulate independent samples (nested independent, or independent-independent)
 #' (3) we use sample estimate   
 
+# cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-12-31-twosample_ttest
+# qsub -cwd twosample_ttest
+
 rm(list = ls())
 library(here)
 library(tidyverse)
