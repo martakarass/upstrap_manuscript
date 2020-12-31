@@ -5,6 +5,9 @@
 # module load conda_R
 # R
 
+# cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/bash_CL/2020-12-29-lmm_trt
+# qsub -cwd -N ttest -t 1-100 ttest_normal_mean
+
 library(here)
 library(tidyverse)
 
@@ -13,7 +16,8 @@ library(tidyverse)
 ## (3) LMM trt 
 
 # out_agg_fname <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2020-12-29-lmm_trt")
-out_fdir <- paste0(here::here(), "/numerical_experiments/results_CL/2020-12-29-lmm_trt/")
+out_agg_fname <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2020-12-30-lmm_trt")
+out_fdir <- paste0(here::here(), "/numerical_experiments/results_CL/2020-12-30-lmm_trt/")
 
 out_fnames <- list.files(out_fdir, full.names = TRUE)
 out_f <- do.call("rbind", lapply(out_fnames, readRDS))
