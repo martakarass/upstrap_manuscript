@@ -28,3 +28,6 @@ numerical_experiments/bash_CL/2020-12-31-twosample_ttest/*
 numerical_experiments/bash_CL/2020-12-29-lmm_trt/*
 !numerical_experiments/bash_CL/2020-12-29-lmm_trt/lmm_trt
 
+numerical_experiments/bash_CL/2021-01-05-sd_estimation_test/*
+!numerical_experiments/bash_CL/2021-01-05-sd_estimation_test/sd_estimation_test
+
