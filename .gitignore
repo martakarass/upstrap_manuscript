@@ -10,6 +10,7 @@ numerical_experiments/results/
 numerical_experiments/results_CL/
 numerical_experiments/utils_CL_notes/
 numerical_experiments/Rmd/
+numerical_experiments/.DS_Store
 Icon
 
 # Exclude everything from the folder content, but do not exclude the folder itself
@@ -18,3 +19,12 @@ numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results/*
 
 numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results/*
 !numerical_experiments/results_CL/2020-10-02-upstrap_estimate_sd_results/.gitkeep 
+
+# Exclude all but one file 
+# ref: https://stackoverflow.com/questions/987142/make-gitignore-ignore-everything-except-a-few-files
+numerical_experiments/bash_CL/2020-12-31-twosample_ttest/*
+!numerical_experiments/bash_CL/2020-12-31-twosample_ttest/twosample_ttest
+
+numerical_experiments/bash_CL/2020-12-29-lmm_trt/*
+!numerical_experiments/bash_CL/2020-12-29-lmm_trt/lmm_trt
+
