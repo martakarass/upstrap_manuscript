@@ -2,5 +2,5 @@
 
 # Run R script 
 module load R
-Rscript --vanilla /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/R/2020-12-31-twosample_ttest.R
+Rscript --vanilla /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/R/2021-01-05-sd_estimation_test.R
 
