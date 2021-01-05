@@ -28,3 +28,5 @@ The following objects are masked from ‘package:base’:
 
 Loaded needed packages.
 innerloop_idx: 1
+B_boot_idx: 100 [10%], 178 secs
+B_boot_idx: 200 [20%], 358 secs
