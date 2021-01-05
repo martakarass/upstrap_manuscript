@@ -22,7 +22,7 @@ sigma_grid <- c(0.5, 1, 2, 5, 10)
 N0_grid    <- c(30, 50, 100, 200)
 N1_grid    <- c(30, 50, 100, 200)
 N1_max     <- max(N1_grid)
-rep_n  <- 1 * 10
+rep_n  <- 1000 * 100
 B_boot <- 1000
 
 sigma_grid_l <- length(sigma_grid)
@@ -95,12 +95,6 @@ for (sigma_idx in 1 : sigma_grid_l){
                 rep_n = n()) %>%
       as.data.frame()
     
-    print("out_df_agg_ALL: ")
-    print(out_df_agg_ALL)
-    
-    print("out_df_agg_TMP: ")
-    print(out_df_agg_TMP)
-    
     out_df_agg_ALL <- base::rbind(out_df_agg_ALL, out_df_agg_TMP)
     
     t_diff <- round(as.numeric(Sys.time() - t1, unit = "secs") / (60 * 60), 5)
@@ -118,14 +112,14 @@ t2-t1
 out_df_fpath <- paste0(res_fdir, "/res_repn_", rep_n, "_boot_", B_boot, "_sd_estimation_test")
 saveRDS(out_df_agg_ALL, out_df_fpath)
 
-# plt_df <- out_df_agg_ALL %>% filter(N0 == N1) %>% 
+# plt_df <- out_df_agg_ALL %>% filter(N0 == N1) %>%
 #   pivot_longer(cols = c(sd_est_median, sd_est_mean)) %>%
 #   mutate(group2 = paste0(group, "_", name))
 # plt_df_hline <- plt_df %>% select(sigma_true) %>% distinct() %>% mutate(yintercept = sigma_true)
 # 
-# ggplot(plt_df, aes(x = N0, y = value / sigma_true, color = group2)) + 
-#   geom_hline(yintercept = 1) + 
-#   facet_wrap(~ sigma_true, ncol = 1) + 
+# ggplot(plt_df, aes(x = N0, y = value / sigma_true, color = group2)) +
+#   geom_hline(yintercept = 1) +
+#   facet_wrap(~ sigma_true, ncol = 1) +
 #   geom_point()
 
 
