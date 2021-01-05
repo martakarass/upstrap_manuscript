@@ -93,7 +93,7 @@ for (sigma_idx in 1 : sigma_grid_l){
                 sd_est_mean = mean(sd_est),
                 sd_est_median = median(sd_est),
                 rep_n = n())
-    out_df_agg_ALL <- rbind(out_df_agg_ALL, out_df_agg_TMP)
+    out_df_agg_ALL <- base::rbind(out_df_agg_ALL, out_df_agg_TMP)
     
     t_diff <- round(as.numeric(Sys.time() - t1, unit = "secs") / (60 * 60), 5)
     message(paste0("COMPLETED: sigma_TMP: ", sigma_TMP, ", N0_TMP: ", N0_TMP, " | hours elapsed: ", t_diff))
