@@ -92,7 +92,15 @@ for (sigma_idx in 1 : sigma_grid_l){
       summarise(sd_est_sd = sd(sd_est),
                 sd_est_mean = mean(sd_est),
                 sd_est_median = median(sd_est),
-                rep_n = n())
+                rep_n = n()) %>%
+      as.data.frame()
+    
+    print("out_df_agg_ALL: ")
+    print(out_df_agg_ALL)
+    
+    print("out_df_agg_TMP: ")
+    print(out_df_agg_TMP)
+    
     out_df_agg_ALL <- base::rbind(out_df_agg_ALL, out_df_agg_TMP)
     
     t_diff <- round(as.numeric(Sys.time() - t1, unit = "secs") / (60 * 60), 5)
