@@ -1,7 +1,7 @@
 # ssh -X mkaras@jhpce01.jhsph.edu
 
-# cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
 # qrsh -l mem_free=10G,h_vmem=10G,h_stack=256M
+# cd /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL
 # module load conda_R
 # R
 
@@ -11,15 +11,16 @@
 library(here)
 library(tidyverse)
 
-
 ## -----------------------------------------------------------------------------
 ## (3) LMM trt 
 
 # out_agg_fname <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2020-12-29-lmm_trt")
-out_agg_fname <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2020-12-30-lmm_trt")
-out_fdir <- paste0(here::here(), "/numerical_experiments/results_CL/2020-12-30-lmm_trt/")
+# out_agg_fname <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2020-12-30-lmm_trt")
+out_agg_fname <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-01-05-lmm_trt")
+# out_fdir <- paste0(here::here(), "/numerical_experiments/results_CL/2020-12-30-lmm_trt/")
+out_fdir <- paste0(here::here(), "/numerical_experiments/results_CL/2020-12-31-lmm_trt/")
 
-out_fnames <- list.files(out_fdir, full.names = TRUE)
+out_fnames <- list.files(out_fdir, full.names = TRUE); length(out_fnames)
 out_f <- do.call("rbind", lapply(out_fnames, readRDS))
 dim(out_f)
 str(out_f)
