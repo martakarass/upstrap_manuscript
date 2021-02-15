@@ -17,44 +17,37 @@ library(matrixStats)
 # dir to save results 
 res_fdir <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2020-12-31-twosample_ttest")
 
-# params
-gg_base_size <- 12
-N0 <- 50
+# experiment parameteres
+N0_grid <- c(50, 100, 150, 200)
 N1_min <- 50
 N1_max <- 250 
 N1_grid <- N1_min : N1_max
 N1_grid_l <- length(N1_grid)
-N0_grid <- c(50, 100, 150, 200)
 
 # data generating model
-mu <- 0.3
+mu     <- 0.3
 simga2 <- 1
 
-# number of repetitions
-rep_n <- 1000 * 10
-B_boot <- 1000
+# number of repetitions of experiment 
+rep_n   <- 10000
+# number of boot repetitions within one experiment, one setup
+B_boot  <- 1000
 
 
 # ------------------------------------------------------------------------------
-# (1)
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# (1) get the estimates using theoretical (gold standard) results
 
 out <- sapply(N1_grid, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "two.sample")$power)
 out_df <- data.frame(N1 = N1_grid, power_est = out)
-
-# ggplot(out_df, aes(x = N1, y = power_est)) + 
-#   geom_line() + 
-#   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) + 
-#   scale_x_continuous(limits = c(N1_min, N1_max), breaks = seq(N1_min, N1_max, by = 10)) + 
-#   geom_hline(yintercept = 0.8, color = "blue") + 
-#   theme_grey(base_size = gg_base_size) + 
-#   labs(title = "two-sample t-test: theoretical power") 
 
 out_df_fpath <- paste0(res_fdir, "/res_theoret")
 saveRDS(out_df, out_df_fpath)
 
 
 # ------------------------------------------------------------------------------
-# (2)
+# (2) get the estimates using sampling of independent samples
 
 t1 <- Sys.time()
 
@@ -94,22 +87,12 @@ out_df_2 <-
                names_to = "group", 
                values_to = "power_est")
 
-# ggplot(out_df_2, aes(x = N1, y = power_est, color = group)) + 
-#   geom_line() + 
-#   geom_line(data = out_df,  aes(x = N1, y = power_est), color = "black") + 
-#   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) + 
-#   scale_x_continuous(limits = c(N1_min, N1_max), breaks = seq(N1_min, N1_max, by = 10)) + 
-#   geom_hline(yintercept = 0.8, color = "blue") + 
-#   theme_grey(base_size = gg_base_size) + 
-#   labs(title = "two-sample t-test: empirical power -- gold standard") 
-
 out_df_fpath <- paste0(res_fdir, "/res_repn_", rep_n, "_boot_", B_boot, "_indepsampling")
 saveRDS(out_df_2, out_df_fpath)
 
 
-
 # ------------------------------------------------------------------------------
-# (3)
+# (3) get the estimates using (a) power.t.test(), (b) usptrap
 
 # compute "cumulative" t.test results (1 - reject H0, 0 -- do not reject H0)  
 cum_rejectH0_twosample_ttest <- function(vals1, vals2){
@@ -196,20 +179,9 @@ out_df_fpath <- paste0(res_fdir, "/res_repn_", rep_n, "_boot_", B_boot, "_powert
 saveRDS(out_df_3, out_df_fpath)
 message("Completed out_df_3")
 
-# ggplot(out_df_3, aes(x = N1, y = power_est, color = group)) + 
-#   geom_line() + 
-#   geom_line(data = out_df,  aes(x = N1, y = power_est), color = "black") + 
-#   facet_grid(N0 ~ .) + 
-#   # scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) + 
-#   scale_x_continuous(limits = c(N1_min, N1_max), breaks = seq(N1_min, N1_max, by = 10)) + 
-#   geom_hline(yintercept = 0.8, color = "blue") + 
-#   theme_grey(base_size = gg_base_size) + 
-#   labs(title = "two-sample t-test: powerttest/upstrap-estimated power") 
-
 t2 <- Sys.time()
 message(t2 - t1)
 
-# Time difference of 7.33839 mins
 
 
 

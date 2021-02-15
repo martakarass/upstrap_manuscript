@@ -26,7 +26,7 @@ N1_grid_l <- length(N1_grid)
 mu     <- 0.3
 simga2 <- 1
 
-# number of repetitions of experiment 
+# number of repetitions pf experiment 
 rep_n   <- 10000
 # number of boot repetitions within one experiment, one setup
 B_boot  <- 1000
@@ -94,7 +94,7 @@ saveRDS(out_df_2, out_df_fpath)
 
 
 # ------------------------------------------------------------------------------
-# (3) get the estimates using (a) power.t.test(), (b) usptrap
+# (2) get the estimates using (a) power.t.test(), (b) usptrap
 
 # function to compute cumulative var
 cumvar <- function (x, sd = FALSE) {
