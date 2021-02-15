@@ -12,6 +12,8 @@ res_fdir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-
 # create dirs if any does not exist
 dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
+message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
+message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
 # experiment parameteres
 N0_grid <- c(50, 100, 150, 200)
