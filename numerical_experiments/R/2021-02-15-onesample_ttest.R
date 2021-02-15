@@ -9,6 +9,11 @@ library(matrixStats)
 # dir to save results 
 res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-15-onesample_ttest_agg")
 res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-15-onesample_ttest_raw")
+# create dirs if any does not exist
+dir.create(path = res_fdir_agg)
+dir.create(path = res_fdir_raw)
+message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
+message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
 # experiment parameters
 N0_grid <- c(30, 50, 100, 150)
