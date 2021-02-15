@@ -32,3 +32,6 @@ numerical_experiments/bash_CL/2020-12-29-lmm_trt/*
 numerical_experiments/bash_CL/2021-01-05-sd_estimation_test/*
 !numerical_experiments/bash_CL/2021-01-05-sd_estimation_test/sd_estimation_test
 
+numerical_experiments/bash_CL/2021-02-15-onesample_ttest/*
+!numerical_experiments/bash_CL/2021-02-15-onesample_ttest/onesample_ttest
+
