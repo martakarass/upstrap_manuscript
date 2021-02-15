@@ -1,5 +1,5 @@
 
-#' This script estimate power of rejecting H0 in one-sample t-test problem. 
+#' This script estimate power of rejecting H0 in two-sample t-test problem. 
 
 rm(list = ls())
 library(here)
@@ -7,13 +7,16 @@ library(tidyverse)
 library(matrixStats)
 
 # dir to save results 
-res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-15-onesample_ttest_agg")
-res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-15-onesample_ttest_raw")
+res_fdir_agg <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-15-twosample_ttest_agg")
+res_fdir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-15-twosample_ttest_raw")
+# create dirs if any does not exist
+dir.create(path = res_fdir_agg)
+dir.create(path = res_fdir_raw)
 
-# experiment parameters
-N0_grid <- c(30, 50, 100, 150)
-N1_min <- 30
-N1_max <- 200 
+# experiment parameteres
+N0_grid <- c(50, 100, 150, 200)
+N1_min <- 50
+N1_max <- 250 
 N1_grid <- N1_min : N1_max
 N1_grid_l <- length(N1_grid)
 
@@ -32,29 +35,27 @@ B_boot  <- 1000
 # ------------------------------------------------------------------------------
 
 # get the estimates using theoretical (gold standard) results
-out <- sapply(N1_grid, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "one.sample")$power)
+out <- sapply(N1_grid, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "two.sample")$power)
 out_df_1 <- data.frame(N1 = N1_grid, power_est = out)
-out_df_fpath <- paste0(res_fdir_agg, "/res_theoret.rds")
+out_df_fpath <- paste0(res_fdir_agg, "/res_theoret")
 saveRDS(out_df_1, out_df_fpath)
 
-# function to compute cumulative var
-cumvar <- function (x, sd = FALSE) {
-  n <- seq_along(x)
-  v <- (cumsum(x ^ 2) - cumsum(x) ^ 2 / n) / (n - 1)
-  # if (sd) v <- sqrt(v)
-  v
-}
 
-# function to compute "cumulative" t.test results (1 - reject H0, 0 -- do not reject H0)  
-vals_cum_reject_H0 <- function(vals){
-  vals_cumnx      <- seq_along(vals)
-  vals_cumdf      <- vals_cumnx - 1
-  vals_cummean    <- cumsum(vals) / vals_cumnx
-  vals_cumvar     <- cumvar(vals)
-  vals_cumstderr  <- sqrt(vals_cumvar / vals_cumnx)
-  vals_cumststat  <- vals_cummean / vals_cumstderr
-  vals_cumpval    <- 2 * pt(-abs(vals_cumststat), vals_cumdf)
-  vals_reject_H0  <- vals_cumpval < 0.05
+# compute "cumulative" t.test results (1 - reject H0, 0 -- do not reject H0)  
+cum_rejectH0_twosample_ttest <- function(vals1, vals2){
+  vals_cumnx      <- seq_along(vals1)
+  vals_cumdf      <- 2 * vals_cumnx - 2
+  vals1_cummean    <- cumsum(vals1) / vals_cumnx
+  vals2_cummean    <- cumsum(vals2) / vals_cumnx
+  vals_cummeandiff <- vals1_cummean - vals2_cummean
+  vals1_sumsquares <- (cumsum(vals1 ^ 2) - cumsum(vals1) ^ 2 / seq_along(vals1))
+  vals2_sumsquares <- (cumsum(vals2 ^ 2) - cumsum(vals2) ^ 2 / seq_along(vals2))
+  vals_cumvarpool  <- (vals1_sumsquares + vals2_sumsquares) / vals_cumdf
+  vals_cumsizeinvsum  <- (1 / vals_cumnx) + (1 / vals_cumnx)
+  vals_cumstderr   <- sqrt(vals_cumvarpool * vals_cumsizeinvsum)
+  vals_cumststat   <- vals_cummeandiff / vals_cumstderr
+  vals_cumpval     <- 2 * pt(-abs(vals_cumststat), vals_cumdf)
+  vals_reject_H0   <- vals_cumpval < 0.05
   return(vals_reject_H0)
 }
 
@@ -70,21 +71,33 @@ for (N0 in N0_grid){ # N0 <- 50; i <- 1
   N1_grid <- N0 : N1_max
   N1_grid_l <- length(N1_grid)
   # set of samples for current N0
-  x_mat <- matrix(rnorm(n = rep_n * N0, mean = mu), nrow = rep_n)
+  x_mat_gr1  <- matrix(rnorm(n = rep_n * N0, mean = 0), nrow = rep_n)
+  x_mat_gr2  <- matrix(rnorm(n = rep_n * N0, mean = mu), nrow = rep_n)
   mat_out_powerttest <- matrix(NA, nrow = rep_n, ncol = N1_grid_l)
   mat_out_upstrap    <- matrix(NA, nrow = rep_n, ncol = N1_grid_l)
   for (i in 1:rep_n){
-    sample_i <- x_mat[i, ]
+    sample_i_gr1 <- x_mat_gr1[i, ]
+    sample_i_gr2 <- x_mat_gr2[i, ]
     # sample_i: generate power estimate with power.t.test()
-    sample_i_mean <- mean(sample_i)
-    sample_i_sd   <- sd(sample_i)
-    mat_out_powerttest[i, ] <- sapply(N1_grid, function(n_tmp){
-      (power.t.test(n = n_tmp, delta = sample_i_mean, sd = sample_i_sd, sig.level = 0.05, type = "one.sample", alternative = "two.sided"))$power
+    sample_i_meandiff   <-  mean(sample_i_gr1) - mean(sample_i_gr2)
+    sample_i_var_pooled <- (var(sample_i_gr1) * (N0 - 1) + var(sample_i_gr2) * (N0 - 1)) / (N0 + N0 - 2)
+    sample_i_sd_pooled  <- sqrt(sample_i_var_pooled)
+    mat_out_powerttest[i, ] <- sapply(N1_grid, function(N1_tmp){
+      (power.t.test(n = N1_tmp, 
+                    delta = sample_i_meandiff, 
+                    sd = sample_i_sd_pooled, 
+                    sig.level = 0.05, type = "two.sample", alternative = "two.sided"))$power
     })
     # sample_i: generate power estimate with upstrap()
-    boot_resamples_i <- matrix(sample(x = sample_i, size = (B_boot * N1_max), replace = TRUE), 
+    boot_resamples_i_gr1 <- matrix(sample(x = sample_i_gr1, size = (B_boot * N1_max), replace = TRUE), 
                                nrow = B_boot, ncol = N1_max)
-    boot_resamples_i_rejectH0 <- t(apply(boot_resamples_i, 1, vals_cum_reject_H0))
+    boot_resamples_i_gr2 <- matrix(sample(x = sample_i_gr2, size = (B_boot * N1_max), replace = TRUE), 
+                               nrow = B_boot, ncol = N1_max)
+    boot_resamples_i_rejectH0 <- lapply(1:B_boot, function(k) cum_rejectH0_twosample_ttest(
+      boot_resamples_i_gr1[k, ],
+      boot_resamples_i_gr2[k, ]
+    ))
+    boot_resamples_i_rejectH0 <- do.call(rbind, boot_resamples_i_rejectH0)
     mat_out_upstrap[i, ] <- apply(boot_resamples_i_rejectH0[, N1_grid], 2, mean, na.rm = TRUE)
   }
   
@@ -113,6 +126,7 @@ for (N0 in N0_grid){ # N0 <- 50; i <- 1
   saveRDS(mat_out_upstrap,    paste0(res_fdir_raw, "/mat_out_upstrap_N0_", N0, ".rds"))
 }
 
+
 # save raw data aggregates 
 out_df_2 <- data.frame(N0 = N0_vec, 
                        N1 = N1_vec, 
@@ -123,4 +137,6 @@ saveRDS(out_df_2, out_df_fpath)
 
 t2 <- Sys.time()
 message(t2 - t1)
+
+
 
