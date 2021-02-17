@@ -19,8 +19,6 @@ message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_r
 N0_grid <- c(30, 50, 100, 150)
 N1_min <- 30
 N1_max <- 200 
-N1_grid <- N1_min : N1_max
-N1_grid_l <- length(N1_grid)
 
 # data generating model
 mu     <- 0.3
@@ -37,8 +35,8 @@ B_boot  <- 1000
 # ------------------------------------------------------------------------------
 
 # get the estimates using theoretical (gold standard) results
-out <- sapply(N1_grid, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "one.sample")$power)
-out_df_1 <- data.frame(N1 = N1_grid, power_est = out)
+out <- sapply(N1_min : N1_max, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "one.sample")$power)
+out_df_1 <- data.frame(N1 = N1_min : N1_max, power_est = out)
 out_df_fpath <- paste0(res_fdir_agg, "/res_theoret.rds")
 saveRDS(out_df_1, out_df_fpath)
 
