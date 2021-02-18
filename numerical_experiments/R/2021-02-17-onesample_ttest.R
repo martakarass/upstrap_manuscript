@@ -7,12 +7,9 @@ library(tidyverse)
 library(matrixStats)
 
 # dir to save results 
-res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-17-onesample_ttest_agg")
 res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-17-onesample_ttest_raw")
 # create dirs if any does not exist
-dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
-message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
 message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
 # x   y
@@ -37,7 +34,6 @@ simga2 <- 1
 R_rep   <- 10000
 # number of boot repetitions within one experiment, one setup
 B_boot  <- 1000
-
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
@@ -70,11 +66,6 @@ vals_cum_reject_H0 <- function(vals){
   return(vals_reject_H0)
 }
 
-N0_vec        <- numeric()
-N1_vec        <- numeric()
-group_vec     <- numeric()
-power_est_vec <- numeric()
-
 t1 <- Sys.time()
 set.seed(123)
 for (N0 in N0_grid){ # N0 <- 50; i <- 1
@@ -99,40 +90,10 @@ for (N0 in N0_grid){ # N0 <- 50; i <- 1
     boot_resamples_i_rejectH0 <- t(apply(boot_resamples_i, 1, vals_cum_reject_H0))
     mat_out_upstrap[i, ] <- apply(boot_resamples_i_rejectH0[, N1_grid], 2, mean, na.rm = TRUE)
   }
-  
-  # aggregate raw data
-  out_powerttest_mean   <- apply(mat_out_powerttest, 2, mean)
-  out_powerttest_median <- apply(mat_out_powerttest, 2, median)
-  out_upstrap_mean      <- apply(mat_out_upstrap, 2, mean)
-  out_upstrap_median    <- apply(mat_out_upstrap, 2, median)
-  
-  # store raw data aggregates 
-  N0_vec        <- c(N0_vec, rep(N0, 4 * N1_grid_l))
-  N1_vec        <- c(N1_vec, rep(N1_grid, 4))
-  group_vec     <- c(group_vec, 
-                     rep("powerttest_mean", N1_grid_l), 
-                     rep("powerttest_median", N1_grid_l),
-                     rep("upstrap_mean", N1_grid_l), 
-                     rep("upstrap_median", N1_grid_l))
-  power_est_vec <- c(power_est_vec, 
-                     out_powerttest_mean,
-                     out_powerttest_median,
-                     out_upstrap_mean,
-                     out_upstrap_median)
-  
   # save raw data 
   saveRDS(mat_out_powerttest, paste0(res_fdir_raw, "/mat_out_powerttest_N0_", N0, ".rds"))
   saveRDS(mat_out_upstrap,    paste0(res_fdir_raw, "/mat_out_upstrap_N0_", N0, ".rds"))
 }
-
-# save raw data aggregates 
-out_df_2 <- data.frame(N0 = N0_vec, 
-                       N1 = N1_vec, 
-                       group = group_vec, 
-                       power_est = power_est_vec) 
-out_df_fpath <- paste0(res_fdir_agg, "/res_repn_", R_rep, "_boot_", B_boot, "_powerttest_upstrap.rds")
-saveRDS(out_df_2, out_df_fpath)
-
 t2 <- Sys.time()
 message(t2 - t1)
 
