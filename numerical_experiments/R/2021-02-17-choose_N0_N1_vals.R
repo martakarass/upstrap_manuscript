@@ -284,6 +284,12 @@ est_power_df %>%
   full_join(target_power_df, by = character()) %>%
   mutate(power_diff = abs(est_power_GEE - target_power)) %>%
   group_by(target_power) %>%
-  filter(power_diff == min(power_diff)) %>%
-  summarise(N1 = mean(N1))
-
+  filter(power_diff == min(power_diff)) 
+# A tibble: 4 x 4
+# Groups:   target_power [4]
+# N1 est_power_GEE target_power power_diff
+# <dbl>         <dbl>        <dbl>      <dbl>
+# 1    41         0.293          0.3      0.007
+# 2    80         0.502          0.5      0.002
+# 3   124         0.7            0.7      0    
+# 4   219         0.9            0.9      0    
