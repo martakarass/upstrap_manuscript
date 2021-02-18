@@ -7,9 +7,12 @@ library(tidyverse)
 library(matrixStats)
 
 # dir to save results 
+res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-17-onesample_ttest_agg")
 res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-17-onesample_ttest_raw")
 # create dirs if any does not exist
+dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
+message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
 message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
 # x   y
@@ -40,8 +43,8 @@ B_boot  <- 1000
 # ------------------------------------------------------------------------------
 
 # get the estimates using theoretical (gold standard) results
-out <- sapply(N1_min : N1_max, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "one.sample")$power)
-out_df_1 <- data.frame(N1 = N1_min : N1_max, power_est = out)
+out <- sapply(N1_grid, function(n_tmp) power.t.test(n = n_tmp, delta = mu, sd = 1, type = "one.sample")$power)
+out_df_1 <- data.frame(N1 = N1_grid, power_est = out)
 out_df_fpath <- paste0(res_fdir_agg, "/res_theoret.rds")
 saveRDS(out_df_1, out_df_fpath)
 
