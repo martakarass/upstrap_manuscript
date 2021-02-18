@@ -7,18 +7,26 @@ library(tidyverse)
 library(matrixStats)
 
 # dir to save results 
-res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-15-onesample_ttest_agg")
-res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-15-onesample_ttest_raw")
+res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-17-onesample_ttest_agg")
+res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-17-onesample_ttest_raw")
 # create dirs if any does not exist
 dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
 message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
 message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
+# x   y
+# 1 0.10   7
+# 2 0.30  25
+# 3 0.50  45
+# 4 0.70  71
+# 5 0.90 119
+# 6 0.95 146
+
 # experiment parameters
-N0_grid <- c(30, 50, 100, 150)
+N0_grid <- c(25, 45, 71)
 N1_min <- 5
-N1_max <- 250 
+N1_max <- 200 
 N1_grid <- N1_min : N1_max
 
 # data generating model
