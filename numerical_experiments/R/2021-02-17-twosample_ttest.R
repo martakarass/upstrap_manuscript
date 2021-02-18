@@ -15,10 +15,18 @@ dir.create(path = res_fdir_raw)
 message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
 message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
+# x   y
+# 1 0.10  12
+# 2 0.30  47
+# 3 0.50  87
+# 4 0.70 139
+# 5 0.90 235
+# 6 0.95 290
+
 # experiment parameteres
-N0_grid <- c(50, 100, 150, 200)
-N1_min <- 50
-N1_max <- 250 
+N0_grid <- c(47, 87, 139)
+N1_min <- 5
+N1_max <- 300 
 N1_grid <- N1_min : N1_max
 N1_grid_l <- length(N1_grid)
 

@@ -18,15 +18,23 @@ library(geepack)
 x = power_grid <- c(0.1, 0.3, 0.5, 0.7, 0.9, 0.95)
 y = sapply(power_grid, function(power_tmp) 
   power.t.test(power = power_tmp, delta = 0.3, sd = 1, type = "one.sample")$n)
-data.frame(x, y = round(y))
+data.frame(x, y = y)
+# x          y
+# 1 0.10   7.054278
+# 2 0.30  24.851434
+# 3 0.50  44.629600
+# 4 0.70  70.520476
+# 5 0.90 118.686546
+# 6 0.95 146.321484
+
+data.frame(x, y = ceiling(y))
 # x   y
-# 1 0.10   7
+# 1 0.10   8
 # 2 0.30  25
 # 3 0.50  45
 # 4 0.70  71
 # 5 0.90 119
-# 6 0.95 146
-
+# 6 0.95 147
 
 
 # two-sample t-test ------------------------------------------------------------
@@ -34,13 +42,14 @@ data.frame(x, y = round(y))
 x = power_grid <- c(0.1, 0.3, 0.5, 0.7, 0.9, 0.95)
 y = sapply(power_grid, function(power_tmp) 
   power.t.test(power = power_tmp, delta = 0.3, sd = 1, type = "two.sample")$n)
-data.frame(x, y = round(y))
+
+data.frame(x, y = ceiling(y))
 # x   y
-# 1 0.10  11
+# 1 0.10  12
 # 2 0.30  47
-# 3 0.50  86
-# 4 0.70 138
-# 5 0.90 234
+# 3 0.50  87
+# 4 0.70 139
+# 5 0.90 235
 # 6 0.95 290
 
 
