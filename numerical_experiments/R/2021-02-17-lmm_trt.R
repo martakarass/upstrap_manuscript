@@ -29,16 +29,24 @@ message(out_fpath_raw)
 coef_x1 <- 0.5
 tau2    <- 1
 sigma2  <- 1
-N       <- 50   # sample size of each of the two arms
+N       <- 41   # sample size of each of the two arms
 ni      <- 3
-N1_min  <- 50
+N1_min  <- 10
 N1_max  <- 150
 
+# target_power    N1
+# <dbl> <dbl>
+# 1         0.3    20 
+# 2         0.5    41 
+# 3         0.7    62 
+# 4         0.9   111 
+# 5         0.95  130.
+
 # define N1 grid
-N1_grid   <- seq(from = N1_min, to = N1_max, by = 3)
+N1_grid   <- seq(from = N1_min, to = N1_max, by = 1)
 N1_grid_l <- length(N1_grid)
 
-innerloop_N <- 50 # TODO => -t 1-40
+innerloop_N <- 20 # TODO => -t 1-50
 B_boot      <- 1000 # TODO
 
 # make object to store simulation results (specific to this array job)
@@ -83,20 +91,22 @@ for (innerloop_idx in 1 : innerloop_N){ # innerloop_idx <- 1
   
   # iterate over number of independent units (subjects) in the same arm
   for (N1_grid_idx in 1 : N1_grid_l){ # N1_grid_idx <- 10
-    N1_tmp <- N1_grid[N1_grid_idx]
-    dat_sub <- dat %>% filter(subjid_arm <= N1_tmp)
-    # LMM
-    fit_LMM   <- lmer(y ~ x1 + (1 | subjid), data = dat_sub)
-    fit_LMM_s <- summary(fit_LMM)
-    fit_LMM_coef_est  <- fit_LMM_s$coefficients[2, 5]
-    mat_out_tmp$out_gold_LMM[N1_grid_idx] <- (fit_LMM_coef_est < 0.05) * 1
-    # GEE
-    fit_GEE_formula <- formula(y ~ x1)
-    fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
-                      data = dat_sub, id = dat_sub$subjid, corstr = "exchangeable")
-    fit_GEE_s <- summary(fit_GEE)
-    fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
-    mat_out_tmp$out_gold_GEE[N1_grid_idx] <- (fit_GEE_coef_est < 0.05) * 1
+    tryCatch({
+      N1_tmp <- N1_grid[N1_grid_idx]
+      dat_sub <- dat %>% filter(subjid_arm <= N1_tmp)
+      # LMM
+      fit_LMM   <- lmer(y ~ x1 + (1 | subjid), data = dat_sub)
+      fit_LMM_s <- summary(fit_LMM)
+      fit_LMM_coef_est  <- fit_LMM_s$coefficients[2, 5]
+      mat_out_tmp$out_gold_LMM[N1_grid_idx] <- (fit_LMM_coef_est < 0.05) * 1
+      # GEE
+      fit_GEE_formula <- formula(y ~ x1)
+      fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
+                        data = dat_sub, id = dat_sub$subjid, corstr = "exchangeable")
+      fit_GEE_s <- summary(fit_GEE)
+      fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
+      mat_out_tmp$out_gold_GEE[N1_grid_idx] <- (fit_GEE_coef_est < 0.05) * 1
+    }, error = function(e) {message(e)})
   }
 
     
@@ -135,20 +145,22 @@ for (innerloop_idx in 1 : innerloop_N){ # innerloop_idx <- 1
     rm(dat_subjid_x1_is1_b, dat_subjid_x1_is0_b, dat_x1_is1_b, dat_x1_is0_b)
     # iterate over N1 values grid
     for (N1_grid_idx in 1:N1_grid_l){ # N1_grid_idx <- 1
-      N1_tmp <- N1_grid[N1_grid_idx]
-      dat_sub <- dat_b %>% filter(subjid_arm <= N1_tmp)
-      # LMM
-      fit_LMM   <- lmer(y ~ x1 + (1 | subjid), data = dat_sub)
-      fit_LMM_s <- summary(fit_LMM)
-      fit_LMM_coef_est  <- fit_LMM_s$coefficients[2, 5]
-      mat_out_boot_LMM[N1_grid_idx, B_boot_idx] <- (fit_LMM_coef_est < 0.05)
-      # GEE
-      fit_GEE_formula <- formula(y ~ x1)
-      fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
-                        data = dat_sub, id = dat_sub$subjid, corstr = "exchangeable")
-      fit_GEE_s <- summary(fit_GEE)
-      fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
-      mat_out_boot_GEE[N1_grid_idx, B_boot_idx] <- (fit_GEE_coef_est < 0.05)
+      tryCatch({
+        N1_tmp <- N1_grid[N1_grid_idx]
+        dat_sub <- dat_b %>% filter(subjid_arm <= N1_tmp)
+        # LMM
+        fit_LMM   <- lmer(y ~ x1 + (1 | subjid), data = dat_sub)
+        fit_LMM_s <- summary(fit_LMM)
+        fit_LMM_coef_est  <- fit_LMM_s$coefficients[2, 5]
+        mat_out_boot_LMM[N1_grid_idx, B_boot_idx] <- (fit_LMM_coef_est < 0.05)
+        # GEE
+        fit_GEE_formula <- formula(y ~ x1)
+        fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
+                          data = dat_sub, id = dat_sub$subjid, corstr = "exchangeable")
+        fit_GEE_s <- summary(fit_GEE)
+        fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
+        mat_out_boot_GEE[N1_grid_idx, B_boot_idx] <- (fit_GEE_coef_est < 0.05)
+      }, error = function(e) {message(e)})
     }
   }
   # add results to mat_out
