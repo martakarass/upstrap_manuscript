@@ -9,6 +9,11 @@ library(matrixStats)
 # dir to save results 
 res_fdir_agg <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-17-twosample_ttest_agg")
 res_fdir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-17-twosample_ttest_raw")
+# remove dirs if exist to make a room for new ones
+unlink(res_fdir_agg, recursive = TRUE, force = TRUE)
+unlink(res_fdir_raw, recursive = TRUE, force = TRUE)
+message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
+message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 # create dirs if any does not exist
 dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
@@ -73,8 +78,8 @@ t1 <- Sys.time()
 set.seed(123)
 for (N0 in N0_grid){ # N0 <- 50; i <- 1
   message(N0)
-  N1_grid <- N0 : N1_max
-  N1_grid_l <- length(N1_grid)
+  # N1_grid <- N0 : N1_max
+  # N1_grid_l <- length(N1_grid)
   # set of samples for current N0
   x_mat_gr1  <- matrix(rnorm(n = rep_n * N0, mean = 0), nrow = rep_n)
   x_mat_gr2  <- matrix(rnorm(n = rep_n * N0, mean = mu), nrow = rep_n)
