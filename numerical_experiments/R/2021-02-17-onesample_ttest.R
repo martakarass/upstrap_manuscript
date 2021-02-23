@@ -9,6 +9,9 @@ library(matrixStats)
 # dir to save results 
 res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-17-onesample_ttest_agg")
 res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-17-onesample_ttest_raw")
+# remove dirs if exist to make a room for new ones
+unlink(res_fdir_agg, recursive = TRUE, force = TRUE)
+unlink(res_fdir_raw, recursive = TRUE, force = TRUE)
 # create dirs if any does not exist
 dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
@@ -28,6 +31,7 @@ N0_grid <- c(25, 45, 71)
 N1_min <- 5
 N1_max <- 200 
 N1_grid <- N1_min : N1_max
+N1_grid_l <- length(N1_grid)
 
 # data generating model
 mu     <- 0.3
@@ -73,8 +77,8 @@ t1 <- Sys.time()
 set.seed(123)
 for (N0 in N0_grid){ # N0 <- 50; i <- 1
   message(N0)
-  N1_grid <- N0 : N1_max
-  N1_grid_l <- length(N1_grid)
+  # N1_grid <- N0 : N1_max   # @MK: removed on Feb 22
+  # N1_grid_l <- length(N1_grid) # @MK: removed on Feb 22
   # set of samples for current N0
   x_mat <- matrix(rnorm(n = R_rep * N0, mean = mu), nrow = R_rep)
   mat_out_powerttest <- matrix(NA, nrow = R_rep, ncol = N1_grid_l)
