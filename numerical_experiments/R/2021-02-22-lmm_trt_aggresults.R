@@ -1,6 +1,12 @@
 
 #' This script aggregates the estimates of power of rejecting H0 in LMM
 #' regression problem.
+#' 
+#' Notes: 
+#' cd $ups 
+#' cd numerical_experiments/R
+#' Rnosave 2021-02-22-lmm_trt_aggresults.R -N JB_lmm_trt_agg
+
 
 rm(list = ls())
 library(here)
@@ -16,7 +22,7 @@ dir.create(path = res_fdir_agg)
 N  <- 41   # sample size of each of the two arms
 
 # parameters for bootstrap CI computation
-B_bootci     <- 10
+B_bootci     <- 10000
 conf_bootci  <- 0.95
 alpha_bootci <- (1 + c(-conf_bootci, conf_bootci))/2
 power_val    <- 0.8
