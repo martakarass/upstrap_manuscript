@@ -22,7 +22,7 @@ dir.create(path = res_fdir_agg)
 N  <- 41   # sample size of each of the two arms
 
 # parameters for bootstrap CI computation
-B_bootci     <- 10000
+B_bootci     <- 1000
 conf_bootci  <- 0.95
 alpha_bootci <- (1 + c(-conf_bootci, conf_bootci))/2
 power_val    <- 0.8
