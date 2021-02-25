@@ -1,0 +1,90 @@
+Loading conda_R/4.0.x
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:matrixStats’:
+
+    count
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-02-17-lmm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-02-17-lmm_trt_raw/arrayjob_45.rds
+innerloop_idx: 1
+B_boot_idx: 100 [10%], 10360 secs
+B_boot_idx: 200 [20%], 20080 secs
+B_boot_idx: 300 [30%], 30345 secs
+B_boot_idx: 400 [40%], 38275 secs
+B_boot_idx: 500 [50%], 48100 secs
+B_boot_idx: 600 [60%], 60119 secs
+B_boot_idx: 700 [70%], 68955 secs
+B_boot_idx: 800 [80%], 79173 secs
+B_boot_idx: 900 [90%], 88767 secs
+B_boot_idx: 1000 [100%], 101193 secs
+Saved current state. Minutes elapsed: 1688.679
+innerloop_idx: 2
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 116739 secs
+B_boot_idx: 200 [20%], 132065 secs
+B_boot_idx: 300 [30%], 152784 secs
+B_boot_idx: 400 [40%], 176215 secs
+B_boot_idx: 500 [50%], 200372 secs
+B_boot_idx: 600 [60%], 225742 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 249731 secs
+B_boot_idx: 800 [80%], 276236 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 900 [90%], 306957 secs
+B_boot_idx: 1000 [100%], 338292 secs
+Saved current state. Minutes elapsed: 5644.148
+innerloop_idx: 3
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 374287 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 200 [20%], 410206 secs
+B_boot_idx: 300 [30%], 439161 secs
+B_boot_idx: 400 [40%], 461325 secs
+B_boot_idx: 500 [50%], 477322 secs
+B_boot_idx: 600 [60%], 492046 secs
+B_boot_idx: 700 [70%], 505787 secs
+B_boot_idx: 800 [80%], 519843 secs
+B_boot_idx: 900 [90%], 533828 secs
+B_boot_idx: 1000 [100%], 547350 secs
+Saved current state. Minutes elapsed: 9124.575
+innerloop_idx: 4
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 561150 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 200 [20%], 576057 secs
+B_boot_idx: 300 [30%], 594968 secs
