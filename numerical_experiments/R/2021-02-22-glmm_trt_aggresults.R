@@ -157,8 +157,6 @@ for (i in 1 : length(ylab_vec)){ # i <- 2
       mutate(N1 = as.numeric(N1))
     dat_i_bootobj_median[b, 1] <- dat_i_resample_b %>% group_by(N1) %>% summarize(y = median(y)) %>% filter(y >= power_val) %>% pull(N1) %>% min()
     dat_i_bootobj_mean[b, 1]   <- dat_i_resample_b %>% group_by(N1) %>% summarize(y = mean(y))   %>% filter(y >= power_val) %>% pull(N1) %>% min()
-    # dat_i_bootobj_median[b, 1] <- dat_i_resample_b %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% median()
-    # dat_i_bootobj_mean[b, 1]   <- dat_i_resample_b %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% mean()
   }
   # bootstrap CI for median
   dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
