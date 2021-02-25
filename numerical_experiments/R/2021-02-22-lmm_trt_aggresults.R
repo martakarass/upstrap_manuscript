@@ -152,8 +152,10 @@ for (i in 1 : length(ylab_vec)){ # ylab_i <- "out_boot_LMM"
       mutate(idx = row_number()) %>%
       pivot_longer(cols = -idx, names_to = "N1", values_to = "y") %>%
       mutate(N1 = as.numeric(N1))
-    dat_i_bootobj_median[b, 1] <- dat_i_resample_b %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% median()
-    dat_i_bootobj_mean[b, 1]   <- dat_i_resample_b %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% mean()
+    dat_i_bootobj_median[b, 1] <- dat_i_resample_b %>% group_by(N1) %>% summarize(y = median(y)) %>% filter(y >= power_val) %>% pull(N1) %>% min()
+    dat_i_bootobj_mean[b, 1]   <- dat_i_resample_b %>% group_by(N1) %>% summarize(y = mean(y))   %>% filter(y >= power_val) %>% pull(N1) %>% min()
+    # dat_i_bootobj_median[b, 1] <- dat_i_resample_b %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% median()
+    # dat_i_bootobj_mean[b, 1]   <- dat_i_resample_b %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% mean()
   }
   # bootstrap CI for median
   dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
@@ -166,8 +168,8 @@ for (i in 1 : length(ylab_vec)){ # ylab_i <- "out_boot_LMM"
     dat_all %>% 
     select(all_of(c('idx', 'N1',  ylab_i))) %>% 
     rename_at(vars(ylab_i), function(x) "y")
-  dat_i_median <- dat_i_long %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% median()
-  dat_i_mean   <- dat_i_long %>% group_by(idx) %>% filter(y >= power_val) %>% filter(N1 == min(N1)) %>% pull(N1) %>% mean()
+  dat_i_median <- dat_i_long %>% group_by(N1) %>% summarize(y = median(y)) %>% filter(y >= power_val) %>% pull(N1) %>% min()
+  dat_i_mean   <- dat_i_long %>% group_by(N1) %>% summarize(y = mean(y))   %>% filter(y >= power_val) %>% pull(N1) %>% min()
   
   # prepare final data frame with these results
   out_df_i <- data.frame(
