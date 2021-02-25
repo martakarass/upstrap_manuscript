@@ -1,6 +1,6 @@
 
-#' This script aggregates the estimates of power of rejecting H0 in two-sample 
-#' t-test problem. It computes aggregates across R repetitions of the experiment:
+#' This script aggregates the estimates of power of rejecting H0 in one-sample 
+#' t-test problem. It computes aggregates across R repetitions of the experiment: 
 #' - median + bootstrap CI
 #' - mean + bootstrap CI
 #' for each sample size considered in the experiment.
@@ -11,11 +11,11 @@ library(tidyverse)
 library(matrixStats)
 
 # dir to data saves
-res_fdir_agg <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-15-twosample_ttest_agg")
-res_fdir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-15-twosample_ttest_raw")
+res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-02-15-onesample_ttest_agg")
+res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-02-15-onesample_ttest_raw")
 
 # experiment parameters (relevant subset)
-N1_max <- 250 
+N1_max <- 200 
 
 # parameters for bootstrap CI computation
 B_bootci <- 1000
@@ -32,11 +32,11 @@ out_agg_df <- data.frame()
 # iterate over data files; aggregate; combine aggregated results
 for (i in 1 : length(dat_all_list)){ # i <- 1
   message(paste0("i: ", i))
-  
+
   # read i-th file with data 
   dat_i <- dat_all_list[[i]]
   dat_i_nrow <- nrow(dat_i)
-  dat_i_nrow <- ncol(dat_i)
+  dat_i_ncol <- ncol(dat_i)
   dat_i_namesplit <- strsplit(basename(fnames_all[i]), "_")[[1]]
   dat_i_method_name <- dat_i_namesplit[3]
   dat_i_N0 <- as.numeric(gsub(".rds", "", dat_i_namesplit[5]))
@@ -81,6 +81,6 @@ for (i in 1 : length(dat_all_list)){ # i <- 1
   
 }
 
-
 # save the aggregated data 
-saveRDS(out_agg_df, paste0(res_fdir_agg, "/twosample_ttest_out_agg_df.rds"))
+saveRDS(out_agg_df, paste0(res_fdir_agg, "/onesample_ttest_out_agg_df.rds"))
+
