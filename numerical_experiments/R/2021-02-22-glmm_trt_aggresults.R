@@ -23,7 +23,7 @@ message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_a
 N  <- 80   # sample size of each of the two arms
 
 # parameters for bootstrap CI computation
-B_bootci     <- 10
+B_bootci     <- 10000
 conf_bootci  <- 0.95
 alpha_bootci <- (1 + c(-conf_bootci, conf_bootci))/2
 power_val    <- 0.8
