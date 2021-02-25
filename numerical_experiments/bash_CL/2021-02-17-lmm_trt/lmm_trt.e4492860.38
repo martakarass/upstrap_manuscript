@@ -1,0 +1,404 @@
+Loading conda_R/4.0.x
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:matrixStats’:
+
+    count
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-02-17-lmm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-02-17-lmm_trt_raw/arrayjob_38.rds
+innerloop_idx: 1
+B_boot_idx: 100 [10%], 2408 secs
+B_boot_idx: 200 [20%], 4708 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 300 [30%], 6991 secs
+B_boot_idx: 400 [40%], 9243 secs
+B_boot_idx: 500 [50%], 11492 secs
+B_boot_idx: 600 [60%], 13630 secs
+B_boot_idx: 700 [70%], 15778 secs
+B_boot_idx: 800 [80%], 17906 secs
+B_boot_idx: 900 [90%], 19974 secs
+B_boot_idx: 1000 [100%], 22199 secs
+Saved current state. Minutes elapsed: 370.366
+innerloop_idx: 2
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 24368 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 200 [20%], 26448 secs
+B_boot_idx: 300 [30%], 28528 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 30591 secs
+B_boot_idx: 500 [50%], 32696 secs
+B_boot_idx: 600 [60%], 34704 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 36727 secs
+B_boot_idx: 800 [80%], 38913 secs
+B_boot_idx: 900 [90%], 40936 secs
+B_boot_idx: 1000 [100%], 43059 secs
+Saved current state. Minutes elapsed: 718.017
+innerloop_idx: 3
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 45319 secs
+B_boot_idx: 200 [20%], 47568 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 300 [30%], 49796 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 51981 secs
+B_boot_idx: 500 [50%], 54197 secs
+B_boot_idx: 600 [60%], 56442 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 58676 secs
+B_boot_idx: 800 [80%], 60912 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 900 [90%], 63140 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 1000 [100%], 65374 secs
+Saved current state. Minutes elapsed: 1089.93
+innerloop_idx: 4
+B_boot_idx: 100 [10%], 67615 secs
+B_boot_idx: 200 [20%], 69802 secs
+B_boot_idx: 300 [30%], 71984 secs
+B_boot_idx: 400 [40%], 74166 secs
+B_boot_idx: 500 [50%], 76368 secs
+B_boot_idx: 600 [60%], 78589 secs
+B_boot_idx: 700 [70%], 80789 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 800 [80%], 82987 secs
+B_boot_idx: 900 [90%], 85201 secs
+B_boot_idx: 1000 [100%], 87413 secs
+Saved current state. Minutes elapsed: 1457.26
+innerloop_idx: 5
+B_boot_idx: 100 [10%], 89668 secs
+B_boot_idx: 200 [20%], 91918 secs
+B_boot_idx: 300 [30%], 94139 secs
+B_boot_idx: 400 [40%], 96371 secs
+B_boot_idx: 500 [50%], 98555 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 600 [60%], 100769 secs
+B_boot_idx: 700 [70%], 102996 secs
+B_boot_idx: 800 [80%], 105211 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 900 [90%], 107426 secs
+B_boot_idx: 1000 [100%], 109687 secs
+Saved current state. Minutes elapsed: 1828.487
+innerloop_idx: 6
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 111958 secs
+B_boot_idx: 200 [20%], 114215 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 300 [30%], 116469 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 118717 secs
+B_boot_idx: 500 [50%], 120961 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 600 [60%], 123215 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 125507 secs
+B_boot_idx: 800 [80%], 127761 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 900 [90%], 130044 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 1000 [100%], 132334 secs
+Saved current state. Minutes elapsed: 2205.944
+innerloop_idx: 7
+B_boot_idx: 100 [10%], 134638 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 200 [20%], 136901 secs
+B_boot_idx: 300 [30%], 139155 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 141438 secs
+B_boot_idx: 500 [50%], 143619 secs
+B_boot_idx: 600 [60%], 145798 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 148024 secs
+B_boot_idx: 800 [80%], 150290 secs
+B_boot_idx: 900 [90%], 152546 secs
+B_boot_idx: 1000 [100%], 154811 secs
+Saved current state. Minutes elapsed: 2580.548
+innerloop_idx: 8
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 157097 secs
+B_boot_idx: 200 [20%], 159283 secs
+B_boot_idx: 300 [30%], 161442 secs
+B_boot_idx: 400 [40%], 163608 secs
+B_boot_idx: 500 [50%], 165780 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 600 [60%], 167935 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 170083 secs
+B_boot_idx: 800 [80%], 172245 secs
+B_boot_idx: 900 [90%], 174395 secs
+B_boot_idx: 1000 [100%], 176565 secs
+Saved current state. Minutes elapsed: 2943.116
+innerloop_idx: 9
+B_boot_idx: 100 [10%], 178747 secs
+B_boot_idx: 200 [20%], 180887 secs
+B_boot_idx: 300 [30%], 183021 secs
+B_boot_idx: 400 [40%], 185077 secs
+B_boot_idx: 500 [50%], 187145 secs
+B_boot_idx: 600 [60%], 189328 secs
+B_boot_idx: 700 [70%], 191431 secs
+B_boot_idx: 800 [80%], 193564 secs
+B_boot_idx: 900 [90%], 195724 secs
+B_boot_idx: 1000 [100%], 197825 secs
+Saved current state. Minutes elapsed: 3297.431
+innerloop_idx: 10
+B_boot_idx: 100 [10%], 199891 secs
+B_boot_idx: 200 [20%], 201922 secs
+B_boot_idx: 300 [30%], 203956 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 206005 secs
+B_boot_idx: 500 [50%], 208022 secs
+B_boot_idx: 600 [60%], 210047 secs
+B_boot_idx: 700 [70%], 212052 secs
+B_boot_idx: 800 [80%], 214061 secs
+B_boot_idx: 900 [90%], 216060 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 1000 [100%], 218038 secs
+Saved current state. Minutes elapsed: 3634.3
+innerloop_idx: 11
+B_boot_idx: 100 [10%], 220029 secs
+B_boot_idx: 200 [20%], 222032 secs
+B_boot_idx: 300 [30%], 224221 secs
+B_boot_idx: 400 [40%], 226279 secs
+B_boot_idx: 500 [50%], 228449 secs
+B_boot_idx: 600 [60%], 230639 secs
+B_boot_idx: 700 [70%], 232831 secs
+B_boot_idx: 800 [80%], 235022 secs
+B_boot_idx: 900 [90%], 237210 secs
+B_boot_idx: 1000 [100%], 239394 secs
+Saved current state. Minutes elapsed: 3990.27
+innerloop_idx: 12
+B_boot_idx: 100 [10%], 241600 secs
+B_boot_idx: 200 [20%], 243782 secs
+B_boot_idx: 300 [30%], 245963 secs
+B_boot_idx: 400 [40%], 248187 secs
+B_boot_idx: 500 [50%], 250430 secs
+B_boot_idx: 600 [60%], 252656 secs
+B_boot_idx: 700 [70%], 254885 secs
+B_boot_idx: 800 [80%], 257119 secs
+B_boot_idx: 900 [90%], 259347 secs
+B_boot_idx: 1000 [100%], 261561 secs
+Saved current state. Minutes elapsed: 4359.701
+innerloop_idx: 13
+B_boot_idx: 100 [10%], 263764 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 200 [20%], 265997 secs
+B_boot_idx: 300 [30%], 268231 secs
+B_boot_idx: 400 [40%], 270470 secs
+B_boot_idx: 500 [50%], 272708 secs
+B_boot_idx: 600 [60%], 274954 secs
+B_boot_idx: 700 [70%], 277203 secs
+B_boot_idx: 800 [80%], 279447 secs
+B_boot_idx: 900 [90%], 281688 secs
+B_boot_idx: 1000 [100%], 283938 secs
+Saved current state. Minutes elapsed: 4732.687
+innerloop_idx: 14
+B_boot_idx: 100 [10%], 286228 secs
+B_boot_idx: 200 [20%], 288474 secs
+B_boot_idx: 300 [30%], 290715 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 292951 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 500 [50%], 295178 secs
+B_boot_idx: 600 [60%], 297399 secs
+B_boot_idx: 700 [70%], 299630 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 800 [80%], 301864 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 900 [90%], 304091 secs
+B_boot_idx: 1000 [100%], 306322 secs
+Saved current state. Minutes elapsed: 5105.741
+innerloop_idx: 15
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 308560 secs
+B_boot_idx: 200 [20%], 310698 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 300 [30%], 312874 secs
+B_boot_idx: 400 [40%], 315055 secs
+B_boot_idx: 500 [50%], 317240 secs
+B_boot_idx: 600 [60%], 319417 secs
+B_boot_idx: 700 [70%], 321598 secs
+B_boot_idx: 800 [80%], 323781 secs
+B_boot_idx: 900 [90%], 325966 secs
+B_boot_idx: 1000 [100%], 328167 secs
+Saved current state. Minutes elapsed: 5469.818
+innerloop_idx: 16
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 330387 secs
+B_boot_idx: 200 [20%], 332593 secs
+B_boot_idx: 300 [30%], 334785 secs
+B_boot_idx: 400 [40%], 336984 secs
+B_boot_idx: 500 [50%], 339189 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 600 [60%], 341397 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 700 [70%], 343595 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 800 [80%], 345789 secs
+B_boot_idx: 900 [90%], 347937 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 1000 [100%], 350111 secs
+Saved current state. Minutes elapsed: 5835.543
+innerloop_idx: 17
+B_boot_idx: 100 [10%], 352299 secs
+B_boot_idx: 200 [20%], 354478 secs
+B_boot_idx: 300 [30%], 356655 secs
+B_boot_idx: 400 [40%], 358833 secs
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 500 [50%], 361007 secs
+B_boot_idx: 600 [60%], 363189 secs
+B_boot_idx: 700 [70%], 365367 secs
+B_boot_idx: 800 [80%], 367554 secs
+B_boot_idx: 900 [90%], 369740 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 1000 [100%], 371927 secs
+Saved current state. Minutes elapsed: 6199.152
+innerloop_idx: 18
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 100 [10%], 374141 secs
+B_boot_idx: 200 [20%], 376333 secs
+B_boot_idx: 300 [30%], 378485 secs
+B_boot_idx: 400 [40%], 380655 secs
+B_boot_idx: 500 [50%], 382827 secs
+B_boot_idx: 600 [60%], 384998 secs
+B_boot_idx: 700 [70%], 387169 secs
+B_boot_idx: 800 [80%], 389292 secs
+B_boot_idx: 900 [90%], 391406 secs
+B_boot_idx: 1000 [100%], 393519 secs
+Saved current state. Minutes elapsed: 6559
+innerloop_idx: 19
+B_boot_idx: 100 [10%], 395632 secs
+B_boot_idx: 200 [20%], 397721 secs
+B_boot_idx: 300 [30%], 399808 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 400 [40%], 401901 secs
+B_boot_idx: 500 [50%], 403997 secs
+B_boot_idx: 600 [60%], 406125 secs
+B_boot_idx: 700 [70%], 408275 secs
+B_boot_idx: 800 [80%], 410378 secs
+B_boot_idx: 900 [90%], 412462 secs
+B_boot_idx: 1000 [100%], 414557 secs
+Saved current state. Minutes elapsed: 6909.637
+innerloop_idx: 20
+B_boot_idx: 100 [10%], 416735 secs
+B_boot_idx: 200 [20%], 418837 secs
+B_boot_idx: 300 [30%], 420937 secs
+B_boot_idx: 400 [40%], 423059 secs
+B_boot_idx: 500 [50%], 425231 secs
+B_boot_idx: 600 [60%], 427391 secs
+B_boot_idx: 700 [70%], 429565 secs
+B_boot_idx: 800 [80%], 431676 secs
+B_boot_idx: 900 [90%], 433827 secs
+B_boot_idx: 1000 [100%], 435934 secs
+Saved current state. Minutes elapsed: 7265.912
+There were 43 warnings (use warnings() to see them)
+Saved FINAL state. Minutes elapsed: 7265.913

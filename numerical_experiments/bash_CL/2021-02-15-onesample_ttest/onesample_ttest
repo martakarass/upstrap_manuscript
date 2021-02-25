@@ -1,4 +1,0 @@
-#!/bin/bash
-
-module load conda_R
-Rscript /users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/R/2021-02-15-onesample_ttest.R
