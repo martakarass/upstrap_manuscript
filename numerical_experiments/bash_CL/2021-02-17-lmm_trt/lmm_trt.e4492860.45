@@ -88,3 +88,10 @@ boundary (singular) fit: see ?isSingular
 boundary (singular) fit: see ?isSingular
 B_boot_idx: 200 [20%], 576057 secs
 B_boot_idx: 300 [30%], 594968 secs
+B_boot_idx: 400 [40%], 608558 secs
+boundary (singular) fit: see ?isSingular
+B_boot_idx: 500 [50%], 621391 secs
+B_boot_idx: 600 [60%], 634083 secs
+B_boot_idx: 700 [70%], 646180 secs
+B_boot_idx: 800 [80%], 662190 secs
+B_boot_idx: 900 [90%], 683339 secs
