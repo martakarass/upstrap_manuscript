@@ -1,5 +1,10 @@
 
 #' This script estimate power of rejecting H0 in one-sample t-test problem. 
+#' 
+#' Notes: 
+#' cd $ups 
+#' cd numerical_experiments/R
+#' Rnosave 2021-02-17-onesample_ttest.R -N JB_onesample_ttest
 
 rm(list = ls())
 library(here)
@@ -38,7 +43,7 @@ mu     <- 0.3
 simga2 <- 1
 
 # number of repetitions of experiment 
-R_rep   <- 10000
+R_rep   <- 1000 
 # number of boot repetitions within one experiment, one setup
 B_boot  <- 1000
 
