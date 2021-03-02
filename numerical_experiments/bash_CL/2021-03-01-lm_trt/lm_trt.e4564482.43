@@ -726,3 +726,15 @@ B_boot_idx: 900 [90%], 45839 secs
 B_boot_idx: 1000 [100%], 45917 secs
 Saved current state. Minutes elapsed: 765.292
 innerloop_idx: 20, N0: 49
+B_boot_idx: 100 [10%], 45994 secs
+B_boot_idx: 200 [20%], 46073 secs
+B_boot_idx: 300 [30%], 46150 secs
+B_boot_idx: 400 [40%], 46230 secs
+B_boot_idx: 500 [50%], 46308 secs
+B_boot_idx: 600 [60%], 46387 secs
+B_boot_idx: 700 [70%], 46464 secs
+B_boot_idx: 800 [80%], 46543 secs
+B_boot_idx: 900 [90%], 46620 secs
+B_boot_idx: 1000 [100%], 46698 secs
+Saved current state. Minutes elapsed: 778.333
+Saved FINAL state. Minutes elapsed: 778.333

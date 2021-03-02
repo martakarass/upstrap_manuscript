@@ -68,3 +68,8 @@ Saved current state. Minutes elapsed: 928.873
 innerloop_idx: 2, N0: 120
 B_boot_idx: 100 [10%], 56865 secs
 B_boot_idx: 200 [20%], 58002 secs
+B_boot_idx: 300 [30%], 59120 secs
+B_boot_idx: 400 [40%], 60253 secs
+B_boot_idx: 500 [50%], 61398 secs
+B_boot_idx: 600 [60%], 62761 secs
+B_boot_idx: 700 [70%], 63964 secs
