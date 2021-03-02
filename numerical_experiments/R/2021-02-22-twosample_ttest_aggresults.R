@@ -29,7 +29,9 @@ power_val    <- 0.8
 
 # read precomputed raw results data 
 fnames_all <- list.files(res_fdir_raw, full.names = TRUE)
+
 dat_all_list <- lapply(fnames_all, readRDS)
+length(fnames_all)
 
 
 # ------------------------------------------------------------------------------

@@ -13,6 +13,10 @@ library(lme4)
 library(lmerTest)
 library(geepack)
 
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # one-sample t-test ------------------------------------------------------------
 
 x = power_grid <- c(0.1, 0.3, 0.5, 0.7, 0.9, 0.95)
@@ -37,6 +41,9 @@ data.frame(x, y = ceiling(y))
 # 6 0.95 147
 
 
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # two-sample t-test ------------------------------------------------------------
 
 x = power_grid <- c(0.1, 0.3, 0.5, 0.7, 0.9, 0.95)
@@ -54,7 +61,95 @@ data.frame(x, y = ceiling(y))
 
 
 
-# LMM (1 + 0 cov) --------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# LM (1 trt + 2 covs) ----------------------------------------------------------
+
+coef_x0 <- 0 # set to zero 
+coef_x1 <- 0.4
+coef_x2 <- 0 # set to zero 
+coef_x3 <- 0 # set to zero 
+sigma2  <- 1
+N       <- 50   # sample size of each of the two arms
+N1_min  <- 10
+N1_max  <- 300
+
+# define N1 grid
+N1_grid   <- seq(from = N1_min, to = N1_max, by = 2)
+N1_grid_l <- length(N1_grid)
+
+rep_R <- 1000
+
+# TMP
+mat_out_LM  <- matrix(NA, nrow = rep_R, ncol = N1_grid_l)
+
+set.seed(123)
+t1 <- Sys.time()
+for (rep_i in 1:rep_R){ # rep_i <- 1
+  print(paste0("r_rep: ", rep_i))
+  
+  # deterministic quantities
+  N_tmp <- N1_max
+  subjid_i     <- 1:(N_tmp * 2)         # subject ID unique in whole data set 
+  subjid_arm_i <- c(1:N_tmp, 1:N_tmp)   # subject ID unique in a trt arm
+  x1_i         <- c(rep(1, N_tmp), rep(0, N_tmp))
+  # simulated quantities
+  x2_i         <- rbinom(n = N_tmp * 2, size = 1, prob = 0.5)
+  x3_i         <- runif(n = N_tmp * 2, min = 18, max = 100)
+  eps_i        <- rnorm(N_tmp * 2, sd = sqrt(sigma2))
+  # simulated/generated data frame variables 
+  y_i   <- coef_x0 + (coef_x1 * x1_i) + (coef_x2 * x2_i) + (coef_x3 * x3_i) + eps_i
+  dat   <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i,
+                      subjid = subjid_i, subjid_arm = subjid_arm_i)
+  
+  # iterate over number of independent units (subjects) in the same arm
+  for (N1_grid_idx in 1 : N1_grid_l){ # N1_grid_idx <- 10
+    N1_tmp <- N1_grid[N1_grid_idx]
+    dat_sub <- dat %>% filter(subjid_arm <= N1_tmp)
+    # LM
+    fit_LM   <- lm(y ~ x1 + x2 + x3, data = dat_sub)
+    fit_LM_s <- summary(fit_LM)
+    fit_LM_coefpval  <- fit_LM_s$coefficients[2, 4]
+    mat_out_LM[rep_i, N1_grid_idx] <- (fit_LM_coefpval < 0.05) * 1
+  }
+}
+t2 <- Sys.time()
+t2 - t1
+# Time difference of 1.608392 mins
+
+est_power_df <- data.frame(
+  N1 = N1_grid,
+  est_power = matrixStats::colMeans2(mat_out_LM)
+)
+est_power_df
+
+# target df 
+target_power_df <- data.frame(
+  target_power = c(0.3, 0.5, 0.7, 0.9, 0.95)
+)
+est_power_df %>% 
+  full_join(target_power_df, by = character()) %>%
+  mutate(power_diff = abs(est_power - target_power)) %>%
+  group_by(target_power) %>%
+  filter(power_diff == min(power_diff)) %>%
+  summarise(N1 = mean(N1))
+#   target_power    N1
+#          <dbl> <dbl>
+# 1         0.3     28
+# 2         0.5     48
+# 3         0.7     74
+# 4         0.9    134
+# 5         0.95   158
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# LMM (1 trt + 0 cov) ----------------------------------------------------------
 
 coef_x1 <- 0.5
 tau2    <- 1
@@ -143,7 +238,10 @@ est_power_df %>%
 
 
 
-# GLMM (1 + 0 cov) --------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# GLMM (1 trt + 0 cov) ---------------------------------------------------------
 
 # define experiment params 
 coef_x1 <- 0.5

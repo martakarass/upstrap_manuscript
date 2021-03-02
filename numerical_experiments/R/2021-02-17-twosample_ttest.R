@@ -91,6 +91,7 @@ for (N0 in N0_grid){ # N0 <- 50; i <- 1
   mat_out_powerttest <- matrix(NA, nrow = rep_n, ncol = N1_grid_l)
   mat_out_upstrap    <- matrix(NA, nrow = rep_n, ncol = N1_grid_l)
   for (i in 1:rep_n){
+    if (i %% 10 == 0) message(paste0("i: ", i))
     sample_i_gr1 <- x_mat_gr1[i, ]
     sample_i_gr2 <- x_mat_gr2[i, ]
     # sample_i: generate power estimate with power.t.test()
