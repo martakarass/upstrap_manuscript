@@ -67,19 +67,19 @@ data.frame(x, y = ceiling(y))
 # LM (1 trt + 2 covs) ----------------------------------------------------------
 
 coef_x0 <- 0 # set to zero 
-coef_x1 <- 0.4
+coef_x1 <- 0.5
 coef_x2 <- 0 # set to zero 
 coef_x3 <- 0 # set to zero 
 sigma2  <- 1
 N       <- 50   # sample size of each of the two arms
 N1_min  <- 10
-N1_max  <- 300
+N1_max  <- 200
 
 # define N1 grid
-N1_grid   <- seq(from = N1_min, to = N1_max, by = 2)
+N1_grid   <- seq(from = N1_min, to = N1_max, by = 1)
 N1_grid_l <- length(N1_grid)
 
-rep_R <- 1000
+rep_R <- 500
 
 # TMP
 mat_out_LM  <- matrix(NA, nrow = rep_R, ncol = N1_grid_l)
@@ -134,15 +134,145 @@ est_power_df %>%
   group_by(target_power) %>%
   filter(power_diff == min(power_diff)) %>%
   summarise(N1 = mean(N1))
-#   target_power    N1
-#          <dbl> <dbl>
-# 1         0.3     28
-# 2         0.5     48
-# 3         0.7     74
-# 4         0.9    134
-# 5         0.95   158
+
+# 1         0.3     20
+# 2         0.5     31
+# 3         0.7     49
+# 4         0.9     91
+# 5         0.95   113
 
 
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# GLM (1 trt + 2 covs) ----------------------------------------------------------
+
+# define experiment params 
+coef_x0 <- 0 # set to zero 
+coef_x1 <- 0.4
+coef_x2 <- 0 # set to zero 
+coef_x3 <- 0 # set to zero 
+sigma2  <- 1
+N       <- 50   # sample size of each of the two arms
+N1_min  <- 10
+N1_max  <- 300
+
+# define N1 grid
+N1_grid   <- seq(from = N1_min, to = N1_max, by = 3)
+N1_grid_l <- length(N1_grid)
+
+# deterministic quantities
+N_tmp <- N1_max
+subjid_i     <- 1:(N_tmp * 2)         # subject ID unique in whole data set 
+subjid_arm_i <- c(1:N_tmp, 1:N_tmp)   # subject ID unique in a trt arm
+x1_i         <- c(rep(1, N_tmp), rep(0, N_tmp))
+
+
+# step 1: choose the intercept ----------------------------------------------------
+
+R_rep <- 1000
+coef_0_grid <- seq(-1, 1, length.out = 100)
+out_mat <- matrix(NA, nrow = R_rep, ncol = length(coef_0_grid))
+
+for (rep_i in 1 : R_rep){
+  print(rep_i)
+  subjid_i     <- 1:(N_tmp * 2)         # subject ID unique in whole data set 
+  subjid_arm_i <- c(1:N_tmp, 1:N_tmp)   # subject ID unique in a trt arm
+  x1_i         <- c(rep(1, N_tmp), rep(0, N_tmp))
+  # simulated quantities
+  x2_i         <- rbinom(n = N_tmp * 2, size = 1, prob = 0.5)
+  x3_i         <- runif(n = N_tmp * 2, min = 18, max = 100)
+  for (coef_idx in 1 : length(coef_0_grid)){
+    # simulated/generated data frame variables 
+    XB_i     <- coef_0_grid[coef_idx] + (coef_x1 * x1_i) + (coef_x2 * x2_i) + (coef_x3 * x3_i) 
+    p_i      <- 1/(1 + exp(-XB_i))
+    y_i      <- rbinom(n = length(p_i), size = 1, prob = p_i)
+    out_mat[rep_i, coef_idx] <- mean(y_i)
+  }
+}
+out_vec <- matrixStats::colMeans2(out_mat)
+coef_0_grid[which.min(abs(out_vec - 0.5))]
+# [1] -0.1919192
+
+
+# step 2: choose N1 grid ------------------------------------------------------
+
+# define experiment params 
+coef_x0 <- -0.2 # set to zero 
+coef_x1 <- 0.5
+coef_x2 <- 0 # set to zero 
+coef_x3 <- 0 # set to zero 
+sigma2  <- 1
+N       <- 50   # sample size of each of the two arms
+N1_min  <- 10
+N1_max  <- 400
+
+N1_grid   <- seq(from = N1_min, to = N1_max, by = 5)
+N1_grid_l <- length(N1_grid)
+
+rep_R <- 500
+
+# TMP
+mat_out_GLM  <- matrix(NA, nrow = rep_R, ncol = N1_grid_l)
+
+set.seed(123)
+t1 <- Sys.time()
+for (rep_i in 1:rep_R){ # rep_i <- 1
+  print(paste0("r_rep: ", rep_i))
+  
+  # deterministic quantities
+  N_tmp <- N1_max
+  subjid_i     <- 1:(N_tmp * 2)         # subject ID unique in whole data set 
+  subjid_arm_i <- c(1:N_tmp, 1:N_tmp)   # subject ID unique in a trt arm
+  x1_i         <- c(rep(1, N_tmp), rep(0, N_tmp))
+  # simulated quantities
+  x2_i    <- rbinom(n = N_tmp * 2, size = 1, prob = 0.5)
+  x3_i    <- runif(n = N_tmp * 2, min = 18, max = 100)
+  XB_i    <- coef_x0 + (coef_x1 * x1_i) + (coef_x2 * x2_i) + (coef_x3 * x3_i)
+  p_i     <- 1/(1 + exp(-XB_i))
+  y_i     <- rbinom(n = length(p_i), size = 1, prob = p_i)
+  dat   <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i,
+                      subjid = subjid_i, subjid_arm = subjid_arm_i)
+  
+  # iterate over number of independent units (subjects) in the same arm
+  for (N1_grid_idx in 1 : N1_grid_l){ # N1_grid_idx <- 10
+    N1_tmp <- N1_grid[N1_grid_idx]
+    dat_sub <- dat %>% filter(subjid_arm <= N1_tmp)
+    # GLM
+    fit_GLM   <- glm(y ~ x1 + x2 + x3, data = dat_sub, family = binomial(link = "logit"))
+    fit_GLM_s <- summary(fit_GLM)
+    fit_GLM_coefpval  <- fit_GLM_s$coefficients[2, 4]
+    mat_out_GLM[rep_i, N1_grid_idx] <- (fit_GLM_coefpval < 0.05) * 1
+  }
+}
+t2 <- Sys.time()
+t2 - t1
+# Time difference of 2.114288 mins
+
+
+est_power_df <- data.frame(
+  N1 = N1_grid,
+  est_power = matrixStats::colMeans2(mat_out_GLM)
+)
+est_power_df
+
+# target df 
+target_power_df <- data.frame(
+  target_power = c(0.3, 0.5, 0.7, 0.9, 0.95)
+)
+est_power_df %>% 
+  full_join(target_power_df, by = character()) %>%
+  mutate(power_diff = abs(est_power - target_power)) %>%
+  group_by(target_power) %>%
+  filter(power_diff == min(power_diff)) %>%
+  summarise(N1 = mean(N1))
+# target_power    N1
+# <dbl> <dbl>
+# 1         0.3    70 
+# 2         0.5   120 
+# 3         0.7   200 
+# 4         0.9   322.
+# 5         0.95  400 
 
 
 
