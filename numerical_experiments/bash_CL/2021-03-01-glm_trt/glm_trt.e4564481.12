@@ -1,0 +1,70 @@
+Loading conda_R/4.0.x
+Unloading conda_R/4.0.x
+Loading conda_R/4.0.x
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+✔ ggplot2 3.3.3     ✔ purrr   0.3.4
+✔ tibble  3.1.0     ✔ dplyr   1.0.4
+✔ tidyr   1.1.2     ✔ stringr 1.4.0
+✔ readr   1.4.0     ✔ forcats 0.5.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::count()  masks matrixStats::count()
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-03-01-glm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-03-01-glm_trt_raw/arrayjob_12.rds
+innerloop_idx: 1, N0: 70
+B_boot_idx: 100 [10%], 2406 secs
+B_boot_idx: 200 [20%], 4833 secs
+B_boot_idx: 300 [30%], 6987 secs
+B_boot_idx: 400 [40%], 9057 secs
+B_boot_idx: 500 [50%], 10968 secs
+B_boot_idx: 600 [60%], 12763 secs
+B_boot_idx: 700 [70%], 14578 secs
+B_boot_idx: 800 [80%], 16350 secs
+B_boot_idx: 900 [90%], 18022 secs
+B_boot_idx: 1000 [100%], 19403 secs
+Saved current state. Minutes elapsed: 323.619
+innerloop_idx: 1, N0: 120
+B_boot_idx: 100 [10%], 20797 secs
+B_boot_idx: 200 [20%], 22090 secs
+B_boot_idx: 300 [30%], 23423 secs
+B_boot_idx: 400 [40%], 24730 secs
+B_boot_idx: 500 [50%], 26088 secs
+B_boot_idx: 600 [60%], 27409 secs
+B_boot_idx: 700 [70%], 28715 secs
+B_boot_idx: 800 [80%], 30041 secs
+B_boot_idx: 900 [90%], 31325 secs
+B_boot_idx: 1000 [100%], 32643 secs
+Saved current state. Minutes elapsed: 544.208
+innerloop_idx: 1, N0: 200
+B_boot_idx: 100 [10%], 33817 secs
+B_boot_idx: 200 [20%], 34968 secs
+B_boot_idx: 300 [30%], 36142 secs
+B_boot_idx: 400 [40%], 37285 secs
+B_boot_idx: 500 [50%], 38445 secs
+B_boot_idx: 600 [60%], 39574 secs
+B_boot_idx: 700 [70%], 40686 secs
+B_boot_idx: 800 [80%], 41805 secs
+B_boot_idx: 900 [90%], 42934 secs
+B_boot_idx: 1000 [100%], 44051 secs
+Saved current state. Minutes elapsed: 734.38
+innerloop_idx: 2, N0: 70
+B_boot_idx: 100 [10%], 45234 secs
+B_boot_idx: 200 [20%], 46428 secs
+B_boot_idx: 300 [30%], 47608 secs
+B_boot_idx: 400 [40%], 48766 secs
+B_boot_idx: 500 [50%], 49928 secs
+B_boot_idx: 600 [60%], 51071 secs
+B_boot_idx: 700 [70%], 52203 secs
+B_boot_idx: 800 [80%], 53373 secs
+B_boot_idx: 900 [90%], 54550 secs
+B_boot_idx: 1000 [100%], 55717 secs
+Saved current state. Minutes elapsed: 928.873
+innerloop_idx: 2, N0: 120
+B_boot_idx: 100 [10%], 56865 secs
+B_boot_idx: 200 [20%], 58002 secs
