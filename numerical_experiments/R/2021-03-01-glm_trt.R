@@ -29,7 +29,7 @@ coef_x3 <- 0 # set to zero
 sigma2  <- 1
 N0_grid <- c(70, 120, 200)   # sample size of each of the two arms
 N1_min  <- 10
-N1_max  <- 200
+N1_max  <- 400
 # target_power    N1
 # <dbl> <dbl>
 # 1         0.3    70 
