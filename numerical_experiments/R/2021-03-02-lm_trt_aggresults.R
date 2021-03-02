@@ -22,7 +22,7 @@ dir.create(path = res_fdir_agg)
 # N  <- 41   # sample size of each of the two arms
 
 # parameters for bootstrap CI computation
-B_bootci     <- 3
+B_bootci     <- 1000
 conf_bootci  <- 0.95
 alpha_bootci <- (1 + c(-conf_bootci, conf_bootci))/2
 power_val    <- 0.8
@@ -190,7 +190,11 @@ for (N0_tmp in N0_grid){
 }
 t2 <- Sys.time()
 t2 - t1
+message("Finished PART 2.")
 
 # save the aggregated data 
 saveRDS(out_df_all, paste0(res_fdir_agg, "/lm_trt_samplesize_est_bootCI.rds"))
 rm(out_df_all)
+
+message("Saved the results.")
+
