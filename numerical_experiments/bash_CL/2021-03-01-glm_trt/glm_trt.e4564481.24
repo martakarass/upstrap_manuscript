@@ -70,3 +70,7 @@ B_boot_idx: 100 [10%], 59541 secs
 B_boot_idx: 200 [20%], 60875 secs
 B_boot_idx: 300 [30%], 62215 secs
 B_boot_idx: 400 [40%], 63558 secs
+B_boot_idx: 500 [50%], 64898 secs
+B_boot_idx: 600 [60%], 66235 secs
+B_boot_idx: 700 [70%], 67580 secs
+B_boot_idx: 800 [80%], 68917 secs

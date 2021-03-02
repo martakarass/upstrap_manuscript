@@ -362,3 +362,33 @@ B_boot_idx: 500 [50%], 63598 secs
 B_boot_idx: 600 [60%], 63824 secs
 B_boot_idx: 700 [70%], 64055 secs
 B_boot_idx: 800 [80%], 64272 secs
+B_boot_idx: 900 [90%], 64491 secs
+B_boot_idx: 1000 [100%], 64722 secs
+Saved current state. Minutes elapsed: 1078.745
+innerloop_idx: 10, N0: 200
+B_boot_idx: 100 [10%], 64948 secs
+B_boot_idx: 200 [20%], 65159 secs
+B_boot_idx: 300 [30%], 65389 secs
+B_boot_idx: 400 [40%], 65618 secs
+B_boot_idx: 500 [50%], 65831 secs
+B_boot_idx: 600 [60%], 66043 secs
+B_boot_idx: 700 [70%], 66273 secs
+B_boot_idx: 800 [80%], 66500 secs
+B_boot_idx: 900 [90%], 66707 secs
+B_boot_idx: 1000 [100%], 66925 secs
+Saved current state. Minutes elapsed: 1115.471
+innerloop_idx: 11, N0: 70
+B_boot_idx: 100 [10%], 67155 secs
+B_boot_idx: 200 [20%], 67383 secs
+B_boot_idx: 300 [30%], 67598 secs
+B_boot_idx: 400 [40%], 67805 secs
+B_boot_idx: 500 [50%], 68029 secs
+B_boot_idx: 600 [60%], 68256 secs
+B_boot_idx: 700 [70%], 68476 secs
+B_boot_idx: 800 [80%], 68685 secs
+B_boot_idx: 900 [90%], 68912 secs
+B_boot_idx: 1000 [100%], 69141 secs
+Saved current state. Minutes elapsed: 1152.436
+innerloop_idx: 11, N0: 120
+B_boot_idx: 100 [10%], 69373 secs
+B_boot_idx: 200 [20%], 69582 secs
