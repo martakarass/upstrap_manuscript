@@ -39,6 +39,7 @@ str(dat_all)
 dat_all %>% select(arrayjob_idx, innerloop_idx)  %>% distinct() %>% nrow()
 length(unique(dat_all$idx))
 # Mar 2: 501
+# Mar 4: 969
 
 ylab_vec <- c("out_gold_GLM", "out_boot_GLM")
 N0_grid <- sort(unique(dat_all$N0))

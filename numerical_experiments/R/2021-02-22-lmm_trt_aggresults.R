@@ -40,6 +40,7 @@ names(dat_all)
 dat_all %>% select(arrayjob_idx, innerloop_idx)  %>% distinct() %>% nrow()
 length(unique(dat_all$idx))
 # Mar 1: 960
+# Mar 4: 965
 
 
 # ------------------------------------------------------------------------------

@@ -18,4 +18,8 @@ theme_ggpr <- function(){
 }
 theme_set(theme_ggpr())
 
+# numerical experiments
+my_pal <- pal_futurama()(12)
+my_pal_numexp <- my_pal[c(4,6)]
+
 message("The file config_figures.R with ggplot2 theme was read.")
