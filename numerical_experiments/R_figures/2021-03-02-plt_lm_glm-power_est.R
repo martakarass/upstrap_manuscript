@@ -64,9 +64,9 @@ plt_2a <-
   scale_x_continuous(breaks = seq(0, 120, by = 20), limits = c(NA, 80)) +
   theme(
     legend.position = "none",
-    plot.title = element_text(size = 12),
+    plot.title = element_text(size = title_font_size_numexp),
     panel.grid.major.x = element_blank(),
-    strip.text = element_text(size = 12)
+    strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
   labs(x = "Sample size M", y = "Estimated power", title = "Problem 3: linear regression\n(OLS est. method)",
        color = "Upstrap type:") + 
@@ -125,11 +125,11 @@ plt_2b <-
   scale_x_continuous(breaks = seq(0, 400, by = 50), limits = c(NA, 350)) +
   theme(
     legend.position = c(0.8, 0.1),
-    legend.title=element_text(size = 12),
+    legend.title=element_text(size = legend_font_size_numexp),
     legend.background = element_rect(linetype="solid", size=0.3),
-    plot.title = element_text(size = 12),
+    plot.title = element_text(size = title_font_size_numexp),
     panel.grid.major.x = element_blank(),
-    strip.text = element_text(size = 12)
+    strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
   labs(x = "Sample size M", y = "Estimated power", title = "Problem 4: generalized linear regression\n(IRLS est. method)",
        color = "Upstrap type:", fill = "Upstrap type:") + 

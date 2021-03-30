@@ -53,10 +53,13 @@ plt_1 <-
   scale_x_continuous(breaks = seq(0, 150, by = 50), limits = c(0, 150)) + 
   theme(
     legend.position = "none",
-    plot.title = element_text(size = 12),
-    panel.grid.major.x = element_blank()
+    plot.title = element_text(size = title_font_size_numexp),
+    panel.grid.major.x = element_blank(),
+    strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
-  labs(x = "Sample size M", y = "Estimated power", title = "Problem 1: simple linear regression\n(Est. method: one-sample t-test)") + 
+  labs(x = TeX("Sample size $M_k$"), 
+       y = "Estimated power", 
+       title = "Problem 1: linear regression with intercept only\n(Est. method: one-sample t-test)") + 
   scale_color_manual(values = my_pal_numexp) + 
   scale_fill_manual(values = my_pal_numexp) 
 plt_1
@@ -101,12 +104,15 @@ plt_2 <-
   scale_x_continuous(breaks = seq(0, 300, by = 50)) + 
   theme(
     legend.position = c(0.8, 0.1),
-    legend.title=element_text(size = 10),
+    legend.title=element_text(size = legend_font_size_numexp),
     legend.background = element_rect(linetype="solid", size=0.3),
-    plot.title = element_text(size = 12),
-    panel.grid.major.x = element_blank()
+    plot.title = element_text(size = title_font_size_numexp),
+    panel.grid.major.x = element_blank(),
+    strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
-  labs(x = "Sample size M", y = "Estimated power", title = "Problem 2: simple linear regression\n(Est. method: two-sample t-test)",
+  labs(x = TeX("Sample size $M_k$"), 
+       y = "Estimated power", 
+       title = "Problem 2: simple linear regression\n(Est. method: two-sample t-test)",
        color = "Upstrap type:",
        fill = "Upstrap type:"
        ) + 

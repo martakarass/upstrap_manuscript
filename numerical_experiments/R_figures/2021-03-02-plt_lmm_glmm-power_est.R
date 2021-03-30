@@ -59,9 +59,9 @@ plt_2a <-
   scale_x_continuous(breaks = seq(0, 250, by = 50), limits = c(NA, 150)) +
   theme(
     legend.position = "none",
-    plot.title = element_text(size = 12),
+    plot.title = element_text(size = title_font_size_numexp),
     panel.grid.major.x = element_blank(),
-    strip.text = element_text(size = 12)
+    strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
   labs(x = "Sample size M", y = "Estimated power", title = "Problem 5: multilevel linear regression\n(GEE est. method)",
        color = "Upstrap type:") + 
@@ -116,11 +116,11 @@ plt_2b <-
   scale_x_continuous(breaks = seq(0, 250, by = 50), limits = c(NA, 250)) +
   theme(
     legend.position = c(0.8, 0.25),
-    legend.title=element_text(size = 12),
+    legend.title=element_text(size = legend_font_size_numexp),
     legend.background = element_rect(linetype="solid", size=0.3),
-    plot.title = element_text(size = 12),
+    plot.title = element_text(size = title_font_size_numexp),
     panel.grid.major.x = element_blank(),
-    strip.text = element_text(size = 12)
+    strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
   labs(x = "Sample size M", y = "Estimated power", title = "Problem 6: multilevel generalized linear regression\n(GEE est. method)",
        color = "Upstrap type:", fill = "Upstrap type:") + 

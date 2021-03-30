@@ -41,8 +41,6 @@ aggstat_name_label <- c("median", "mean")
 # ------------------------------------------------------------------------------
 # PART 1: power curves and their aggregates: (a) mean, (b) median
  
-gg_base_size <- 12
-
 plt_df_1_sub <- readRDS(paste0(results_dir, "/plt_df_1_sub.rds"))
 plt_df_2_sub <- readRDS(paste0(results_dir, "/plt_df_2_sub.rds"))
 plt_df_3_sub <- readRDS(paste0(results_dir, "/plt_df_3_sub.rds"))
@@ -65,7 +63,7 @@ plt1 <-
   geom_line(alpha = 0.2, size = 0.1) + 
   geom_line(data = plt_df_baseline, aes(x = N1, y = value, group = 1), inherit.aes = FALSE, size = 1.3) + 
   geom_line(data = plt_df_1_agg, aes(x = N1, y = value, color = name), inherit.aes = FALSE) + 
-  theme_classic(base_size = gg_base_size) + 
+  theme_classic(base_size = gg_base_size_numexp) + 
   labs(x = "Sample size", 
        # y = "Power",
        # title = TeX('power.t.test(delta = $Z_i^{\\bar{X}_N}$, sd = $\\sigma$)'),
@@ -74,8 +72,9 @@ plt1 <-
   scale_color_futurama() + 
   # theme(legend.position = c(0.8, 0.2)) + 
   theme(legend.position = "none",
-        legend.title = element_text(size = gg_base_size),
-        plot.title = element_text(size = gg_base_size)) + 
+        legend.title = element_text(size = legend_font_size_numexp),
+        # plot.title = element_text(size = gg_base_size_numexp)
+        ) + 
   scale_y_continuous(limits = c(0, 1))
 # plt1
 
@@ -85,7 +84,7 @@ plt2 <-
   geom_line(alpha = 0.2, size = 0.1) + 
   geom_line(data = plt_df_baseline, aes(x = N1, y = value, group = 1), inherit.aes = FALSE, size = 1.3) + 
   geom_line(data = plt_df_2_agg, aes(x = N1, y = value, color = name), inherit.aes = FALSE) + 
-  theme_classic(base_size = gg_base_size) + 
+  theme_classic(base_size = gg_base_size_numexp) + 
   labs(x = "Sample size", 
        # y = "Power",
        # title = TeX('power.t.test(delta = $\\mu$, sd = $Z_i^{S_N}$)'),
@@ -94,8 +93,9 @@ plt2 <-
   scale_color_futurama() + 
   # theme(legend.position = c(0.8, 0.2)) + 
   theme(legend.position = "none",
-        legend.title = element_text(size = gg_base_size),
-        plot.title = element_text(size = gg_base_size)) + 
+        legend.title = element_text(size = legend_font_size_numexp),
+        # plot.title = element_text(size = gg_base_size_numexp)
+  ) + 
   scale_y_continuous(limits = c(0, 1))
 # plt2
 
@@ -105,7 +105,7 @@ plt3 <-
   geom_line(alpha = 0.2, size = 0.1) + 
   geom_line(data = plt_df_baseline, aes(x = N1, y = value, group = 1), inherit.aes = FALSE, size = 1.3) + 
   geom_line(data = plt_df_3_agg, aes(x = N1, y = value, color = name), inherit.aes = FALSE) + 
-  theme_classic(base_size = gg_base_size) + 
+  theme_classic(base_size = gg_base_size_numexp) + 
   labs(x = "Sample size", 
        # y = "Power",
        # title = TeX('power.t.test(delta = $Z_i^{\\bar{X}_N}$, sd = $Z_i^{S_N}$)'),
@@ -114,8 +114,9 @@ plt3 <-
        color = "point-wise\naggregate") + 
   scale_color_futurama() + 
   theme(legend.position = c(0.8, 0.3),
-        legend.title = element_text(size = gg_base_size),
-        plot.title = element_text(size = gg_base_size)) + 
+        legend.title = element_text(size = legend_font_size_numexp),
+        # plot.title = element_text(size = gg_base_size_numexp)
+  ) + 
   scale_y_continuous(limits = c(0, 1))
 # plt3
 
@@ -262,7 +263,7 @@ plt3b <-
   scale_x_continuous(limits = c(0, 1)) +   
   geom_vline(data = plt_s_df_agg, aes(xintercept = x, color = name)) + 
   scale_color_futurama() + 
-  theme(legend.position = c(0.2, 0.8))
+  theme(legend.position = c(0.2, 0.8)) 
 
 
 # plot final: combined plot
