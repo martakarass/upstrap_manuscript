@@ -68,7 +68,9 @@ plt_2a <-
     panel.grid.major.x = element_blank(),
     strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
-  labs(x = "Sample size M", y = "Estimated power", title = "Problem 3: linear regression\n(OLS est. method)",
+  labs(x = TeX("Sample size $M_k$"), 
+       y = "Estimated power", 
+       title = "Problem 3: linear regression\n(Est. method: OLS)",
        color = "Upstrap type:") + 
   scale_color_manual(values = my_pal_numexp) + 
   scale_fill_manual(values = my_pal_numexp)
@@ -131,7 +133,9 @@ plt_2b <-
     panel.grid.major.x = element_blank(),
     strip.text = element_text(size = facetrid_font_size_numexp)
   ) + 
-  labs(x = "Sample size M", y = "Estimated power", title = "Problem 4: generalized linear regression\n(IRLS est. method)",
+  labs(x = TeX("Sample size $M_k$"), 
+       y = "Estimated power",
+       title = "Problem 4: generalized linear regression\n(Est. method: IRLS)",
        color = "Upstrap type:", fill = "Upstrap type:") + 
   scale_color_manual(values = my_pal_numexp) + 
   scale_fill_manual(values = my_pal_numexp)
