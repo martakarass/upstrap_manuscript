@@ -1,139 +1,194 @@
 
-#' This script generate
-#' - figures
-#' showing how sampling distribution of sample mean and sample standard deviation
-#' affect the (a) mean, (b) median of power across multiple experiment repetitions. 
 
 rm(list = ls())
-
 library(here)
 library(tidyverse)
 library(matrixStats)
 library(latex2exp)
 library(cowplot)
-
 source(here::here("numerical_experiments/R/config_figures.R"))
 source(here::here("numerical_experiments/R/config_utils.R"))
 
-# dir to results 
-results_dir <- paste0(here::here(), "/numerical_experiments/results/2021-02-10-onesample_ttest_aggegating_comparison")
-
-# # simulation parameters
-N0     <- 50
-N1_min <- N0
-N1_max <- 200
-N1_grid <- N1_min : N1_max
-# N1_grid_l <- length(N1_grid)
-# 
-# # data generating model
-mu <- 0.3
-sigma2_v <- 1
-sigma_v  <- 1
-# rep_R <- 10000
-
-# factor levels, labels 
-aggstat_name_level <- c("power_est_median", "power_est_mean")
-aggstat_name_label <- c("median", "mean")
-
 
 # ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
-# PART 1: power curves and their aggregates: (a) mean, (b) median
- 
-plt_df_1_sub <- readRDS(paste0(results_dir, "/plt_df_1_sub.rds"))
-plt_df_2_sub <- readRDS(paste0(results_dir, "/plt_df_2_sub.rds"))
-plt_df_3_sub <- readRDS(paste0(results_dir, "/plt_df_3_sub.rds"))
-plt_df_1_agg <- readRDS(paste0(results_dir, "/plt_df_1_agg.rds"))
-plt_df_2_agg <- readRDS(paste0(results_dir, "/plt_df_2_agg.rds"))
-plt_df_3_agg <- readRDS(paste0(results_dir, "/plt_df_3_agg.rds"))
+# PLOT 1 
 
-# get baseline power 
-plt_df_baseline <- data.frame(
-  N1 = N1_grid,
-  value = sapply(N1_grid, function(n_tmp){
-    test_out <- power.t.test(n = n_tmp, delta = 0.3, sd = 1, sig.level = 0.05, type = "one.sample", alternative = "two.sided")
-    return(test_out$power)
-  })
+# read simulated example data
+results_dir <- paste0(here::here(), "/numerical_experiments/results/2021-04-05-onesample_ttest_aggegating_comparison")
+out_df <- readRDS(paste0(results_dir, "/out_df.rds"))
+
+# aggregate data 
+out_df_agg <- out_df %>%
+  group_by(M_sample_size) %>%
+  summarise(
+    powerttest_mean = mean(powerttest),
+    powerttest_median = median(powerttest),
+    upstrap_mean = mean(upstrap),
+    upstrap_median = median(upstrap),
+    ttest_mean = mean(ttest)
+  ) %>%
+  pivot_longer(cols = -M_sample_size) %>%
+  separate(name, into = c("est_approach", "results_agg_method"))
+head(out_df_agg)
+
+# define gold standard power data 
+n_arg <- sort(unique(out_df$M_sample_size))
+goldstandard_df <- data.frame(
+  M_sample_size = n_arg,
+  value = power.t.test(n = n_arg, delta = 0.3, sd = 1, type = "one.sample")$power
 )
 
-plt1 <- 
-  ggplot(plt_df_1_sub,
-         aes(x = N1, y = power_est, group = idx)) + 
-  geom_line(alpha = 0.2, size = 0.1) + 
-  geom_line(data = plt_df_baseline, aes(x = N1, y = value, group = 1), inherit.aes = FALSE, size = 1.3) + 
-  geom_line(data = plt_df_1_agg, aes(x = N1, y = value, color = name), inherit.aes = FALSE) + 
-  theme_classic(base_size = gg_base_size_numexp) + 
-  labs(x = "Sample size", 
-       # y = "Power",
-       # title = TeX('power.t.test(delta = $Z_i^{\\bar{X}_N}$, sd = $\\sigma$)'),
-       y = TeX('$power.t.test(delta = \\bar{x})$'),
-       color = "point-wise\naggregate") + 
-  scale_color_futurama() + 
-  # theme(legend.position = c(0.8, 0.2)) + 
-  theme(legend.position = "none",
-        legend.title = element_text(size = legend_font_size_numexp),
-        # plot.title = element_text(size = gg_base_size_numexp)
-        ) + 
-  scale_y_continuous(limits = c(0, 1))
-# plt1
+# pivot pre-aggregated data to generate a plot
+out_df_L <- 
+  out_df %>%
+  pivot_longer(cols = -c(rep_idx, M_sample_size), names_to = "est_approach") 
+head(out_df_L)
 
-plt2 <- 
-  ggplot(plt_df_2_sub,
-         aes(x = N1, y = power_est, group = idx)) + 
-  geom_line(alpha = 0.2, size = 0.1) + 
-  geom_line(data = plt_df_baseline, aes(x = N1, y = value, group = 1), inherit.aes = FALSE, size = 1.3) + 
-  geom_line(data = plt_df_2_agg, aes(x = N1, y = value, color = name), inherit.aes = FALSE) + 
-  theme_classic(base_size = gg_base_size_numexp) + 
-  labs(x = "Sample size", 
-       # y = "Power",
-       # title = TeX('power.t.test(delta = $\\mu$, sd = $Z_i^{S_N}$)'),
-       y = TeX('$power.t.test(sd = s)$'),
-       color = "point-wise\naggregate") + 
-  scale_color_futurama() + 
-  # theme(legend.position = c(0.8, 0.2)) + 
-  theme(legend.position = "none",
-        legend.title = element_text(size = legend_font_size_numexp),
-        # plot.title = element_text(size = gg_base_size_numexp)
-  ) + 
-  scale_y_continuous(limits = c(0, 1))
-# plt2
+est_approach_levels <- c("powerttest", "upstrap", "ttest")
+est_approach_labels <- c("(a) power.t.test", "(b) upstrap", "(c) t.test")
 
-plt3 <- 
-  ggplot(plt_df_3_sub,
-         aes(x = N1, y = power_est, group = idx)) + 
-  geom_line(alpha = 0.2, size = 0.1) + 
-  geom_line(data = plt_df_baseline, aes(x = N1, y = value, group = 1), inherit.aes = FALSE, size = 1.3) + 
-  geom_line(data = plt_df_3_agg, aes(x = N1, y = value, color = name), inherit.aes = FALSE) + 
-  theme_classic(base_size = gg_base_size_numexp) + 
-  labs(x = "Sample size", 
-       # y = "Power",
-       # title = TeX('power.t.test(delta = $Z_i^{\\bar{X}_N}$, sd = $Z_i^{S_N}$)'),
-       # title = TeX('power.t.test(delta = $(\\bar{X}_N)_i$, sd = $(S_N)_i$)'),
-       y = TeX('$power.t.test(delta = \\bar{x},\\;sd = s$)'),
-       color = "point-wise\naggregate") + 
-  scale_color_futurama() + 
-  theme(legend.position = c(0.8, 0.3),
-        legend.title = element_text(size = legend_font_size_numexp),
-        # plot.title = element_text(size = gg_base_size_numexp)
-  ) + 
-  scale_y_continuous(limits = c(0, 1))
-# plt3
+plt_list <- list()
+for (i in 1 : length(est_approach_levels)){ # i <- 2
+  est_approach_i  <- est_approach_levels[i]
+  out_df_agg_i    <- out_df_agg %>% filter(est_approach == est_approach_i)
+  out_df_L_i      <- out_df_L %>% filter(est_approach == est_approach_i)
+  plt <- ggplot()
+  if (i %in% c(1,2)){
+    plt <- plt +
+      geom_line(data = out_df_L_i %>% filter(rep_idx <= 100),
+                aes(x = M_sample_size, y = value, group = rep_idx),
+                color = "black", alpha = 0.1, size = 0.3) 
+  }
+  plt <- plt + 
+    geom_line(data = out_df_agg_i, 
+              aes(x = M_sample_size, y = value, color = results_agg_method, group = results_agg_method),
+              size = 1, inherit.aes = FALSE) + 
+    geom_line(data = goldstandard_df, aes(x = M_sample_size, y = value, group = 1), 
+              color = "black", inherit.aes = FALSE) + 
+    theme(
+      legend.title=element_text(size = legend_font_size_numexp),
+      plot.title = element_text(size = title_font_size_numexp),
+      panel.grid.major.x = element_blank(),
+      strip.text = element_text(size = facetrid_font_size_numexp)
+    ) + 
+    labs(x = TeX("Sample size $M_k$"),
+         y = "",
+         color = "",
+         title = est_approach_labels[i]) + 
+    scale_y_continuous(limits = c(0,1))  + 
+    theme(legend.position = c(0.7, 0.3)) 
+  # append plot to plots list
+  plt_list[[length(plt_list) + 1]] <- plt 
+}
 
-# combined plot
-plt_list <- list(plt1, plt2, plt3)
-plt <- plot_grid(plotlist = plt_list, ncol = 3, align = "v")
+plt <- plot_grid(plotlist = plt_list, ncol = 3, align = "v", byrow = TRUE)
 plt
 
-plt_fpath <- paste0(here::here(), "/numerical_experiments/results_figures/onesample_ttest_aggegating_comparison.png")
-save_plot(filename = plt_fpath, plot = plt, base_width = 10, base_height = 3.3)
+plt_fpath <- paste0(here::here(), "/numerical_experiments/results_figures/onesample_ttest_aggegating_comparison_PLOT1.png")
+save_plot(filename = plt_fpath, plot = plt, base_width = 10, base_height = 3.5)
+
+
+# ------------------------------------------------------------------------------
+# PLOT 2
+
+rm(out_df, out_df_L, out_df_agg, goldstandard_df)
+
+# read simulated example data
+results_dir <- paste0(here::here(), "/numerical_experiments/results/2021-04-05-onesample_ttest_aggegating_comparison")
+out_df <- readRDS(paste0(results_dir, "/out_df_PLOT2.rds"))
+head(out_df)
+
+# aggregate data 
+out_df_agg <- out_df %>%
+  group_by(M_sample_size, example) %>%
+  summarise(
+    powerttest_mean = mean(powerttest),
+    powerttest_median = median(powerttest)
+  ) %>%
+  pivot_longer(cols = -c(M_sample_size, example)) %>%
+  separate(name, into = c("est_approach", "results_agg_method"))
+head(out_df_agg)
+
+# define gold standard power data 
+n_arg <- sort(unique(out_df$M_sample_size))
+goldstandard_df <- data.frame(
+  M_sample_size = n_arg,
+  value = power.t.test(n = n_arg, delta = 0.3, sd = 1, type = "one.sample")$power
+)
+
+
+example_levels <- c("ex_a", "ex_b", "ex_c")
+example_labels <- c('$power.t.test(delta = \\bar{x},\\;sd = 1$)', 
+                    '$power.t.test(delta = 0.3,\\;sd = s$)', 
+                    '$power.t.test(delta = \\bar{x},\\;sd = s$)')
+
+plt_list <- list()
+for (i in 1 : length(example_levels)){ # i <- 1
+  example_i     <- example_levels[i]
+  out_df_i      <- out_df %>% filter(example == example_i)
+  out_df_agg_i  <- out_df_agg %>% filter(example == example_i)
+  plt <- 
+    ggplot(out_df_i %>% filter(rep_idx <= 100), 
+           aes(x = M_sample_size, y = powerttest, group = rep_idx)) + 
+    geom_line(alpha = 0.1, size = 0.3) + 
+    geom_line(data = out_df_agg_i, 
+              aes(x = M_sample_size, y = value, color = results_agg_method, group = results_agg_method),
+              size = 1) + 
+    geom_line(data = goldstandard_df, aes(x = M_sample_size, y = value, group = 1), 
+              color = "black") + 
+    theme(
+      legend.title=element_text(size = legend_font_size_numexp),
+      plot.title = element_text(size = title_font_size_numexp),
+      panel.grid.major.x = element_blank(),
+      strip.text = element_text(size = facetrid_font_size_numexp)
+    ) + 
+    labs(x = TeX("Sample size $M_k$"),
+         y = "",
+         color = "",
+         title = TeX(example_labels[i])) + 
+    scale_y_continuous(limits = c(0,1)) + 
+    theme(legend.position = c(0.7, 0.3)) 
+  # append plot to plots list
+  plt_list[[length(plt_list) + 1]] <- plt 
+}
+
+plt <- plot_grid(plotlist = plt_list, ncol = 3, align = "v", byrow = TRUE)
+plt
+
+plt_fpath <- paste0(here::here(), "/numerical_experiments/results_figures/onesample_ttest_aggegating_comparison_PLOT2.png")
+save_plot(filename = plt_fpath, plot = plt, base_width = 10, base_height = 3.5)
 
 
 
 # ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------
-# PART 2: dive into function: power(xbar_i), power(s_i), power(xbar_i, s_i)
+# PLOT 3
+
+rm(out_df, out_df_L, out_df_agg, goldstandard_df)
+
+# read simulated example data
+results_dir <- paste0(here::here(), "/numerical_experiments/results/2021-04-05-onesample_ttest_aggegating_comparison")
+out_df <- readRDS(paste0(results_dir, "/out_df_PLOT3.rds"))
+head(out_df)
+
+plt1 <- 
+  out_df %>% 
+  filter(arg_name == "xbar") %>%
+  ggplot(aes(x = arg_val)) + 
+  geom_density()
+plt1
+
+
+# simulation parameters
+N   <- 50
+R   <- 100000
+mu  <- 0.3
+sigma2 <- 1
+M_k <- 100
+
+xbar_obs_vec <- seq(-0.1, 0.7, length.out = 1000)
+s_obs_vec <- seq(0.75, 1.25, length.out = 1000)
+
+
 
 # get theoretical E(), sd() of sampling distributions for Xbar, S random variables
 xbar_mean <- mu
@@ -152,6 +207,7 @@ s_grid <- seq(
   to = qnorm(p = 1-0.01, mean = s_mean, sd = s_sd),
   length.out = 10000
 )
+
 # combine grids into dfs
 ## xbar 
 arg_power = sapply(xbar_grid, function(xbar_tmp){
@@ -197,8 +253,7 @@ plt_s_df_agg <- data.frame(
   mutate(name = factor(name, levels = aggstat_name_level, labels = aggstat_name_label))
 
 
-# ------------------------------------------------------------------------------
-# generate the plots 
+
 
 # Plot 1: density Xbar, density S
 plt1a <- 
@@ -228,7 +283,7 @@ plt2a <-
     y = TeX('$\\phi(\\bar{x}) = power.t.test(delta = \\bar{x}$)'),
     color = "power.t.test\nvalues\naggregate",
     x = TeX('$\\bar{x}$')) 
-  # theme(legend.position = c(0.8, 0.3))
+# theme(legend.position = c(0.8, 0.3))
 plt2b <- 
   ggplot(plt_s_df, aes(x = arg_grid, y = arg_power)) + 
   geom_line() + 
@@ -239,42 +294,21 @@ plt2b <-
     color = "power.t.test\nvalues\naggregate",
     x = TeX('$s$'))
 
-# Plot 3: power density
-plt3a <- 
-  ggplot(data.frame(x = xbar_power_vals), aes(x = x)) + 
-  geom_density() + 
-  labs(
-    # y = TeX('$\\overset{\\bar{X}\\;sampling\\;distribution}{density}$'),
-    y = TeX('$\\phi(\\bar{X})$ distribution density'),
-    x = TeX('$\\phi(\\bar{x})$'),
-    color =  TeX('$\\phi(\\bar{X})$: ')) + 
-  scale_x_continuous(limits = c(0, 1)) +   
-  geom_vline(data = plt_xbar_df_agg, aes(xintercept = x, color = name)) + 
-  scale_color_futurama() + 
-  theme(legend.position = c(0.2, 0.8))
-plt3b <- 
-  ggplot(data.frame(x = s_power_vals), aes(x = x)) + 
-  geom_density() + 
-  labs(
-    # y = TeX('$\\overset{\\bar{X}\\;sampling\\;distribution}{density}$'),
-    y = TeX('$\\phi(S)$ distribution density'),
-    x = TeX('$\\phi(s)$'),
-    color =  TeX('$\\phi(S)$: ')) + 
-  scale_x_continuous(limits = c(0, 1)) +   
-  geom_vline(data = plt_s_df_agg, aes(xintercept = x, color = name)) + 
-  scale_color_futurama() + 
-  theme(legend.position = c(0.2, 0.8)) 
-
-
 # plot final: combined plot
 plt_list <- list(plt1a, plt1b, 
-                 plt2a, plt2b, 
-                 plt3a, plt3b)
+                 plt2a, plt2b)
 plt <- plot_grid(plotlist = plt_list, ncol = 3, align = "v", byrow = FALSE)
 plt
 
 
-plt_fpath <- paste0(here::here(), "/numerical_experiments/results_figures/onesample_ttest_aggegating_comparison_2.png")
+plt_fpath <- paste0(here::here(), "/numerical_experiments/results_figures/onesample_ttest_aggegating_comparison_PLOT3.png")
 save_plot(filename = plt_fpath, plot = plt, base_width = 10, base_height = 6)
+
+
+
+
+
+
+
 
 
