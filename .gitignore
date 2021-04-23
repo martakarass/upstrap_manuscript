@@ -3,7 +3,6 @@
 .RData
 .DS_Store
 .Ruserdata
-use_case_examples/
 numerical_experiments/LongitudinalUpstrap/
 numerical_experiments/data_processed/
 numerical_experiments/results/
@@ -38,4 +37,17 @@ numerical_experiments/bash_CL/2021-01-05-sd_estimation_test/*
 
 numerical_experiments/bash_CL/2021-02-15-onesample_ttest/*
 !numerical_experiments/bash_CL/2021-02-15-onesample_ttest/onesample_ttest
+
+# Use case exmples
+use_case_examples/_OLD/
+use_case_examples/bausema2016/data_raw/
+use_case_examples/bausema2016/data_raw_csv/
+use_case_examples/bausema2016/results/
+use_case_examples/bausema2016/Rmd/
+use_case_examples/cohen2015/
+use_case_examples/notes/
+
+
+
+
 

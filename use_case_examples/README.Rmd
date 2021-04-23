@@ -1,0 +1,97 @@
+---
+title: "README"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This README describes the content of use_case_examples directory.
+
+# data_raw
+
+This directory contains "raw data" sets, as obtained / downloaded. 
+
+
+## rct
+
+* This directory contains "raw data" sets, as obtained / downloaded, from randomized control trials. 
+* Summary of data based on Naudet paper can be found here: https://docs.google.com/spreadsheets/d/1cgJVwrSxIICk60rPlxKwIhyI9UYrEce6HjB5LML-76w/edit?usp=sharing
+* Naudet paper: https://www.bmj.com/content/360/bmj.k400
+* Naudet paper code: https://osf.io/jgsw3/
+
+### LESIvGABA-C-R-2020.xlsx (rct, linear regression)
+
+Data 
+
+* Received over email
+
+Paper 
+
+* Title: Epidural steroid injections compared with gabapentin for lumbosacral radicular pain: multicenter randomized double blind comparative efficacy study
+* BMJ 2015; 350 doi: https://doi.org/10.1136/bmj.h1748
+* Concacted: Steven Cohen, scohen40@jhmi.edu,  2020-12-07
+* File received: 2020-12-07
+* Primary outcome measures: 
+    - Average leg pain, time 1; MD (95% CI),	0.4 (−0.3 to 1.2),	0.25,	0.4 (−0.3 to 1.2),	0.26
+    - Average leg pain, time 2; MD (95% CI),	0.3 (−0.5 to 1.2),	0.43,	0.3 (−0.5 to 1.2),	0.45
+
+Analysis variables used 
+
+* BaseLegAve
+* MLegAve
+* z3MLegAve
+* Group
+* Sex
+
+
+### doi_10.5061_dryad.nr8d8__v1
+
+Paper
+
+* bousema2016
+* Title: The impact of hotspot-targeted interventions on malaria transmission in Rachuonyo south district in the western Kenyan highlands: a cluster-randomized controlled trial
+* POLS Medicine (2016); https://doi.org/10.1371/journal.pmed.1001993
+* In a cluster-randomized trial from 22 March to 15 April 2012, we randomly allocated 
+    - five clusters to hotspot-targeted interventions with larviciding, distribution of long-lasting insecticide-treated nets, indoor residual spraying, and focal mass drug administration (2,082 individuals in 432 compounds)
+    - five control clusters received malaria control following Kenyan national policy (2,468 individuals in 512 compounds).
+* Primary outcome measure -- parasite prevalence in evaluation zones up to 500 m outside hotspots, determined by nested PCR (nPCR)
+    - at baseline 
+    - 8 wk post-intervention
+    - 16 wk post-intervention
+    
+    
+##### detailed notes 
+
+* nPCR was only performed on only a random selection of samples (12,912/16,381)
+* The primary outcome measure was parasite prevalence in the evaluation zone surrounding malaria hotspots, measured by nPCR
+*  Secondary outcome measures were (i) parasite prevalence inside hotspots, (ii) parasite prevalence in the evaluation zone as a function of distance from the hotspot boundary
+* All finger prick blood samples collected at baseline (n = 3,808) and
+8 wk (n = 3,817) and 16 wk after the intervention (n = 3,955) were tested for P. falciparum parasitemia by nPCR targeting the 18S rRNA gene (3808 + 3955 + 3817 = 11580)
+* Statistical analyses were performed using Stata (v. 13, StataCorp)
+* Each comparison was made using a t-test on the clusterlevel nPCR parasite prevalence.
+* Analyses for nPCR parasite prevalence were carried out adjusting for 
+    - baseline prevalence, 
+    - age group (<=5, 6–15, 16–25, >25 y)
+    - sex
+    - altitude (<1,450, 1,450–1,500, >1,500 m)
+    -  living in a house with open eaves
+*  These covariates, which were not part of the intervention, were defined a priori and were included simultaneously in a single prespecified adjusted analysis. 
+    - This was done by first performing an individual-level logistic regression with only the factors we wished to adjust for as the predictors while excluding the intervention status of the cluster
+    - This regression was then used to predict the prevalence in each cluster.
+    - We then calculated cluster-level residuals as the difference between the
+observed and expected prevalence and compared the residuals of control and intervention clusters using a t-test
+    - Since complexity of infection is count data with an extra-Poisson variation, negative binomial regression was used to estimate cluster-level means
+    -  A model with distance from hotspot (categorized as 0 m,
+1–249 m, and 250–500 m) and intervention but no interaction term for these factors was compared to a model with an interaction between intervention and distance.
+
+
+
+
+
+
+
+
+
+
