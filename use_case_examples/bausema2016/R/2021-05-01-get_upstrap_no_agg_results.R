@@ -175,7 +175,7 @@ M_min    <- 5
 M_max    <- 30
 M_grid   <- M_min : M_max
 M_grid_l <- length(M_grid)
-B_boot   <- 10
+B_boot   <- 1000
 
 # define grid of upstrap analysis parameters
 param_df <- expand.grid(
@@ -243,8 +243,8 @@ message("Upstrap procedure completed.")
 out_df <- data.frame(
   time_point = time_point_tmp, 
   zone = zone_tmp, 
-  power = mean(boot_power_vec, na.rm = TRUE),
   sample_size_M = M_tmp,
+  power = mean(boot_power_vec, na.rm = TRUE),
   B_boot = B_boot,
   B_boot_success = sum(!is.na(boot_power_vec)),
   eval_time_secs = round(as.numeric(Sys.time() - t1, units = "secs"))
