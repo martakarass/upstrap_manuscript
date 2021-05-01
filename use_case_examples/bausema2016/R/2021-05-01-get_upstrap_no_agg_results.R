@@ -10,8 +10,12 @@ args = commandArgs(trailingOnly = TRUE)
 #' 
 #' Notes: 
 #' cd $ups 
-#' cd numerical_experiments/R
-#' Rnosave mat_to_minute_quality_flag.R -l mem_free=20G,h_vmem=20G,h_stack=256M -t 1-78 -tc 90 -N JOB_quality_flag
+#' cd use_case_examples/bausema2016/R
+#' Rnosave 2021-05-01-get_upstrap_no_agg_results.R -l mem_free=20G,h_vmem=20G,h_stack=256M -t 1-78 -tc 90 -N JOB_quality_flag
+#' 
+#' Rnosave 2021-05-01-get_upstrap_no_agg_results.R -t 1-78 -N JOB_bausema
+
+
 
 # move the files needed 
 # put /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/use_case_examples/bausema2016/data_raw_csv/intervention_dataset_REDHOT_anonymous_updated.csv /users/mkaras/_PROJECTS/upstrap_manuscript/use_case_examples/bausema2016/data_raw_csv/intervention_dataset_REDHOT_anonymous_updated.csv
@@ -23,8 +27,8 @@ library(matrixStats)
 library(geepack)
 options(scipen=999)
 
-# job_idx  <-  as.numeric(Sys.getenv("SGE_TASK_ID"))
-job_idx <- 10
+job_idx  <-  as.numeric(Sys.getenv("SGE_TASK_ID"))
+# job_idx <- 10
 set.seed(123)
 
 # create dir directory if does not exist
