@@ -30,3 +30,5 @@ dat %>%
 # save aggregated file 
 fpath_tmp <- paste0(here::here(), "/use_case_examples/bausema2016/results/2021-05-01-upstrap_no_agg_results.rds")
 saveRDS(dat, fpath_tmp)
+
+# get /users/mkaras/_PROJECTS/upstrap_manuscript/use_case_examples/bausema2016/results/2021-05-01-upstrap_no_agg_results.rds /Users/martakaras/Dropbox/_PROJECTS/upstrap_manuscript/use_case_examples/bausema2016/results/2021-05-01-upstrap_no_agg_results.rds
