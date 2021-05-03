@@ -14,6 +14,10 @@ args = commandArgs(trailingOnly = TRUE)
 #' Rnosave 2021-05-02-get_upstrap_no_agg_results.R -l mem_free=20G,h_vmem=20G,h_stack=256M -t 1-78 -tc 90 -N JOB_quality_flag
 #' 
 #' Rnosave 2021-05-02-get_upstrap_no_agg_results.R -t 1-78 -N JOB_bausema
+#' 
+#' Rnosave 2021-05-02-get_upstrap_no_agg_results.R -t 19-19 -N JOB_bausema
+#' Rnosave 2021-05-02-get_upstrap_no_agg_results.R -t 22-22 -N JOB_bausema
+#' Rnosave 2021-05-02-get_upstrap_no_agg_results.R -t 70-70 -N JOB_bausema
 
 
 
