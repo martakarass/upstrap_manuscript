@@ -26,9 +26,9 @@ plt_list <- list()
 for (i in 1 : length(name_levels)){ # i <- 1
   name_i  <- name_levels[i]
   out_df_i  <- out_df %>% filter(zone == name_i)
-  if (i == 1) {
-    out_df_i <- out_df_i %>% filter(power > 0.9)
-  }
+  # if (i == 1) {
+  #   out_df_i <- out_df_i %>% filter(power > 0.9)
+  # }
   M_min_i <- min(out_df_i %>% filter(power >= 0.8) %>% pull(sample_size_M))
   plt_i <- 
     ggplot(out_df_i %>% filter(sample_size_M < 30), 

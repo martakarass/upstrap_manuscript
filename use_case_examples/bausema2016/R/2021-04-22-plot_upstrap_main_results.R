@@ -15,6 +15,8 @@ out_df <- readRDS(out_power_df_fpath)
 str(out_df)
 table(out_df$zone)
 
+out_df %>% filter(sample_size_M == 5) %>% pull(power) %>% round(2)
+
 name_levels <- c("hotspot", "eval_zone_1", "eval_zone_2")
 name_labels <- c("Hotspot", "Eval. zone 1-249 m", "Eval. zone 250-500 m")
 
@@ -32,7 +34,7 @@ for (i in 1 : length(name_levels)){ # i <- 1
   out_df_i    <- out_df %>% filter(zone == name_i)
   M_min_i <- min(out_df_i %>% filter(power >= 0.8) %>% pull(sample_size_M))
   plt_i <- 
-    ggplot(out_df_i %>% filter(sample_size_M < 30), 
+    ggplot(out_df_i %>% filter(sample_size_M <= 30), 
            aes(x = sample_size_M, y = power, group = 1)) + 
     geom_hline(yintercept = 0.8, color = "blue", alpha = 0.4) + 
     # annotate('segment', x = M_min_i, y = 0, xend = M_min_i, yend = 0.8, color = "blue", alpha = 0.6, linetype = 2) 
