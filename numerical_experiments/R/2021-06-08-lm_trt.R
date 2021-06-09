@@ -1,0 +1,229 @@
+#!/usr/bin/env Rscript
+
+#' cd $ups 
+#' cd numerical_experiments/R
+#' Rnosave 2021-06-08-lm_trt.R -t 1-5 -tc 25 -N JOB_lm_trt
+
+arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
+arrayjob_idx <- as.numeric(arg_str)
+# rm(list = ls()); arrayjob_idx <- 1
+
+library(here)
+library(matrixStats)
+library(tidyverse)
+message("Loaded needed packages.")
+
+# define results dir, create dir if any does not exist
+out_dir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-06-08-lm_trt_raw")
+dir.create(path = out_dir_raw)
+message(paste0("dir.exists(path = out_dir_raw): ", dir.exists(path = out_dir_raw)))
+
+# define results path 
+out_fpath_raw <- paste0(out_dir_raw, "/arrayjob_", arrayjob_idx, ".rds")
+message(out_fpath_raw)
+
+
+# ------------------------------------------------------------------------------
+# define experiment params 
+
+coef_x0 <- 0 # set to zero 
+coef_x1 <- 0.5
+coef_x2 <- 0 # set to zero 
+coef_x3 <- 0 # set to zero 
+sigma2  <- 1
+N0_grid <- c(20, 31, 49)   # sample size of each of the two arms
+N1_min  <- 10
+N1_max  <- 150
+# power roughly corresponding to N0 grid
+# 1         0.3     20
+# 2         0.5     31
+# 3         0.7     49
+# 4         0.9     91
+# 5         0.95   113
+# define N1 grid
+N1_grid   <- seq(from = N1_min, to = N1_max, by = 1)
+N1_grid_l <- length(N1_grid)
+# innerloop_N <- 20   # TODO => -t 1-50
+B_boot      <- 100 # TODO
+t1 <- Sys.time()
+
+
+# ----------------------------------------------------------------------------
+# simulate the data 
+
+# seed seed for reproducibility of the results 
+set.seed(arrayjob_idx)
+
+# deterministic quantities
+N_tmp        <- N1_max
+subjid_i     <- 1:(N_tmp * 2)         # subject ID unique in whole data set 
+subjid_arm_i <- c(1:N_tmp, 1:N_tmp)   # subject ID unique in a trt arm
+x1_i         <- c(rep(1, N_tmp), rep(0, N_tmp))
+# simulated quantities
+x2_i         <- rbinom(n = N_tmp * 2, size = 1, prob = 0.5)
+x3_i         <- runif(n = N_tmp * 2, min = 18, max = 100)
+eps_i        <- rnorm(N_tmp * 2, sd = sqrt(sigma2))
+# simulated/generated data frame variables 
+y_i   <- coef_x0 + (coef_x1 * x1_i) + (coef_x2 * x2_i) + (coef_x3 * x3_i) + eps_i
+dat   <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i,
+                    subjid = subjid_i, subjid_arm = subjid_arm_i)
+
+# make object to store simulation results 
+mat_out <- data.frame()
+
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# RUN SIMULATION: UPSTRAP POWER
+
+for (N0 in N0_grid){ # N0 <- N0_grid[1]
+  message(paste0("Running: uptstrap N0=", N0))
+  
+  # make object to store simulation results (specific to this N0)
+  mat_out_tmp               <- data.frame(N0 = rep(N0, N1_grid_l), N1 = N1_grid) 
+  mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N1_grid_l)
+  mat_out_tmp$name          <- "upstrap_power"
+
+  # data with "observed" sample of size N0 
+  datN0 <-  dat %>% filter(subjid_arm <= N0)
+  datN0_1_idx <- which(datN0$x1 == 1)
+  datN0_0_idx <- which(datN0$x1 == 0)
+  
+  # define object to store values across B resamplings
+  mat_out_boot <- matrix(NA, nrow = N1_grid_l, ncol = B_boot)
+  # iterate over bootstrap repetitions 
+  for (B_boot_idx in 1:B_boot){ # B_boot_idx <- 10
+    if (B_boot_idx %% 100 == 0){
+      t_passed <- round(as.numeric(Sys.time() - t1, unit = "mins"))
+      message(paste0("B_boot_idx: ", B_boot_idx, " [", round(B_boot_idx / B_boot * 100, 2), "%], ", t_passed, " mins"))
+    }
+    ## upsample data for current boot repetition (upstrap up to N1 max)
+    dat_b <- rbind(
+      datN0[sample(datN0_1_idx, size = N1_max, replace = TRUE), ], 
+      datN0[sample(datN0_0_idx, size = N1_max, replace = TRUE), ])
+    ## make new subj ID so as to treat resampled subjects as new ones
+    dat_b$subjid <- 1 : (2 * N1_max)
+    dat_b$subjid_arm <- c(1 : N1_max, 1 : N1_max)
+    # iterate over N1 values grid
+    for (N1_grid_idx in 1 : N1_grid_l){ # N1_grid_idx <- 1
+      tryCatch({
+        fit   <- lm(y ~ x1 + x2 + x3, data = dat_b[dat_b$subjid_arm <= N1_grid[N1_grid_idx], ])
+        fit_s <- summary(fit)
+        fit_coefpval  <- fit_s$coefficients[2, 4]
+        mat_out_boot[N1_grid_idx, B_boot_idx] <- (fit_coefpval < 0.05) * 1
+      }, error = function(e) {message(e)})
+    }
+  }
+  # add results to mat_out
+  mat_out_tmp$value <- rowMeans(mat_out_boot, na.rm = TRUE); rm(mat_out_boot)
+
+  # store results to master file
+  mat_out <- rbind(mat_out, mat_out_tmp); rm(mat_out_tmp)
+}
+
+
+# t1a <- Sys.time()
+# 
+# t1b <- Sys.time()
+# as.numeric(t1b-t1a, unit = "secs")
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# RUN SIMULATION: BOOTSTRAP POWER
+
+message(paste0("Running: bootstrap"))
+
+# make object to store simulation results (specific to this N0)
+mat_out_tmp               <- data.frame(N0 = N1_grid, N1 = N1_grid) 
+mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N1_grid_l)
+mat_out_tmp$name          <- "upstrap_power"
+
+# define object to store values across B resamplings
+mat_out_boot <- matrix(NA, nrow = N1_grid_l, ncol = B_boot)
+
+for (N1_grid_idx in 1 : length(N1_grid)){ # N1_grid_idx <-1
+  if (N1_grid_idx %% 10 == 0){
+    message(paste0("N1_grid_idx: ", N1_grid_idx))
+  }
+  N1 <- N1_grid[N1_grid_idx]
+  N0 <- N1 
+  # data with "observed" sample of size N0 
+  datN0 <-  dat %>% filter(subjid_arm <= N0)
+  datN0_1_idx <- which(datN0$x1 == 1)
+  datN0_0_idx <- which(datN0$x1 == 0)
+  # iterate over bootstrap repetitions 
+  for (B_boot_idx in 1:B_boot){ # B_boot_idx <- 100
+    if (B_boot_idx %% 100 == 0){
+      t_passed <- round(as.numeric(Sys.time() - t1, unit = "mins"))
+      message(paste0("B_boot_idx: ", B_boot_idx, " [", round(B_boot_idx / B_boot * 100, 2), "%], ", t_passed, " mins"))
+    }
+    ## upsample data for current boot repetition (upstrap up to N1 max)
+    dat_b <- rbind(
+      datN0[sample(datN0_1_idx, size = N1, replace = TRUE), ], 
+      datN0[sample(datN0_0_idx, size = N1, replace = TRUE), ])
+    fit  <- lm(y ~ x1 + x2 + x3, data = dat_b)
+    fit_s <- summary(fit)
+    fit_coefpval  <- fit_s$coefficients[2, 4]
+    mat_out_boot[N1_grid_idx, B_boot_idx] <- (fit_coefpval < 0.05) * 1
+  }
+}
+
+# add results to mat_out
+mat_out_tmp$value <- rowMeans(mat_out_boot, na.rm = TRUE); rm(mat_out_boot)
+
+# store results to master file
+mat_out <- rbind(mat_out, mat_out_tmp); rm(mat_out_tmp)
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# RUN SIMULATION: SINGLE RESULT 
+
+message(paste0("Running: test result"))
+
+# make object to store simulation results (specific to this N0)
+mat_out_tmp               <- data.frame(N0 = N1_grid, N1 = N1_grid) 
+mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N1_grid_l)
+mat_out_tmp$name          <- "run_result"
+
+# define object to store values across B resamplings
+mat_out_boot <- matrix(NA, nrow = N1_grid_l, ncol = 1)
+
+for (N1_grid_idx in 1 : length(N1_grid)){ # N1_grid_idx <-1
+  if (N1_grid_idx %% 10 == 0){
+    message(paste0("N1_grid_idx: ", N1_grid_idx))
+  }
+  N1 <- N1_grid[N1_grid_idx]
+  N0 <- N1 
+  # data with "observed" sample of size N0 
+  datN0 <-  dat %>% filter(subjid_arm <= N0)
+  # run one result
+  fit  <- lm(y ~ x1 + x2 + x3, data = datN0)
+  fit_s <- summary(fit)
+  fit_coefpval  <- fit_s$coefficients[2, 4]
+  mat_out_boot[N1_grid_idx, 1] <- (fit_coefpval < 0.05) * 1
+}
+
+# add results to mat_out
+mat_out_tmp$value <- rowMeans(mat_out_boot, na.rm = TRUE); rm(mat_out_boot)
+
+# store results to master file
+mat_out <- rbind(mat_out, mat_out_tmp); rm(mat_out_tmp)
+
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# SAVE FINAL RESULT TO FILE
+saveRDS(object = mat_out, file = out_fpath_raw)
+t_diff <- round(difftime(Sys.time(), t1, units = "mins"), 3)
+message(paste0("Saved FINAL state. Minutes elapsed: ", t_diff))
+
+
+
+
