@@ -79,7 +79,7 @@ mat_out <- data.frame()
 # RUN SIMULATION: UPSTRAP POWER
 
 for (N0 in N0_grid){ # N0 <- N0_grid[1]
-  message(paste0("Running: uptstrap N0=", N0))
+  message(paste0("--- Running: uptstrap N0=", N0))
   
   # make object to store simulation results (specific to this N0)
   mat_out_tmp               <- data.frame(N0 = rep(N0, N1_grid_l), N1 = N1_grid) 
@@ -135,7 +135,7 @@ for (N0 in N0_grid){ # N0 <- N0_grid[1]
 # ------------------------------------------------------------------------------
 # RUN SIMULATION: BOOTSTRAP POWER
 
-message(paste0("Running: bootstrap"))
+message(paste0("--- Running: bootstrap"))
 
 # make object to store simulation results (specific to this N0)
 mat_out_tmp               <- data.frame(N0 = N1_grid, N1 = N1_grid) 
@@ -157,10 +157,6 @@ for (N1_grid_idx in 1 : length(N1_grid)){ # N1_grid_idx <-1
   datN0_0_idx <- which(datN0$x1 == 0)
   # iterate over bootstrap repetitions 
   for (B_boot_idx in 1:B_boot){ # B_boot_idx <- 100
-    if (B_boot_idx %% 100 == 0){
-      t_passed <- round(as.numeric(Sys.time() - t1, unit = "mins"))
-      message(paste0("B_boot_idx: ", B_boot_idx, " [", round(B_boot_idx / B_boot * 100, 2), "%], ", t_passed, " mins"))
-    }
     ## upsample data for current boot repetition (upstrap up to N1 max)
     dat_b <- rbind(
       datN0[sample(datN0_1_idx, size = N1, replace = TRUE), ], 
@@ -184,7 +180,7 @@ mat_out <- rbind(mat_out, mat_out_tmp); rm(mat_out_tmp)
 # ------------------------------------------------------------------------------
 # RUN SIMULATION: SINGLE RESULT 
 
-message(paste0("Running: test result"))
+message(paste0("--- Running: test result"))
 
 # make object to store simulation results (specific to this N0)
 mat_out_tmp               <- data.frame(N0 = N1_grid, N1 = N1_grid) 
