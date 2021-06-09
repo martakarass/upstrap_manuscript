@@ -2,7 +2,7 @@
 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave 2021-06-08-lm_trt.R -t 1-5 -tc 25 -N JOB_lm_trt
+#' Rnosave 2021-06-08-lm_trt.R -t 1-1000 -tc 25 -N JOB_lm_trt
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -44,7 +44,7 @@ N1_max  <- 150
 N1_grid   <- seq(from = N1_min, to = N1_max, by = 1)
 N1_grid_l <- length(N1_grid)
 # innerloop_N <- 20   # TODO => -t 1-50
-B_boot      <- 100 # TODO
+B_boot      <- 1000 # TODO
 t1 <- Sys.time()
 
 
