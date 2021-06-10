@@ -2,7 +2,7 @@
 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave 2021-06-08-lmm_trt.R -t 1-1000 -tc 40 -N JOB_lmm_trt
+#' Rnosave 2021-06-08-glmm_trt.R -t 1-1000 -tc 60 -N JOB_glmm_trt
 #' qalter -tc 40 job_IDX 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
@@ -18,7 +18,7 @@ library(geepack)
 message("Loaded needed packages.")
 
 # define results dir; create dir if any does not exist
-out_dir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-06-08-lmm_trt_raw")
+out_dir_raw <- paste0(here::here(), "/numerical_experiments/results_CL/2021-06-08-glmm_trt_raw")
 dir.create(path = out_dir_raw)
 message(paste0("dir.exists(path = out_dir_raw): ", dir.exists(path = out_dir_raw)))
 
@@ -29,20 +29,15 @@ message(out_fpath_raw)
 
 # ------------------------------------------------------------------------------
 # define experiment params 
+coef_0  <- -0.25
 coef_x1 <- 0.5
 tau2    <- 1
 sigma2  <- 1
-N0      <- 41   # sample size of each of the two arms
+N0      <- 80   # sample size of each of the two arms
 ni      <- 3
 N1_min  <- 10
-N1_max  <- 150
-# target_power    N1
-# <dbl> <dbl>
-# 1         0.3    20 
-# 2         0.5    41 
-# 3         0.7    62 
-# 4         0.9   111 
-# 5         0.95  130.
+N1_max  <- 250
+
 # define N1 grid
 N1_grid   <- seq(from = N1_min, to = N1_max, by = 1)
 N1_grid_l <- length(N1_grid)
@@ -57,19 +52,20 @@ B_boot    <- 1000 # TODO
 set.seed(arrayjob_idx)
 
 # deterministic quantities
-N_tmp     <- N1_max
+N_tmp <- N1_max
 subjid_i     <- 1:(N_tmp * 2)         # subject ID unique in whole data set 
 subjid_arm_i <- c(1:N_tmp, 1:N_tmp)   # subject ID unique in a trt arm
-x1_i      <- c(rep(1, N_tmp), rep(0, N_tmp))
+x1_i         <- c(rep(1, N_tmp), rep(0, N_tmp))
 # simulated quantities
 b0_i      <- rnorm(n = (N_tmp * 2), mean = 0, sd = tau2)
-eps_ij    <- rnorm(n = (N_tmp * 2 * ni), mean = 0, sd = sigma2)
 # simulated/generated data frame variables 
 subjid_ij     <- rep(subjid_i, each = ni) 
 subjid_arm_ij <- rep(subjid_arm_i, each = ni) 
 x1_ij     <- rep(x1_i, each = ni) 
 b0_ij     <- rep(b0_i, each = ni) 
-y_ij      <- b0_ij + coef_x1 * x1_ij + eps_ij
+XB_ij     <- coef_0 + b0_ij + coef_x1 * x1_ij
+p_ij      <- 1/(1 + exp(-XB_ij))
+y_ij      <- rbinom(n = length(p_ij), size = 1, prob = p_ij)
 dat       <- data.frame(y = y_ij, x1 = x1_ij, subjid = subjid_ij, subjid_arm = subjid_arm_ij)
 
 # make object to store simulation results 
@@ -99,6 +95,7 @@ mat_out_boot_GEE   <- matrix(NA, nrow = N1_grid_l, ncol = B_boot)
 
 # iterate over bootstrap repetitions 
 for (B_boot_idx in 1:B_boot){ # B_boot_idx <- 2
+  print(paste0("B_boot_idx: ", B_boot_idx))
   if (B_boot_idx %% 10 == 0){
     t_passed <- round(as.numeric(Sys.time() - t1, unit = "mins"))
     message(paste0("B_boot_idx: ", B_boot_idx, " [", round(B_boot_idx / B_boot * 100, 2), "%], ", t_passed, " mins"))
@@ -118,24 +115,20 @@ for (B_boot_idx in 1:B_boot){ # B_boot_idx <- 2
   dat_b <- rbind(dat_x1_is1_b, dat_x1_is0_b)
   rm(dat_subjid_x1_is1_b, dat_subjid_x1_is0_b, dat_x1_is1_b, dat_x1_is0_b)
   # iterate over N1 values grid
-  for (N1_grid_idx in 1:N1_grid_l){ # N1_grid_idx <- 1
+  for (N1_grid_idx in 1:N1_grid_l){ # N1_grid_idx <- 200
     tryCatch({
       dat_b_sub <- dat_b[dat_b$subjid_arm <= N1_grid[N1_grid_idx], ]
-      # # LMM
-      # fit_LMM   <- lmer(y ~ x1 + (1 | subjid), data = dat_b_sub)
-      # fit_LMM_s <- summary(fit_LMM)
-      # fit_LMM_coef_est  <- fit_LMM_s$coefficients[2, 5]
-      # mat_out_boot_LMM[N1_grid_idx, B_boot_idx] <- (fit_LMM_coef_est < 0.05)
       # GEE
       fit_GEE_formula <- formula(y ~ x1)
-      fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
+      fit_GEE <- geeglm(formula = fit_GEE_formula, family = binomial(link = "logit"), 
                         data = dat_b_sub, id = dat_b_sub$subjid, corstr = "exchangeable")
       fit_GEE_s <- summary(fit_GEE)
       fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
       mat_out_boot_GEE[N1_grid_idx, B_boot_idx] <- (fit_GEE_coef_est < 0.05) * 1
+      rm(dat_b_sub)
     }, error = function(e) {message(e)})
-    rm(dat_b_sub)
   }
+  rm(dat_b)
 }
 
 # store and append the results 
@@ -193,7 +186,7 @@ for (N1_grid_idx in 1 : length(N1_grid)){ # N1_grid_idx <-1
       # mat_out_boot_LMM[N1_grid_idx, B_boot_idx] <- (fit_LMM_coef_est < 0.05)
       # GEE
       fit_GEE_formula <- formula(y ~ x1)
-      fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
+      fit_GEE <- geeglm(formula = fit_GEE_formula, family = binomial(link = "logit"), 
                         data = dat_b, id = dat_b$subjid, corstr = "exchangeable")
       fit_GEE_s <- summary(fit_GEE)
       fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
@@ -233,7 +226,7 @@ for (N1_grid_idx in 1 : length(N1_grid)){ # N1_grid_idx <-1
   datN0 <-  dat %>% filter(subjid_arm <= N0)
   # run one result
   fit_GEE_formula <- formula(y ~ x1)
-  fit_GEE <- geeglm(formula = fit_GEE_formula, family = gaussian(link = "identity"), 
+  fit_GEE <- geeglm(formula = fit_GEE_formula, family = binomial(link = "logit"), 
                     data = datN0, id = datN0$subjid, corstr = "exchangeable")
   fit_GEE_s <- summary(fit_GEE)
   fit_GEE_coef_est  <- fit_GEE_s$coefficients[2, 4]
@@ -251,7 +244,6 @@ mat_out_tmp$value         <- rowMeans(mat_out_boot_GEE, na.rm = TRUE)
 mat_out <- rbind(mat_out, mat_out_tmp); rm(mat_out_tmp)
 
 
-
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
@@ -259,5 +251,7 @@ mat_out <- rbind(mat_out, mat_out_tmp); rm(mat_out_tmp)
 saveRDS(object = mat_out, file = out_fpath_raw)
 t_diff <- round(difftime(Sys.time(), t1, units = "mins"), 3)
 message(paste0("Saved FINAL state. Minutes elapsed: ", t_diff))
+
+# Saved FINAL state. Minutes elapsed: 3.296
 
 
