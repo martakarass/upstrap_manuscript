@@ -141,7 +141,7 @@ message(paste0("--- Running: bootstrap"))
 # make object to store simulation results (specific to this N0)
 mat_out_tmp               <- data.frame(N0 = N1_grid, N1 = N1_grid) 
 mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N1_grid_l)
-mat_out_tmp$name          <- "upstrap_power"
+mat_out_tmp$name          <- "bootstrap_power"
 
 # define object to store values across B resamplings
 mat_out_boot <- matrix(NA, nrow = N1_grid_l, ncol = B_boot)
