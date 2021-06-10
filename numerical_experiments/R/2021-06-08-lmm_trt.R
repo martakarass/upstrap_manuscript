@@ -2,7 +2,7 @@
 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave 2021-06-08-lmm_trt.R -t 1-1000 -tc 50 -N JOB_lmm_trt
+#' Rnosave 2021-06-08-lmm_trt.R -t 1-1000 -tc 40 -N JOB_lmm_trt
 #' qalter -tc 40 job_IDX 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
@@ -52,6 +52,9 @@ B_boot    <- 1000 # TODO
 
 # ----------------------------------------------------------------------------
 # simulate the data 
+
+# seed seed for reproducibility of the results 
+set.seed(arrayjob_idx)
 
 # deterministic quantities
 N_tmp     <- N1_max
