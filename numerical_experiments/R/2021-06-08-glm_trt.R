@@ -2,7 +2,8 @@
 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave 2021-06-08-glm_trt.R -t 1-1000 -tc 25 -N JOB_lm_trt
+#' Rnosave 2021-06-08-glm_trt.R -t 1-1000 -tc 25 -N JOB_glm_trt
+#' qalter -tc 40 6345625 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
