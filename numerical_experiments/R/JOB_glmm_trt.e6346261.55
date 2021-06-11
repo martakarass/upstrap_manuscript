@@ -1,0 +1,187 @@
+Loading conda_R/4.0.x
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:matrixStats’:
+
+    count
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-glmm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-glmm_trt_raw/arrayjob_55.rds
+--- Running: uptstrap N0=80
+B_boot_idx: 10 [1%], 2 mins
+B_boot_idx: 20 [2%], 3 mins
+B_boot_idx: 30 [3%], 5 mins
+B_boot_idx: 40 [4%], 6 mins
+B_boot_idx: 50 [5%], 8 mins
+B_boot_idx: 60 [6%], 10 mins
+B_boot_idx: 70 [7%], 11 mins
+B_boot_idx: 80 [8%], 13 mins
+B_boot_idx: 90 [9%], 15 mins
+B_boot_idx: 100 [10%], 16 mins
+B_boot_idx: 110 [11%], 18 mins
+B_boot_idx: 120 [12%], 20 mins
+B_boot_idx: 130 [13%], 21 mins
+B_boot_idx: 140 [14%], 23 mins
+B_boot_idx: 150 [15%], 25 mins
+B_boot_idx: 160 [16%], 26 mins
+B_boot_idx: 170 [17%], 28 mins
+B_boot_idx: 180 [18%], 30 mins
+B_boot_idx: 190 [19%], 31 mins
+B_boot_idx: 200 [20%], 33 mins
+B_boot_idx: 210 [21%], 34 mins
+B_boot_idx: 220 [22%], 36 mins
+B_boot_idx: 230 [23%], 38 mins
+B_boot_idx: 240 [24%], 39 mins
+B_boot_idx: 250 [25%], 41 mins
+B_boot_idx: 260 [26%], 43 mins
+B_boot_idx: 270 [27%], 44 mins
+B_boot_idx: 280 [28%], 46 mins
+B_boot_idx: 290 [29%], 48 mins
+B_boot_idx: 300 [30%], 49 mins
+B_boot_idx: 310 [31%], 51 mins
+B_boot_idx: 320 [32%], 52 mins
+B_boot_idx: 330 [33%], 54 mins
+B_boot_idx: 340 [34%], 56 mins
+B_boot_idx: 350 [35%], 57 mins
+B_boot_idx: 360 [36%], 59 mins
+B_boot_idx: 370 [37%], 61 mins
+B_boot_idx: 380 [38%], 62 mins
+B_boot_idx: 390 [39%], 64 mins
+B_boot_idx: 400 [40%], 65 mins
+B_boot_idx: 410 [41%], 67 mins
+B_boot_idx: 420 [42%], 69 mins
+B_boot_idx: 430 [43%], 70 mins
+B_boot_idx: 440 [44%], 72 mins
+B_boot_idx: 450 [45%], 74 mins
+B_boot_idx: 460 [46%], 75 mins
+B_boot_idx: 470 [47%], 77 mins
+B_boot_idx: 480 [48%], 79 mins
+B_boot_idx: 490 [49%], 80 mins
+B_boot_idx: 500 [50%], 82 mins
+B_boot_idx: 510 [51%], 84 mins
+B_boot_idx: 520 [52%], 85 mins
+B_boot_idx: 530 [53%], 87 mins
+B_boot_idx: 540 [54%], 89 mins
+B_boot_idx: 550 [55%], 90 mins
+B_boot_idx: 560 [56%], 92 mins
+B_boot_idx: 570 [57%], 94 mins
+B_boot_idx: 580 [58%], 95 mins
+B_boot_idx: 590 [59%], 97 mins
+B_boot_idx: 600 [60%], 99 mins
+B_boot_idx: 610 [61%], 100 mins
+B_boot_idx: 620 [62%], 102 mins
+B_boot_idx: 630 [63%], 104 mins
+B_boot_idx: 640 [64%], 105 mins
+B_boot_idx: 650 [65%], 107 mins
+B_boot_idx: 660 [66%], 109 mins
+B_boot_idx: 670 [67%], 110 mins
+B_boot_idx: 680 [68%], 112 mins
+B_boot_idx: 690 [69%], 114 mins
+B_boot_idx: 700 [70%], 115 mins
+B_boot_idx: 710 [71%], 117 mins
+B_boot_idx: 720 [72%], 119 mins
+B_boot_idx: 730 [73%], 120 mins
+B_boot_idx: 740 [74%], 122 mins
+B_boot_idx: 750 [75%], 124 mins
+B_boot_idx: 760 [76%], 126 mins
+B_boot_idx: 770 [77%], 127 mins
+B_boot_idx: 780 [78%], 129 mins
+B_boot_idx: 790 [79%], 131 mins
+B_boot_idx: 800 [80%], 132 mins
+B_boot_idx: 810 [81%], 134 mins
+B_boot_idx: 820 [82%], 136 mins
+B_boot_idx: 830 [83%], 137 mins
+B_boot_idx: 840 [84%], 139 mins
+B_boot_idx: 850 [85%], 140 mins
+B_boot_idx: 860 [86%], 142 mins
+B_boot_idx: 870 [87%], 144 mins
+B_boot_idx: 880 [88%], 145 mins
+B_boot_idx: 890 [89%], 147 mins
+B_boot_idx: 900 [90%], 149 mins
+B_boot_idx: 910 [91%], 150 mins
+B_boot_idx: 920 [92%], 152 mins
+B_boot_idx: 930 [93%], 154 mins
+B_boot_idx: 940 [94%], 155 mins
+B_boot_idx: 950 [95%], 157 mins
+B_boot_idx: 960 [96%], 159 mins
+B_boot_idx: 970 [97%], 160 mins
+B_boot_idx: 980 [98%], 162 mins
+B_boot_idx: 990 [99%], 164 mins
+B_boot_idx: 1000 [100%], 165 mins
+--- Running: bootstrap
+N1_grid_idx: 10
+N1_grid_idx: 20
+N1_grid_idx: 30
+N1_grid_idx: 40
+N1_grid_idx: 50
+N1_grid_idx: 60
+N1_grid_idx: 70
+N1_grid_idx: 80
+N1_grid_idx: 90
+N1_grid_idx: 100
+N1_grid_idx: 110
+N1_grid_idx: 120
+N1_grid_idx: 130
+N1_grid_idx: 140
+N1_grid_idx: 150
+N1_grid_idx: 160
+N1_grid_idx: 170
+N1_grid_idx: 180
+N1_grid_idx: 190
+N1_grid_idx: 200
+N1_grid_idx: 210
+N1_grid_idx: 220
+N1_grid_idx: 230
+N1_grid_idx: 240
+--- Running: test result
+N1_grid_idx: 10
+N1_grid_idx: 20
+N1_grid_idx: 30
+N1_grid_idx: 40
+N1_grid_idx: 50
+N1_grid_idx: 60
+N1_grid_idx: 70
+N1_grid_idx: 80
+N1_grid_idx: 90
+N1_grid_idx: 100
+N1_grid_idx: 110
+N1_grid_idx: 120
+N1_grid_idx: 130
+N1_grid_idx: 140
+N1_grid_idx: 150
+N1_grid_idx: 160
+N1_grid_idx: 170
+N1_grid_idx: 180
+N1_grid_idx: 190
+N1_grid_idx: 200
+N1_grid_idx: 210
+N1_grid_idx: 220
+N1_grid_idx: 230
+N1_grid_idx: 240
+Saved FINAL state. Minutes elapsed: 588.667

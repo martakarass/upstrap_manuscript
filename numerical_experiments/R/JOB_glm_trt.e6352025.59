@@ -1,0 +1,69 @@
+Loading conda_R/4.0.x
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+✔ ggplot2 3.3.3     ✔ purrr   0.3.4
+✔ tibble  3.1.1     ✔ dplyr   1.0.5
+✔ tidyr   1.1.3     ✔ stringr 1.4.0
+✔ readr   1.4.0     ✔ forcats 0.5.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::count()  masks matrixStats::count()
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-glm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-glm_trt_raw/arrayjob_59.rds
+--- Running: uptstrap N0=70
+B_boot_idx: 100 [10%], 2 mins
+B_boot_idx: 200 [20%], 5 mins
+B_boot_idx: 300 [30%], 7 mins
+B_boot_idx: 400 [40%], 10 mins
+B_boot_idx: 500 [50%], 12 mins
+B_boot_idx: 600 [60%], 14 mins
+B_boot_idx: 700 [70%], 17 mins
+B_boot_idx: 800 [80%], 19 mins
+B_boot_idx: 900 [90%], 21 mins
+B_boot_idx: 1000 [100%], 24 mins
+--- Running: uptstrap N0=120
+B_boot_idx: 100 [10%], 26 mins
+B_boot_idx: 200 [20%], 28 mins
+B_boot_idx: 300 [30%], 31 mins
+B_boot_idx: 400 [40%], 33 mins
+B_boot_idx: 500 [50%], 36 mins
+B_boot_idx: 600 [60%], 39 mins
+B_boot_idx: 700 [70%], 41 mins
+B_boot_idx: 800 [80%], 44 mins
+B_boot_idx: 900 [90%], 46 mins
+B_boot_idx: 1000 [100%], 49 mins
+--- Running: uptstrap N0=200
+B_boot_idx: 100 [10%], 52 mins
+B_boot_idx: 200 [20%], 54 mins
+B_boot_idx: 300 [30%], 56 mins
+B_boot_idx: 400 [40%], 59 mins
+B_boot_idx: 500 [50%], 61 mins
+B_boot_idx: 600 [60%], 63 mins
+B_boot_idx: 700 [70%], 66 mins
+B_boot_idx: 800 [80%], 68 mins
+B_boot_idx: 900 [90%], 71 mins
+B_boot_idx: 1000 [100%], 74 mins
+There were 33 warnings (use warnings() to see them)
+--- Running: bootstrap
+N1_grid_idx: 10
+N1_grid_idx: 20
+N1_grid_idx: 30
+N1_grid_idx: 40
+N1_grid_idx: 50
+N1_grid_idx: 60
+N1_grid_idx: 70
+N1_grid_idx: 80
+N1_grid_idx: 90
+N1_grid_idx: 100
+N1_grid_idx: 110
+N1_grid_idx: 120
+N1_grid_idx: 130
+N1_grid_idx: 140
+N1_grid_idx: 150
+N1_grid_idx: 160
+N1_grid_idx: 170

@@ -1,0 +1,61 @@
+Loading conda_R/4.0.x
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:matrixStats’:
+
+    count
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-lmm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-lmm_trt_raw/arrayjob_308.rds
+--- Running: uptstrap N0=41
+B_boot_idx: 10 [1%], 0 mins
+B_boot_idx: 20 [2%], 1 mins
+B_boot_idx: 30 [3%], 1 mins
+B_boot_idx: 40 [4%], 1 mins
+B_boot_idx: 50 [5%], 2 mins
+B_boot_idx: 60 [6%], 2 mins
+B_boot_idx: 70 [7%], 2 mins
+B_boot_idx: 80 [8%], 3 mins
+B_boot_idx: 90 [9%], 3 mins
+B_boot_idx: 100 [10%], 3 mins
+B_boot_idx: 110 [11%], 4 mins
+B_boot_idx: 120 [12%], 4 mins
+B_boot_idx: 130 [13%], 4 mins
+B_boot_idx: 140 [14%], 5 mins
+B_boot_idx: 150 [15%], 5 mins
+B_boot_idx: 160 [16%], 5 mins
+B_boot_idx: 170 [17%], 6 mins
+B_boot_idx: 180 [18%], 6 mins
+B_boot_idx: 190 [19%], 6 mins
+B_boot_idx: 200 [20%], 7 mins
+B_boot_idx: 210 [21%], 7 mins
+B_boot_idx: 220 [22%], 7 mins
+B_boot_idx: 230 [23%], 8 mins
+B_boot_idx: 240 [24%], 8 mins
+B_boot_idx: 250 [25%], 8 mins

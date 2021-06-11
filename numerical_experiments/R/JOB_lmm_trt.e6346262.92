@@ -1,0 +1,147 @@
+Loading conda_R/4.0.x
+Loading required package: Matrix
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+here() starts at /users/mkaras/_PROJECTS/upstrap_manuscript
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:matrixStats’:
+
+    count
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loaded needed packages.
+Warning message:
+In dir.create(path = out_dir_raw) :
+  '/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-lmm_trt_raw' already exists
+dir.exists(path = out_dir_raw): TRUE
+/users/mkaras/_PROJECTS/upstrap_manuscript/numerical_experiments/results_CL/2021-06-08-lmm_trt_raw/arrayjob_92.rds
+--- Running: uptstrap N0=41
+B_boot_idx: 10 [1%], 4 mins
+B_boot_idx: 20 [2%], 7 mins
+B_boot_idx: 30 [3%], 11 mins
+B_boot_idx: 40 [4%], 15 mins
+B_boot_idx: 50 [5%], 19 mins
+B_boot_idx: 60 [6%], 23 mins
+B_boot_idx: 70 [7%], 27 mins
+B_boot_idx: 80 [8%], 31 mins
+B_boot_idx: 90 [9%], 34 mins
+B_boot_idx: 100 [10%], 38 mins
+B_boot_idx: 110 [11%], 42 mins
+B_boot_idx: 120 [12%], 46 mins
+B_boot_idx: 130 [13%], 50 mins
+B_boot_idx: 140 [14%], 54 mins
+B_boot_idx: 150 [15%], 58 mins
+B_boot_idx: 160 [16%], 62 mins
+B_boot_idx: 170 [17%], 65 mins
+B_boot_idx: 180 [18%], 69 mins
+B_boot_idx: 190 [19%], 73 mins
+B_boot_idx: 200 [20%], 77 mins
+B_boot_idx: 210 [21%], 81 mins
+B_boot_idx: 220 [22%], 85 mins
+B_boot_idx: 230 [23%], 89 mins
+B_boot_idx: 240 [24%], 92 mins
+B_boot_idx: 250 [25%], 96 mins
+B_boot_idx: 260 [26%], 100 mins
+B_boot_idx: 270 [27%], 104 mins
+B_boot_idx: 280 [28%], 108 mins
+B_boot_idx: 290 [29%], 112 mins
+B_boot_idx: 300 [30%], 116 mins
+B_boot_idx: 310 [31%], 120 mins
+B_boot_idx: 320 [32%], 123 mins
+B_boot_idx: 330 [33%], 127 mins
+B_boot_idx: 340 [34%], 131 mins
+B_boot_idx: 350 [35%], 135 mins
+B_boot_idx: 360 [36%], 139 mins
+B_boot_idx: 370 [37%], 143 mins
+B_boot_idx: 380 [38%], 147 mins
+B_boot_idx: 390 [39%], 150 mins
+B_boot_idx: 400 [40%], 154 mins
+B_boot_idx: 410 [41%], 158 mins
+B_boot_idx: 420 [42%], 162 mins
+B_boot_idx: 430 [43%], 166 mins
+B_boot_idx: 440 [44%], 170 mins
+B_boot_idx: 450 [45%], 174 mins
+B_boot_idx: 460 [46%], 178 mins
+B_boot_idx: 470 [47%], 181 mins
+B_boot_idx: 480 [48%], 185 mins
+B_boot_idx: 490 [49%], 189 mins
+B_boot_idx: 500 [50%], 193 mins
+B_boot_idx: 510 [51%], 198 mins
+B_boot_idx: 520 [52%], 202 mins
+B_boot_idx: 530 [53%], 207 mins
+B_boot_idx: 540 [54%], 211 mins
+B_boot_idx: 550 [55%], 215 mins
+B_boot_idx: 560 [56%], 220 mins
+B_boot_idx: 570 [57%], 224 mins
+B_boot_idx: 580 [58%], 228 mins
+B_boot_idx: 590 [59%], 233 mins
+B_boot_idx: 600 [60%], 237 mins
+B_boot_idx: 610 [61%], 241 mins
+B_boot_idx: 620 [62%], 246 mins
+B_boot_idx: 630 [63%], 250 mins
+B_boot_idx: 640 [64%], 254 mins
+B_boot_idx: 650 [65%], 259 mins
+B_boot_idx: 660 [66%], 263 mins
+B_boot_idx: 670 [67%], 267 mins
+B_boot_idx: 680 [68%], 272 mins
+B_boot_idx: 690 [69%], 276 mins
+B_boot_idx: 700 [70%], 280 mins
+B_boot_idx: 710 [71%], 285 mins
+B_boot_idx: 720 [72%], 289 mins
+B_boot_idx: 730 [73%], 294 mins
+B_boot_idx: 740 [74%], 298 mins
+B_boot_idx: 750 [75%], 302 mins
+B_boot_idx: 760 [76%], 307 mins
+B_boot_idx: 770 [77%], 311 mins
+B_boot_idx: 780 [78%], 316 mins
+B_boot_idx: 790 [79%], 320 mins
+B_boot_idx: 800 [80%], 324 mins
+B_boot_idx: 810 [81%], 328 mins
+B_boot_idx: 820 [82%], 332 mins
+B_boot_idx: 830 [83%], 335 mins
+B_boot_idx: 840 [84%], 339 mins
+B_boot_idx: 850 [85%], 343 mins
+B_boot_idx: 860 [86%], 347 mins
+B_boot_idx: 870 [87%], 350 mins
+B_boot_idx: 880 [88%], 354 mins
+B_boot_idx: 890 [89%], 358 mins
+B_boot_idx: 900 [90%], 362 mins
+B_boot_idx: 910 [91%], 366 mins
+B_boot_idx: 920 [92%], 369 mins
+B_boot_idx: 930 [93%], 373 mins
+B_boot_idx: 940 [94%], 377 mins
+B_boot_idx: 950 [95%], 381 mins
+B_boot_idx: 960 [96%], 384 mins
+B_boot_idx: 970 [97%], 388 mins
+B_boot_idx: 980 [98%], 392 mins
+B_boot_idx: 990 [99%], 396 mins
+B_boot_idx: 1000 [100%], 400 mins
+--- Running: bootstrap
+N1_grid_idx: 10
+N1_grid_idx: 20
+N1_grid_idx: 30
+N1_grid_idx: 40
+N1_grid_idx: 50
+N1_grid_idx: 60
+N1_grid_idx: 70
+N1_grid_idx: 80
+N1_grid_idx: 90
+N1_grid_idx: 100

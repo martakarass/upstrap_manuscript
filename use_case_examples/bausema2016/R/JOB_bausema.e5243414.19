@@ -1,0 +1,128 @@
+Loading conda_R/4.0.x
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:data.table’:
+
+    between, first, last
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: ‘matrixStats’
+
+The following object is masked from ‘package:dplyr’:
+
+    count
+
+`summarise()` has grouped output by 'cluster_number'. You can override using the `.groups` argument.
+time_point: wk_8, zone_tmp: hotspot, M_tmp: 11
+Starting the upstrap procedure...
+j: 100 Time elapsed: 0.041 hours
+j: 200 Time elapsed: 0.082 hours
+j: 300 Time elapsed: 0.122 hours
+j: 400 Time elapsed: 0.163 hours
+j: 500 Time elapsed: 0.205 hours
+j: 600 Time elapsed: 0.246 hours
+j: 700 Time elapsed: 0.288 hours
+j: 800 Time elapsed: 0.329 hours
+j: 900 Time elapsed: 0.37 hours
+j: 1000 Time elapsed: 0.411 hours
+j: 1100 Time elapsed: 0.452 hours
+j: 1200 Time elapsed: 0.497 hours
+j: 1300 Time elapsed: 0.538 hours
+j: 1400 Time elapsed: 0.579 hours
+j: 1500 Time elapsed: 0.621 hours
+j: 1600 Time elapsed: 0.662 hours
+j: 1700 Time elapsed: 0.704 hours
+j: 1800 Time elapsed: 0.745 hours
+j: 1900 Time elapsed: 0.786 hours
+j: 2000 Time elapsed: 0.827 hours
+j: 2100 Time elapsed: 0.868 hours
+j: 2200 Time elapsed: 0.909 hours
+j: 2300 Time elapsed: 0.95 hours
+j: 2400 Time elapsed: 0.991 hours
+j: 2500 Time elapsed: 1.033 hours
+j: 2600 Time elapsed: 1.073 hours
+j: 2700 Time elapsed: 1.114 hours
+j: 2800 Time elapsed: 1.156 hours
+j: 2900 Time elapsed: 1.197 hours
+j: 3000 Time elapsed: 1.238 hours
+j: 3100 Time elapsed: 1.279 hours
+j: 3200 Time elapsed: 1.32 hours
+j: 3300 Time elapsed: 1.361 hours
+j: 3400 Time elapsed: 1.402 hours
+j: 3500 Time elapsed: 1.443 hours
+j: 3600 Time elapsed: 1.484 hours
+j: 3700 Time elapsed: 1.526 hours
+j: 3800 Time elapsed: 1.566 hours
+j: 3900 Time elapsed: 1.608 hours
+j: 4000 Time elapsed: 1.649 hours
+j: 4100 Time elapsed: 1.69 hours
+j: 4200 Time elapsed: 1.731 hours
+j: 4300 Time elapsed: 1.771 hours
+j: 4400 Time elapsed: 1.812 hours
+j: 4500 Time elapsed: 1.853 hours
+j: 4600 Time elapsed: 1.894 hours
+j: 4700 Time elapsed: 1.935 hours
+j: 4800 Time elapsed: 1.976 hours
+j: 4900 Time elapsed: 2.016 hours
+j: 5000 Time elapsed: 2.057 hours
+j: 5100 Time elapsed: 2.098 hours
+j: 5200 Time elapsed: 2.139 hours
+j: 5300 Time elapsed: 2.18 hours
+j: 5400 Time elapsed: 2.221 hours
+j: 5500 Time elapsed: 2.262 hours
+j: 5600 Time elapsed: 2.303 hours
+j: 5700 Time elapsed: 2.344 hours
+j: 5800 Time elapsed: 2.385 hours
+j: 5900 Time elapsed: 2.426 hours
+j: 6000 Time elapsed: 2.467 hours
+j: 6100 Time elapsed: 2.511 hours
+j: 6200 Time elapsed: 2.552 hours
+j: 6300 Time elapsed: 2.593 hours
+j: 6400 Time elapsed: 2.634 hours
+j: 6500 Time elapsed: 2.675 hours
+j: 6600 Time elapsed: 2.716 hours
+j: 6700 Time elapsed: 2.757 hours
+j: 6800 Time elapsed: 2.798 hours
+j: 6900 Time elapsed: 2.838 hours
+j: 7000 Time elapsed: 2.879 hours
+j: 7100 Time elapsed: 2.92 hours
+j: 7200 Time elapsed: 2.961 hours
+j: 7300 Time elapsed: 3.002 hours
+j: 7400 Time elapsed: 3.042 hours
+j: 7500 Time elapsed: 3.083 hours
+j: 7600 Time elapsed: 3.124 hours
+j: 7700 Time elapsed: 3.165 hours
+j: 7800 Time elapsed: 3.206 hours
+j: 7900 Time elapsed: 3.247 hours
+j: 8000 Time elapsed: 3.287 hours
+j: 8100 Time elapsed: 3.329 hours
+j: 8200 Time elapsed: 3.37 hours
+j: 8300 Time elapsed: 3.41 hours
+j: 8400 Time elapsed: 3.451 hours
+j: 8500 Time elapsed: 3.492 hours
+j: 8600 Time elapsed: 3.533 hours
+j: 8700 Time elapsed: 3.573 hours
+j: 8800 Time elapsed: 3.614 hours
+j: 8900 Time elapsed: 3.655 hours
+j: 9000 Time elapsed: 3.696 hours
+j: 9100 Time elapsed: 3.736 hours
+j: 9200 Time elapsed: 3.777 hours
+j: 9300 Time elapsed: 3.818 hours
+j: 9400 Time elapsed: 3.859 hours
+j: 9500 Time elapsed: 3.899 hours
+j: 9600 Time elapsed: 3.94 hours
+j: 9700 Time elapsed: 3.981 hours
+j: 9800 Time elapsed: 4.022 hours
+j: 9900 Time elapsed: 4.063 hours
+j: 10000 Time elapsed: 4.104 hours
+Upstrap procedure completed.
+Results saved. Time elapsed: 4.104 hours
