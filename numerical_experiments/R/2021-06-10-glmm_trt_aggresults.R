@@ -5,7 +5,7 @@
 #' Notes: 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave 2021-06-10-lmm_trt_aggresults.R -N JOB_lmm_agg
+#' Rnosave 2021-06-10-glmm_trt_aggresults.R -N JOB_glmm_agg
 
 
 rm(list = ls())
@@ -14,10 +14,10 @@ library(tidyverse)
 library(matrixStats)
 
 # dir to precomputed results
-res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-06-08-lmm_trt_raw")
+res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-06-08-glmm_trt_raw")
 
 # dir to data saves
-res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-06-08-lmm_trt_agg")
+res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-06-08-glmm_trt_agg")
 dir.create(path = res_fdir_agg)
 
 # parameters for bootstrap CI computation
@@ -37,18 +37,17 @@ head(dat)
 str(dat)
 
 range(dat$N1)
-# [1]  10 150
+# [1]  10 250
 
 table(dat$name); Sys.time()
-
 # bootstrap_power_GEE      run_result_GEE   upstrap_power_GEE 
-# 32853               32853               32853 
-# [1] "2021-06-10 21:01:19 EDT"
+# 31089               31089               31089 
+# [1] "2021-06-10 21:00:11 EDT"
 
 # how many out of R=1000 has processed
-paste0("arrayjob_idx count = ", length(unique(dat$arrayjob_idx))) ; Sys.time()
-# [1] "arrayjob_idx count = 233"
-# [1] "2021-06-10 21:02:37 EDT"
+paste0("arrayjob_idx count = ", length(unique(dat$arrayjob_idx))); Sys.time()
+# [1] "arrayjob_idx count = 130"
+# [1] "2021-06-10 21:02:15 EDT"
 
 
 # ------------------------------------------------------------------------------
@@ -133,7 +132,8 @@ dat_value <-
   select(N0, N1, arrayjob_idx, name, value)
 
 # no need to iterate over N0 
-N0_tmp <- 41
+N0_tmp <- unique(dat_value$N0)[1]
+
 dat_i <- 
   dat_value %>% 
   select(arrayjob_idx, N1, value) %>% 
@@ -244,6 +244,6 @@ for (name_tmp in c("bootstrap_power_GEE", "run_result_GEE")){
 # ------------------------------------------------------------------------------
 # save the aggregated data 
 
-saveRDS(out_df_all, paste0(res_fdir_agg, "/lmm_trt_power_est_bootCI.rds"))
+saveRDS(out_df_all, paste0(res_fdir_agg, "/glmm_trt_power_est_bootCI.rds"))
 message("Saved the results.")
 
