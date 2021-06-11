@@ -20,12 +20,8 @@ res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-06
 res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-06-08-lm_trt_agg")
 dir.create(path = res_fdir_agg)
 
-
-# experiment parameters (relevant subset; see /R/2021-02-17-lm_trt.R)
-# N  <- 41   # sample size of each of the two arms
-
 # parameters for bootstrap CI computation
-B_bootci     <- 10  # TODO
+B_bootci     <- 1000  # TODO
 conf_bootci  <- 0.95
 alpha_bootci <- (1 + c(-conf_bootci, conf_bootci))/2
 power_val    <- 0.8
@@ -37,10 +33,19 @@ dat <- do.call("rbind", lapply(fnames_all, readRDS))
 dim(dat)
 head(dat)
 str(dat)
-table(dat$name)
+
+range(dat$N1)
+# [1]  10 150
+
+table(dat$name); Sys.time()
+# bootstrap_power      run_result   upstrap_power 
+# 31161           31161           93483 
+# [1] "2021-06-10 22:23:36 EDT"
 
 # how many out of R=1000 has processed
-paste0("arrayjob_idx count = ", length(unique(dat$arrayjob_idx)))
+paste0("arrayjob_idx count = ", length(unique(dat$arrayjob_idx))) ; Sys.time()
+# [1] "arrayjob_idx count = 221"
+# [1] "2021-06-10 22:24:22 EDT"
 
 
 # ------------------------------------------------------------------------------
@@ -53,159 +58,197 @@ message("Starting PART 1...")
 out_df_all <- data.frame()
 
 # ------------------------------------------------------------------------------
-# PART 1A: upstrap_bootstrap_diff
+# PART 1A: upstrap_bootstrap_power_diff
 
-dat_ups <- dat %>% filter(name == "upstrap_power")
+name_tmp <- "upstrap_bootstrap_power_diff"
+dat_ups   <- dat %>% filter(name == "upstrap_power")
+dat_bots  <- dat %>% filter(name == "bootstrap_power")
+dim(dat_ups)
+dim(dat_bots)
 
+dat_value <- 
+  dat_ups %>% 
+  left_join(dat_bots, by = c("N1", "arrayjob_idx")) %>%
+  mutate(value = value.x - value.y,
+         name = name_tmp) %>%
+  select(N0 = N0.x, N1 = N1, arrayjob_idx, name, value)
+dim(dat_value)
 
+N0_vec <- sort(unique(dat_value$N0))
+for (N0_tmp in N0_vec){ # N0_tmp <- 20 
 
-
-
-
-t1 <- Sys.time()
-for (N0_tmp in N0_grid){ 
-  for (ylab_i in ylab_vec){ # ylab_i <- ylab_vec[1] ;  N0_tmp <- N0_grid[1]
-    
-    message(paste0("PART 1: N0: ", N0_tmp, ", ylab: ", ylab_i))
+  dat_i <- 
+    dat_value %>% 
+    filter(N0 == N0_tmp) %>%
+    select(arrayjob_idx, N1, value) %>% 
+    pivot_wider(names_from = N1, values_from = value) %>%
+    select(-arrayjob_idx) %>% 
+    as.matrix() 
+  dat_i_ncol <- ncol(dat_i)
+  dat_i_nrow <- nrow(dat_i)
   
-    # matrix with current outcome [number of repetitions R] x [number of unique values of N1]
-    dat_i <- 
-      dat_all %>% 
-      filter(N0 == N0_tmp) %>%
-      select(all_of(c('idx', 'N1', ylab_i))) %>% 
-      rename_at(vars(ylab_i), function(x) "y") %>% 
-      pivot_wider(names_from = N1, values_from = y) %>% 
-      select(-idx) %>%
-      as.matrix()
-    dat_i_nrow <- nrow(dat_i)
-    dat_i_ncol <- ncol(dat_i)
-    
-    # bootstrap the statistics: median, mean 
-    dat_i_bootobj_median <- matrix(NA, nrow = B_bootci, ncol = dat_i_ncol)
-    dat_i_bootobj_mean   <- matrix(NA, nrow = B_bootci, ncol = dat_i_ncol)
-    set.seed(123)
-    for (b in 1 : B_bootci){
-      if (b %% 100 == 0) message(b)
-      resample_b_idx <- sample(1 : dat_i_nrow, replace = TRUE)
-      dat_i_resample_b <- dat_i[resample_b_idx, ]
-      dat_i_bootobj_median[b, ] <- matrixStats::colMedians(dat_i_resample_b)
-      dat_i_bootobj_mean[b, ]   <- matrixStats::colMeans2(dat_i_resample_b)
-    }
-    # bootstrap CI for median
-    dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
-    dat_i_bootci_median_upr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[2])
-    dat_i_median <-  matrixStats::colMedians(dat_i)
-    # bootstrap CI for mean
-    dat_i_bootci_mean_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[1])
-    dat_i_bootci_mean_upr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[2])
-    dat_i_mean <-  matrixStats::colMeans2(dat_i)
-    # prepare final data frame with these results
-    out_df_i <- data.frame(
-      est_median = dat_i_median,
-      est_bootci_median_lwr = dat_i_bootci_median_lwr,
-      est_bootci_median_upr = dat_i_bootci_median_upr,
-      est_mean = dat_i_mean,
-      est_bootci_mean_lwr = dat_i_bootci_mean_lwr,
-      est_bootci_mean_upr = dat_i_bootci_mean_upr
-    ) %>% mutate(
-      method_name = rep(ylab_i, dat_i_ncol),
-      N0 = rep(N0_tmp, dat_i_ncol),
-      N1 = as.numeric(colnames(dat_i)), 
-      .before = everything(),
-    )
-    # append results
-    out_df_all <- rbind(out_df_all, out_df_i)
+  # bootstrap the statistics: median, mean 
+  dat_i_bootobj_median <- matrix(NA, nrow = B_bootci, ncol = ncol(dat_i))
+  dat_i_bootobj_mean   <- matrix(NA, nrow = B_bootci, ncol = ncol(dat_i))
+  set.seed(123)
+  for (b in 1 : B_bootci){
+    if (b %% 100 == 0) message(b)
+    # resample the dat_value rows
+    resample_b_idx <- sample(1 : dat_i_nrow, replace = TRUE)
+    dat_i_resample_b <- dat_i[resample_b_idx, ]
+    dat_i_bootobj_median[b, ] <- matrixStats::colMedians(dat_i_resample_b)
+    dat_i_bootobj_mean[b, ]   <- matrixStats::colMeans2(dat_i_resample_b)
   }
+  # bootstrap CI for median
+  dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
+  dat_i_bootci_median_upr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[2])
+  dat_i_median <-  matrixStats::colMedians(dat_i)
+  # bootstrap CI for mean
+  dat_i_bootci_mean_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[1])
+  dat_i_bootci_mean_upr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[2])
+  dat_i_mean <-  matrixStats::colMeans2(dat_i)
+  # prepare final data frame with these results
+  out_df_i <- data.frame(
+    est_median = dat_i_median,
+    est_median_bootci_lwr = dat_i_bootci_median_lwr,
+    est_median_bootci_upr = dat_i_bootci_median_upr,
+    est_mean = dat_i_mean,
+    est_mean_bootci_lwr = dat_i_bootci_mean_lwr,
+    est_mean_bootci_upr = dat_i_bootci_mean_upr
+  ) %>% mutate(
+    name = rep(name_tmp, dat_i_ncol),
+    N0 = rep(N0_tmp, dat_i_ncol),
+    N1 = as.numeric(colnames(dat_i)), 
+    .before = everything(),
+  )
+  out_df_all <- rbind(out_df_all, out_df_i)
+  rm(out_df_i, dat_i_bootobj_median, dat_i_bootobj_mean, dat_i)
 }
-t2 <- Sys.time()
-t2 - t1
-
-# save the aggregated data 
-saveRDS(out_df_all, paste0(res_fdir_agg, "/lm_trt_power_est_bootCI.rds"))
-rm(out_df_all)
 
 
 # ------------------------------------------------------------------------------
-# PART 2: bootstrap minimum sample size needed to get certain power met 
+# PART 1B: upstrap power 
 
-message("Starting PART 2...")
+name_tmp <- "upstrap_power"
 
-out_df_all <- data.frame()
+dat_value <- 
+  dat %>% filter(name == name_tmp) %>%
+  select(N0, N1, arrayjob_idx, name, value)
 
-t1 <- Sys.time()
-for (N0_tmp in N0_grid){ 
-  for (ylab_i in ylab_vec){ # ylab_i <- ylab_vec[1] ;  N0_tmp <- N0_grid[1]
-    message(paste0("PART 2: N0: ", N0_tmp, ", ylab: ", ylab_i))
-    
-    # matrix with current outcome [number of repetitions R] x [number of unique values of N1]
-    dat_i <- 
-      dat_all %>% 
-      filter(N0 == N0_tmp) %>%
-      select(all_of(c('idx', 'N1',  ylab_i))) %>% 
-      rename_at(vars(ylab_i), function(x) "y")  %>%
-      pivot_wider(names_from = N1, values_from = y) %>% 
-      select(-idx) %>%
-      as.matrix()
-    dat_i_nrow <- nrow(dat_i)
-    dat_i_ncol <- ncol(dat_i)
-    
-    # bootstrap the statistics: median, mean 
-    dat_i_bootobj_median <- matrix(NA, nrow = B_bootci, ncol = 1)
-    dat_i_bootobj_mean   <- matrix(NA, nrow = B_bootci, ncol = 1)
-    set.seed(123)
-    for (b in 1 : B_bootci){ # b <- 1
-      if (b %% 100 == 0) message(b)
-      resample_b_idx <- sample(1 : dat_i_nrow, replace = TRUE)
-      # resample from wide, make a new unique row index `idx`, reshape to long
-      dat_i_resample_b <- 
-        dat_i[resample_b_idx, ] %>%
-        as.data.frame() %>%
-        mutate(idx = row_number()) %>%
-        pivot_longer(cols = -idx, names_to = "N1", values_to = "y") %>%
-        mutate(N1 = as.numeric(N1))
-      dat_i_bootobj_median[b, 1] <- dat_i_resample_b %>% group_by(N1) %>% summarize(y = median(y)) %>% filter(y >= power_val) %>% pull(N1) %>% min()
-      dat_i_bootobj_mean[b, 1]   <- dat_i_resample_b %>% group_by(N1) %>% summarize(y = mean(y))   %>% filter(y >= power_val) %>% pull(N1) %>% min()
-    }
-    # bootstrap CI for median
-    dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
-    dat_i_bootci_median_upr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[2])
-    # bootstrap CI for mean
-    dat_i_bootci_mean_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[1])
-    dat_i_bootci_mean_upr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[2])
-    # estimates: median, mean
-    dat_i_long <- 
-      dat_all %>% 
-      filter(N0 == N0_tmp) %>%
-      select(all_of(c('idx', 'N1',  ylab_i))) %>% 
-      rename_at(vars(ylab_i), function(x) "y")
-    dat_i_median <- dat_i_long %>% group_by(N1) %>% summarize(y = median(y)) %>% filter(y >= power_val) %>% pull(N1) %>% min()
-    dat_i_mean   <- dat_i_long %>% group_by(N1) %>% summarize(y = mean(y))   %>% filter(y >= power_val) %>% pull(N1) %>% min()
-    
-    # prepare final data frame with these results
-    out_df_i <- data.frame(
-      est_median = dat_i_median,
-      est_bootci_median_lwr = dat_i_bootci_median_lwr,
-      est_bootci_median_upr = dat_i_bootci_median_upr,
-      est_mean = dat_i_mean,
-      est_bootci_mean_lwr = dat_i_bootci_mean_lwr,
-      est_bootci_mean_upr = dat_i_bootci_mean_upr
-    ) %>% mutate(
-      method_name = rep(ylab_i, 1),
-      N0 = rep(N0_tmp, 1),
-      N1 = NA, 
-      .before = everything(),
-    )
-    # append results
-    out_df_all <- rbind(out_df_all, out_df_i)
+N0_vec <- sort(unique(dat_value$N0))
+for (N0_tmp in N0_vec){ # N0_tmp <- 20 
+  
+  dat_i <- 
+    dat_value %>% 
+    filter(N0 == N0_tmp)  %>%
+    select(arrayjob_idx, N1, value) %>% 
+    pivot_wider(names_from = N1, values_from = value) %>%
+    select(-arrayjob_idx) %>% 
+    as.matrix() 
+  dat_i_ncol <- ncol(dat_i)
+  dat_i_nrow <- nrow(dat_i)
+  
+  # bootstrap the statistics: median, mean 
+  dat_i_bootobj_median <- matrix(NA, nrow = B_bootci, ncol = ncol(dat_i))
+  dat_i_bootobj_mean   <- matrix(NA, nrow = B_bootci, ncol = ncol(dat_i))
+  set.seed(123)
+  for (b in 1 : B_bootci){
+    if (b %% 100 == 0) message(b)
+    # resample the dat_value rows
+    resample_b_idx <- sample(1 : dat_i_nrow, replace = TRUE)
+    dat_i_resample_b <- dat_i[resample_b_idx, ]
+    dat_i_bootobj_median[b, ] <- matrixStats::colMedians(dat_i_resample_b)
+    dat_i_bootobj_mean[b, ]   <- matrixStats::colMeans2(dat_i_resample_b)
   }
+  # bootstrap CI for median
+  dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
+  dat_i_bootci_median_upr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[2])
+  dat_i_median <-  matrixStats::colMedians(dat_i)
+  # bootstrap CI for mean
+  dat_i_bootci_mean_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[1])
+  dat_i_bootci_mean_upr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[2])
+  dat_i_mean <-  matrixStats::colMeans2(dat_i)
+  # prepare final data frame with these results
+  out_df_i <- data.frame(
+    est_median = dat_i_median,
+    est_median_bootci_lwr = dat_i_bootci_median_lwr,
+    est_median_bootci_upr = dat_i_bootci_median_upr,
+    est_mean = dat_i_mean,
+    est_mean_bootci_lwr = dat_i_bootci_mean_lwr,
+    est_mean_bootci_upr = dat_i_bootci_mean_upr
+  ) %>% mutate(
+    name = rep(name_tmp, dat_i_ncol),
+    N0 = rep(N0_tmp, dat_i_ncol),
+    N1 = as.numeric(colnames(dat_i)), 
+    .before = everything(),
+  )
+  
+  out_df_all <- rbind(out_df_all, out_df_i)
+  rm(out_df_i, dat_i_bootobj_median, dat_i_bootobj_mean, dat_i)
 }
-t2 <- Sys.time()
-t2 - t1
-message("Finished PART 2.")
 
+# ------------------------------------------------------------------------------
+# PART 1C: bootstrap power , run result
+
+for (name_tmp in c("bootstrap_power", "run_result")){
+  # name_tmp <- "bootstrap_power"
+  dat_value <- 
+    dat %>% filter(name == name_tmp) %>%
+    select(N0, N1, arrayjob_idx, name, value)
+  
+  # no need to iterate over N0 
+  dat_i <- 
+    dat_value %>% 
+    select(arrayjob_idx, N1, value) %>% 
+    pivot_wider(names_from = N1, values_from = value) %>%
+    select(-arrayjob_idx) %>% 
+    as.matrix() 
+  dat_i_ncol <- ncol(dat_i)
+  dat_i_nrow <- nrow(dat_i)
+  
+  # bootstrap the statistics: median, mean 
+  dat_i_bootobj_median <- matrix(NA, nrow = B_bootci, ncol = ncol(dat_i))
+  dat_i_bootobj_mean   <- matrix(NA, nrow = B_bootci, ncol = ncol(dat_i))
+  set.seed(123)
+  for (b in 1 : B_bootci){
+    if (b %% 100 == 0) message(b)
+    # resample the dat_value rows
+    resample_b_idx <- sample(1 : dat_i_nrow, replace = TRUE)
+    dat_i_resample_b <- dat_i[resample_b_idx, ]
+    dat_i_bootobj_median[b, ] <- matrixStats::colMedians(dat_i_resample_b)
+    dat_i_bootobj_mean[b, ]   <- matrixStats::colMeans2(dat_i_resample_b)
+  }
+  # bootstrap CI for median
+  dat_i_bootci_median_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[1])
+  dat_i_bootci_median_upr <-  matrixStats::colQuantiles(dat_i_bootobj_median, probs = alpha_bootci[2])
+  dat_i_median <-  matrixStats::colMedians(dat_i)
+  # bootstrap CI for mean
+  dat_i_bootci_mean_lwr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[1])
+  dat_i_bootci_mean_upr <-  matrixStats::colQuantiles(dat_i_bootobj_mean, probs = alpha_bootci[2])
+  dat_i_mean <-  matrixStats::colMeans2(dat_i)
+  # prepare final data frame with these results
+  out_df_i <- data.frame(
+    est_median = dat_i_median,
+    est_median_bootci_lwr = dat_i_bootci_median_lwr,
+    est_median_bootci_upr = dat_i_bootci_median_upr,
+    est_mean = dat_i_mean,
+    est_mean_bootci_lwr = dat_i_bootci_mean_lwr,
+    est_mean_bootci_upr = dat_i_bootci_mean_upr
+  ) %>% mutate(
+    name = rep(name_tmp, dat_i_ncol),
+    N0 = as.numeric(colnames(dat_i)),
+    N1 = as.numeric(colnames(dat_i)), 
+    .before = everything(),
+  )
+
+  out_df_all <- rbind(out_df_all, out_df_i)
+  rm(out_df_i, dat_i_bootobj_median, dat_i_bootobj_mean, dat_i)
+}
+
+
+# ------------------------------------------------------------------------------
 # save the aggregated data 
-saveRDS(out_df_all, paste0(res_fdir_agg, "/lm_trt_samplesize_est_bootCI.rds"))
-rm(out_df_all)
 
+saveRDS(out_df_all, paste0(res_fdir_agg, "/lm_trt_power_est_bootCI.rds"))
 message("Saved the results.")
 
