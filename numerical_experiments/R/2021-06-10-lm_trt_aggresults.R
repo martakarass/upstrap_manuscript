@@ -6,6 +6,9 @@
 #' cd $ups 
 #' cd numerical_experiments/R
 #' Rnosave 2021-06-10-lm_trt_aggresults.R -N JOB_lm_agg
+#' 
+#' cd $ups
+#' git add -all
 
 
 rm(list = ls())

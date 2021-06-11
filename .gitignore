@@ -16,6 +16,11 @@ Icon
 # ignore all files starting with
 JB*
 jb*
+JOB*.*
+JOB*
+
+# ignore all files ending with
+*.core
 
 # Exclude everything from the folder content, but do not exclude the folder itself
 numerical_experiments/results_CL/2020-09-19-estimate_ci_coverage_N0_N1_results/*
