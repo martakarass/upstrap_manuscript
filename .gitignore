@@ -57,7 +57,10 @@ use_case_examples/notes/
 
 # other numberical experiments
 numerical_experiments/R/OLD/
+numerical_experiments/R/OLD_0/
+numerical_experiments/R/OLD_1/
 numerical_experiments/R/OLD_2/
+numerical_experiments/R/OLD_3/
 numerical_experiments/R/*simr*
 
 
