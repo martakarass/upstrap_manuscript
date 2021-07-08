@@ -1,4 +1,6 @@
 
+cd $ups
+git pull
 
 cd $ups
 cd numerical_experiments/R
