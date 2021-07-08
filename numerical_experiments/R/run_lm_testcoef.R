@@ -229,43 +229,44 @@ for (eff_tar in eff_tar_grid){
 # ------------------------------------------------------------------------------
 # ADDITIONAL SIMULATIONS TO BE RUN ONCE 
 
-# if (arrayjob_idx == 1)
+if (arrayjob_idx == 1){
 
-for (eff_tar in eff_tar_grid){ 
-  mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
-  message(paste0("INDEPSAMPLES -- eff_tar = ", eff_tar))
-  for (bb in 1 : B_boot){ # bb <- 100
-    if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
-    subjid_arm_i <- rep(1 : N_tar_max, each = 2)
-    subjid_i  <- 1 : (N_tar_max * 2)   # subject ID unique in data set
-    x1_i      <- rep(c(0, 1), times = N_tar_max)
-    x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
-    x3_i      <- runif(n = N_tar_max * 2, min = 18, max = 100)
-    eps_i     <- rnorm(N_tar_max * 2, sd = sqrt(sigma2))
-    y_i       <- coef_x0 + (eff_tar * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i
-    dat_N_tar_max <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, 
-                                subjid = subjid_i, subjid_arm = subjid_arm_i)
-    for (rr in 1 : N_tar_grid_l){  # rr <- 10
-      tryCatch({
-        N_tar      <- N_tar_grid[rr]
-        dat_bb_rr  <- dat_N_tar_max[dat_N_tar_max$subjid_arm <= N_tar, ]
-        fit_bb_rr  <- lm(y ~ x1 + x2 + x3, data = dat_bb_rr)
-        pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
-        mat_boot[rr, bb] <- (pval_bb_rr < 0.05) * 1
-      }, error = function(e) {message(e)})
+  for (eff_tar in eff_tar_grid){ 
+    mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
+    message(paste0("INDEPSAMPLES -- eff_tar = ", eff_tar))
+    for (bb in 1 : B_boot){ # bb <- 100
+      if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
+      subjid_arm_i <- rep(1 : N_tar_max, each = 2)
+      subjid_i  <- 1 : (N_tar_max * 2)   # subject ID unique in data set
+      x1_i      <- rep(c(0, 1), times = N_tar_max)
+      x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
+      x3_i      <- runif(n = N_tar_max * 2, min = 18, max = 100)
+      eps_i     <- rnorm(N_tar_max * 2, sd = sqrt(sigma2))
+      y_i       <- coef_x0 + (eff_tar * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i
+      dat_N_tar_max <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, 
+                                  subjid = subjid_i, subjid_arm = subjid_arm_i)
+      for (rr in 1 : N_tar_grid_l){  # rr <- 10
+        tryCatch({
+          N_tar      <- N_tar_grid[rr]
+          dat_bb_rr  <- dat_N_tar_max[dat_N_tar_max$subjid_arm <= N_tar, ]
+          fit_bb_rr  <- lm(y ~ x1 + x2 + x3, data = dat_bb_rr)
+          pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
+          mat_boot[rr, bb] <- (pval_bb_rr < 0.05) * 1
+        }, error = function(e) {message(e)})
+      }
     }
+    value <- rowMeans(mat_boot, na.rm = TRUE)
+    ##
+    mat_out_tmp               <- data.frame(N_tar = N_tar_grid)
+    mat_out_tmp$N_obs         <- rep(N_obs, N_tar_grid_l)
+    mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
+    mat_out_tmp$name          <- "indepsample_power"
+    mat_out_tmp$eff_tru       <- eff_tar
+    mat_out_tmp$eff_tar       <- eff_tar
+    mat_out_tmp$value         <- value
+    mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
+    rm(mat_out_tmp, value, mat_boot)
   }
-  value <- rowMeans(mat_boot, na.rm = TRUE)
-  ##
-  mat_out_tmp               <- data.frame(N_tar = N_tar_grid)
-  mat_out_tmp$N_obs         <- rep(N_obs, N_tar_grid_l)
-  mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
-  mat_out_tmp$name          <- "indepsample_power"
-  mat_out_tmp$eff_tru       <- eff_tar
-  mat_out_tmp$eff_tar       <- eff_tar
-  mat_out_tmp$value         <- value
-  mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
-  rm(mat_out_tmp, value, mat_boot)
 }
 
 
