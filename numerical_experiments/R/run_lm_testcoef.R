@@ -1,7 +1,5 @@
 #!/usr/bin/env Rscript
 
-#' This script estimate power of rejecting H0 in one-sample t-test problem. 
-#' 
 #' Notes: 
 #' cd $ups 
 #' cd numerical_experiments/R
@@ -23,14 +21,12 @@ library(simr)
 # dir to save results 
 res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-07-07-lm_testcoef_raw")
 res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-07-07-lm_testcoef_agg")
-# remove dirs if exist to make a room for new ones
-unlink(res_fdir_agg, recursive = TRUE, force = TRUE)
-unlink(res_fdir_raw, recursive = TRUE, force = TRUE)
+# # remove dirs if exist to make a room for new ones
+# unlink(res_fdir_agg, recursive = TRUE, force = TRUE)
+# unlink(res_fdir_raw, recursive = TRUE, force = TRUE)
 # create dirs if any does not exist
 dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
-message(paste0("dir.exists(path = res_fdir_agg): ", dir.exists(path = res_fdir_agg)))
-message(paste0("dir.exists(path = res_fdir_raw): ", dir.exists(path = res_fdir_raw)))
 
 # experiment parameters
 N_obs   <- 40 # size of each of the two "treatment arms" 
@@ -231,6 +227,7 @@ for (eff_tar in eff_tar_grid){
 
 if (arrayjob_idx == 1){
 
+  set.seed(1)
   for (eff_tar in eff_tar_grid){ 
     mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
     message(paste0("INDEPSAMPLES -- eff_tar = ", eff_tar))
