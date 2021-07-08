@@ -103,7 +103,7 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
   
   
   # ESTIMATE POWER WITH power.t.test(), for predefined effect size 
-  for (eff_tar in eff_tar_grid){
+  for (eff_tar in eff_tar_grid){ # eff_tar <- eff_tar_grid[1]
     value <- sapply(N_tar_grid, function(n_tmp){
       out_test <- power.t.test(n = n_tmp,  delta = eff_tar,  sd = sample_i_sd_pooled, sig.level = 0.05, type = "two.sample", alternative = "two.sided")
       out_test$power
@@ -123,9 +123,10 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
   # ------------------------------------------------------------------------------
   # ESTIMATE POWER WITH upstrap, for observed effect size 
   
-  sample_i_updated <- sample_i 
-  boot_resamples_1_i <- matrix(sample(x = sample_1_i, size = (B_boot * N_tar_max), replace = TRUE), nrow = B_boot, ncol = N_tar_max)
-  boot_resamples_2_i <- matrix(sample(x = sample_2_i, size = (B_boot * N_tar_max), replace = TRUE), nrow = B_boot, ncol = N_tar_max)
+  sample_1_i_upd <- sample_1_i 
+  sample_2_i_upd <- sample_2_i # no update 
+  boot_resamples_1_i <- matrix(sample(x = sample_1_i_upd, size = (B_boot * N_tar_max), replace = TRUE), nrow = B_boot, ncol = N_tar_max)
+  boot_resamples_2_i <- matrix(sample(x = sample_2_i_upd, size = (B_boot * N_tar_max), replace = TRUE), nrow = B_boot, ncol = N_tar_max)
   boot_resamples_i_rejectH0 <- lapply(1 : B_boot, function(k) cum_rejectH0_twosample_ttest(
     boot_resamples_1_i[k, ],
     boot_resamples_2_i[k, ]
