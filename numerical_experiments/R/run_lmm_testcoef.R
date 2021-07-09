@@ -43,7 +43,7 @@ eff_tar_grid  <- c(0.2, 0.5, 0.8)
 eff_tru       <- coef_x1
 
 # number of boot repetitions within one experiment, one setup
-B_boot  <- 100
+B_boot  <- 1000
 
 # simulate sample (for maximum sample size first)
 # subject-specific
@@ -274,7 +274,7 @@ if (arrayjob_idx == 1){
       subjid_arm_ij <- rep(subjid_arm_i, each = ni) 
       rm(x1_i, x2_i, x3_i, b0_i, subjid_i, subjid_arm_i)
       # data set 
-      y_ij      <- (b0_ij + coef_x0) + (coef_x1 * x1_ij) + (coef_x2 * x2_ij) +  (coef_x3 * x3_ij) + eps_ij
+      y_ij      <- (b0_ij + coef_x0) + (eff_tar * x1_ij) + (coef_x2 * x2_ij) +  (coef_x3 * x3_ij) + eps_ij
       dat_N_tar_max       <- data.frame(y = y_ij, x1 = x1_ij, x2 = x2_ij,  x3 = x3_ij,
                               subjid = subjid_ij, subjid_arm = subjid_arm_ij)
       for (rr in 1 : N_tar_grid_l){  # rr <- 10

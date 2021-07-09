@@ -19,7 +19,7 @@ fnames <- list.files(res_fdir_raw, full.names = TRUE)
 fnames <- fnames[grepl("arrayjob", fnames)]
 dat_l <- lapply(fnames, readRDS)
 dat <- do.call("rbind", dat_l)
-ddat <- mutate(dat, eff_tar = ifelse(is.na(eff_tar), "observed", eff_tar))
+dat <- mutate(dat, eff_tar = ifelse(is.na(eff_tar), "observed", eff_tar))
 
 # aggregate power 
 dat_agg <- 
