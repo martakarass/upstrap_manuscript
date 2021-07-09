@@ -7,6 +7,7 @@ cd numerical_experiments/R
 
 Rnosave agg_onesample_ttest.R -N JOB_agg_onesample
 Rnosave agg_twosample_ttest.R -N JOB_agg_twosample
+Rnosave agg_lm_restcoef.R -N JOB_agg_lm_restcoef
 
 cd $ups
 git add -A
