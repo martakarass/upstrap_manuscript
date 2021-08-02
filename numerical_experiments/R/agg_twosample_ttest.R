@@ -21,7 +21,14 @@ dat_l <- lapply(fnames, readRDS)
 dat <- do.call("rbind", dat_l)
 dat <- mutate(dat, eff_tar = ifelse(is.na(eff_tar), "observed", eff_tar))
 
-# aggregate power 
+length(fnames); length(unique(dat$arrayjob_idx))
+dim(dat)
+head(dat)
+table(dat$name)
+table(dat$eff_tar, useNA = "always")
+
+
+# Aggregate power 
 dat_agg <- 
   dat %>%
   group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%
@@ -32,13 +39,21 @@ dat_agg <-
   ) %>%
   ungroup()
 
-# aggregate power difference
+table(dat_agg$cnt)
+
+
+# Percent error (percentage error) is the difference between an experimental 
+# and theoretical value, divided by the theoretical value, multiplied by 100 to give a percent
+# power diff, pe
 dat_diff <- 
   dat %>%
   pivot_wider(names_from = name, values_from = value) %>%
-  mutate(upstrap_powerttest_power_diff = upstrap_power - powerttest_power) %>%
+  mutate(
+    ups_cmp_power_diff = upstrap_power - powerttest_power,
+    ups_cmp_power_pe = 100 * (upstrap_power - powerttest_power)/powerttest_power,
+    ups_cmp_power_ape = abs(ups_cmp_power_pe)) %>%
   select(-c(upstrap_power, powerttest_power)) %>%
-  pivot_longer(cols = upstrap_powerttest_power_diff)
+  pivot_longer(cols = starts_with("ups_cmp_power"))
 dat_agg_diff <- 
   dat_diff %>%
   group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%

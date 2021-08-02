@@ -27,7 +27,9 @@ head(dat)
 table(dat$name)
 table(dat$eff_tar, useNA = "always")
 
-# aggregate data
+# AGGREGATE DATA 
+
+# power mean 
 dat_agg <- 
   dat %>%
   group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%
@@ -38,12 +40,18 @@ dat_agg <-
   ) %>%
   ungroup()
 
+# Percent error (percentage error) is the difference between an experimental 
+# and theoretical value, divided by the theoretical value, multiplied by 100 to give a percent
+# power diff, pe
 dat_diff <- 
   dat %>%
   pivot_wider(names_from = name, values_from = value) %>%
-  mutate(upstrap_powerttest_power_diff = upstrap_power - powerttest_power) %>%
+  mutate(
+    ups_cmp_power_diff = upstrap_power - powerttest_power,
+    ups_cmp_power_pe = 100 * (upstrap_power - powerttest_power)/powerttest_power,
+    ups_cmp_power_ape = abs(ups_cmp_power_pe)) %>%
   select(-c(upstrap_power, powerttest_power)) %>%
-  pivot_longer(cols = upstrap_powerttest_power_diff)
+  pivot_longer(cols = starts_with("ups_cmp_power"))
 dat_agg_diff <- 
   dat_diff %>%
   group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%
@@ -54,7 +62,8 @@ dat_agg_diff <-
   ) %>%
   ungroup()
 
-dat_out <- rbind(dat_agg, dat_agg_diff)
+# rbind
+dat_out <- dat_agg %>% rbind(dat_agg_diff) 
 dim(dat_out)
 table(dat_out$name)
 

@@ -18,11 +18,23 @@ length(fnames)
 dat_l <- lapply(fnames, readRDS)
 dat <- do.call("rbind", dat_l)
 dat <- mutate(dat, eff_tar = ifelse(is.na(eff_tar), "observed", eff_tar))
+dat <- filter(dat, name != "indepsample_power")
 
-table(dat$name)
-table(dat$name, dat$eff_tar)
+length(fnames); length(unique(dat$arrayjob_idx))
+dim(dat)
+head(dat)
+table(dat$name, useNA = "always")
+table(dat$eff_tar, useNA = "always")
 
-# aggregate power 
+# data.frame(
+#   x = sort(unique(dat$arrayjob_idx)),
+#   y = c(NA, diff(sort(unique(dat$arrayjob_idx))))
+# )
+# max(sort(unique(dat$arrayjob_idx)))
+
+
+# Aggregate: 
+# power mean 
 dat_agg <- 
   dat %>%
   group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%
@@ -33,20 +45,20 @@ dat_agg <-
   ) %>%
   ungroup()
 
-table(dat_agg$name, dat_agg$eff_tar)
 
-
-# aggregate power difference
+# Aggregate: 
+# power percent error (percentage error) is the difference between an experimental 
+# and theoretical value, divided by the theoretical value, multiplied by 100 to give a percent
+# power diff, pe
 dat_diff <- 
   dat %>%
-  filter(name %in% c("upstrap_power", "simr_power")) %>%
   pivot_wider(names_from = name, values_from = value) %>%
-  mutate(upstrap_simr_power_diff = upstrap_power - simr_power) %>%
+  mutate(
+    ups_cmp_power_diff = upstrap_power - simr_power,
+    ups_cmp_power_pe = 100 * (upstrap_power - simr_power)/simr_power,
+    ups_cmp_power_ape = abs(ups_cmp_power_pe)) %>%
   select(-c(upstrap_power, simr_power)) %>%
-  pivot_longer(cols = upstrap_simr_power_diff)
-
-table(dat_diff$name, dat_diff$eff_tar)
-
+  pivot_longer(cols = starts_with("ups_cmp_power"))
 dat_agg_diff <- 
   dat_diff %>%
   group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%
@@ -57,13 +69,11 @@ dat_agg_diff <-
   ) %>%
   ungroup()
 
-table(dat_agg_diff$name, dat_agg_diff$eff_tar)
-
-
 dat_out <- rbind(dat_agg, dat_agg_diff)
 dim(dat_out)
 table(dat_out$name)
-
+table(dat_out$eff_tar)
+table(dat_out$cnt)
 
 fpath_tmp <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-07-08-lmm_testcoef_agg.rds")
 saveRDS(dat_out, fpath_tmp)

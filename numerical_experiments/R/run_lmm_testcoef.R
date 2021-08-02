@@ -3,8 +3,9 @@
 #' Notes: 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave run_lmm_testcoef.R -t 1-1000 -tc 125 -N JOB_run_lmm
-#' Rnosave run_lmm_testcoef.R -t 1-125 -tc 125 -N JOB_run_lmm
+#' Rnosave run_lmm_testcoef.R -t 1-1000 -tc 125 -N JOB_lmm
+#' Rnosave run_lmm_testcoef.R -t 1-450 -tc 150 -N JOB_lmm
+#' Rnosave run_lmm_testcoef.R -t 451-1000 -tc 40 -N JOB_lmm
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
