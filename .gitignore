@@ -18,6 +18,7 @@ JB*
 jb*
 JOB*.*
 JOB*
+tune_*
 
 # ignore all files ending with
 *.core
