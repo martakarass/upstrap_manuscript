@@ -44,8 +44,6 @@ dat_agg <-
     value_sd = sd(value)
   ) %>%
   ungroup()
-
-
 # Aggregate: 
 # power percent error (percentage error) is the difference between an experimental 
 # and theoretical value, divided by the theoretical value, multiplied by 100 to give a percent

@@ -29,7 +29,7 @@ dir.create(path = res_fdir_raw)
 N_obs   <- 50 # number of subjects in each of the two "treatment arms" 
 ni      <- 3  # number of observations per subject 
 coef_x0 <- -0.5 
-coef_x1 <- 0.4
+coef_x1 <- 0.6
 coef_x2 <- 0.1 
 coef_x3 <- -0.1
 tau2    <- 1

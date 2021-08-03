@@ -20,12 +20,7 @@ library(simr)
 
 # dir to save results 
 res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-02-glm_testcoef_raw")
-res_fdir_agg  <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-02-glm_testcoef_agg")
-# # remove dirs if exist to make a room for new ones
-# unlink(res_fdir_agg, recursive = TRUE, force = TRUE)
-# unlink(res_fdir_raw, recursive = TRUE, force = TRUE)
 # create dirs if any does not exist
-dir.create(path = res_fdir_agg)
 dir.create(path = res_fdir_raw)
 
 # experiment parameters
