@@ -168,6 +168,7 @@ out_tmp   <- read_and_agg_B(fdir_raw)
 head(out_tmp)
 Sys.time()
 # "2021-08-02 18:53:11 EDT"; Raw files count: 122
+# "2021-08-04 13:41:31 EDT"; Raw files count: 970
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -185,6 +186,7 @@ out_tmp   <- read_and_agg_B(fdir_raw)
 head(out_tmp)
 Sys.time()
 # "2021-08-02 18:53:11 EDT"; Raw files count: 450
+# "2021-08-04 13:41:31 EDT"; Raw files count: 544
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -201,6 +203,8 @@ fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021
 out_tmp   <- read_and_agg_B(fdir_raw)
 head(out_tmp)
 Sys.time()
+
+# "2021-08-04 13:41:31 EDT"; Raw files count: 57
 
 # save to file
 saveRDS(out_tmp, fpath_out)
