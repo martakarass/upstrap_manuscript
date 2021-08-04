@@ -3,7 +3,8 @@
 #' Notes: 
 #' cd $ups 
 #' cd numerical_experiments/R
-#' Rnosave adhoc_test_glmm_testcoef.R -t 1-20 -tc 20 -N JOB_adhoc_glmm
+#' Rnosave adhoc_test_glmm_testcoef.R -t 1-50 -tc 50 -N JOB_adhoc_glmm
+#' ls -l-d *adhoc*
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -134,10 +135,12 @@ for (rr_rep in 1 : R_rep){
   ps_out <- simr::powerSim(fit_obs_simr, nsim = B_boot, progress = FALSE)
   ps_out_s      <- summary(ps_out)
   power_simr[rr_rep] <- ps_out_s$mean
+  
+  
+  # ------------------------------------------------------------------------------
+  # SAVE TO FILE 
+  df <- data.frame(result_glmm = result_glmm, power_upstrap = power_upstrap, power_simr = power_simr)
+  df$arrayjob_idx <- arrayjob_idx
+  saveRDS(object = df, file = paste0(dir_out, "/arrayjob_", arrayjob_idx, ".rds"))
 }
 
-
-# save to file 
-df <- data.frame(result_glmm = result_glmm, power_upstrap = power_upstrap, power_simr = power_simr)
-df$arrayjob_idx <- arrayjob_idx
-saveRDS(object = df, file = paste0(dir_out, "/arrayjob_", arrayjob_idx, ".rds"))
