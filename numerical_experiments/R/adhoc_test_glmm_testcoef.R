@@ -4,7 +4,7 @@
 #' cd $ups 
 #' cd numerical_experiments/R
 #' Rnosave adhoc_test_glmm_testcoef.R -t 1-50 -tc 50 -N JOB_adhoc_glmm
-#' ls -l-d *adhoc*
+#' ls -l -d *adhoc*
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -38,9 +38,9 @@ eff_tar <- 0.8
 B_boot  <- 500
 R_rep   <- 20
 
-result_glmm   <- numeric(R_rep)
-power_upstrap <- numeric(R_rep)
-power_simr    <- numeric(R_rep)
+result_glmm   <- rep(NA, R_rep)
+power_upstrap <- rep(NA, R_rep)
+power_simr    <- rep(NA, R_rep)
 
 
 # ------------------------------------------------------------------------------
