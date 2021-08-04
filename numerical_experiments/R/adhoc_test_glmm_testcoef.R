@@ -5,6 +5,7 @@
 #' cd numerical_experiments/R
 #' Rnosave adhoc_test_glmm_testcoef.R -t 1-50 -tc 50 -N JOB_adhoc_glmm
 #' ls -l -d *adhoc*
+#' rm JOB_adhoc_glmm*
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -32,7 +33,7 @@ tau2    <- 1
 sigma2  <- 1
 
 N_tar   <- 50
-eff_tar <- 0.8
+eff_tar <- 0.6
 
 # number of boot repetitions within one experiment, one setup
 B_boot  <- 500
@@ -40,6 +41,7 @@ R_rep   <- 20
 
 result_glmm   <- rep(NA, R_rep)
 power_upstrap <- rep(NA, R_rep)
+power_upstrap_nore <- rep(NA, R_rep)
 power_simr    <- rep(NA, R_rep)
 
 
@@ -126,6 +128,41 @@ for (rr_rep in 1 : R_rep){
   
   
   # ------------------------------------------------------------------------------
+  # ESTIMATE POWER WITH upstrap [ver 2], for fixed target effect size 
+  
+  message(paste0("eff_tar = ", eff_tar))
+  dat_upd <- dat
+  dat_upd$link_orig <- predict(fit_obs, type = "link", re.form = NA) 
+  dat_upd$link_upd  <- dat_upd$link_orig  + (eff_tar - fixef(fit_obs)["x1"]) * dat_upd$x1
+  dat_upd$res_upd   <- 1/(1 + exp(-dat_upd$link_upd))
+  mat_boot <- numeric( B_boot)
+  for (bb in 1 : B_boot){ # bb <- 1; rr <- 1
+    if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
+    # resample data indices for current boot repetition (upstrap up to N target max)
+    dat_bb_idx_x1_is1 <- sample(x = dat_subjid_x1_is1, size = N_tar, replace = TRUE)
+    dat_bb_idx_x1_is0 <- sample(x = dat_subjid_x1_is0, size = N_tar, replace = TRUE)
+    dat_bb_x1_is1     <- lapply(dat_bb_idx_x1_is1, function(subjid_tmp) dat_upd %>% filter(subjid == subjid_tmp)) %>% do.call("rbind", .)
+    dat_bb_x1_is0     <- lapply(dat_bb_idx_x1_is0, function(subjid_tmp) dat_upd %>% filter(subjid == subjid_tmp)) %>% do.call("rbind", .)
+    ## make new subj ID so as to treat resampled subjects as new ones
+    dat_bb_x1_is1$subjid <- rep(1 : N_tar, each = ni)
+    dat_bb_x1_is0$subjid <- rep((N_tar + 1) : (2 * N_tar), each = ni)
+    dat_bb_x1_is1$subjid_arm <- rep(1 : N_tar, each = ni)
+    dat_bb_x1_is0$subjid_arm <- rep(1 : N_tar, each = ni)
+    # length(unique(c(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjid)))
+    # intersect(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjidy)
+    dat_bb <- rbind(dat_bb_x1_is1, dat_bb_x1_is0)
+    # simulate response on resampled data, assuming target effect size  
+    dat_bb$y <- rbinom(n = nrow(dat_bb), size = 1, prob = dat_bb$res_upd)
+    
+    dat_bb_rr  <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
+    fit_bb_rr  <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr, family = binomial)  
+    pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
+    mat_boot[bb] <- (pval_bb_rr < 0.05) * 1
+  }
+  power_upstrap_nore[rr_rep] <- mean(mat_boot)
+  
+  
+  # ------------------------------------------------------------------------------
   # ESTIMATE POWER WITH simr, for fixed target effect size 
   
   message(paste0("SIMR -- eff_tar = ", eff_tar))
@@ -139,7 +176,9 @@ for (rr_rep in 1 : R_rep){
   
   # ------------------------------------------------------------------------------
   # SAVE TO FILE 
-  df <- data.frame(result_glmm = result_glmm, power_upstrap = power_upstrap, power_simr = power_simr)
+  df <- data.frame(result_glmm = result_glmm, 
+                   power_upstrap = power_upstrap, power_upstrap_nore = power_upstrap_nore,
+                   power_simr = power_simr)
   df$arrayjob_idx <- arrayjob_idx
   saveRDS(object = df, file = paste0(dir_out, "/arrayjob_", arrayjob_idx, ".rds"))
 }
