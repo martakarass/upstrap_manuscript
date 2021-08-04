@@ -36,8 +36,8 @@ N_tar   <- 50
 eff_tar <- 0.6
 
 # number of boot repetitions within one experiment, one setup
-B_boot  <- 100
-R_rep   <- 2
+B_boot  <- 500
+R_rep   <- 20
 
 result_glmm      <- rep(NA, R_rep)
 power_upstrap_v1 <- rep(NA, R_rep)
