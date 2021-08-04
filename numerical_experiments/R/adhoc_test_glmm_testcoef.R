@@ -35,8 +35,8 @@ N_tar   <- 50
 eff_tar <- 0.8
 
 # number of boot repetitions within one experiment, one setup
-B_boot  <- 100
-R_rep   <- 2
+B_boot  <- 500
+R_rep   <- 20
 
 result_glmm   <- numeric(R_rep)
 power_upstrap <- numeric(R_rep)
@@ -100,7 +100,7 @@ for (rr_rep in 1 : R_rep){
   dat_upd$res_upd   <- 1/(1 + exp(-dat_upd$link_upd))
   mat_boot <- numeric( B_boot)
   for (bb in 1 : B_boot){ # bb <- 1; rr <- 1
-    # if (bb %% 10 == 0) print(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
+    if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
     # resample data indices for current boot repetition (upstrap up to N target max)
     dat_bb_idx_x1_is1 <- sample(x = dat_subjid_x1_is1, size = N_tar, replace = TRUE)
     dat_bb_idx_x1_is0 <- sample(x = dat_subjid_x1_is0, size = N_tar, replace = TRUE)
