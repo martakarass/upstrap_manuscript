@@ -8,7 +8,7 @@
 #' ls -l -d *other_est*
 #' rm JOB_other_est*
 #' 
-#' Rnosave 2021-08-05-estimate_power.R -t 1-205 -tc 100 -N JOB_other_est
+#' Rnosave 2021-08-05-estimate_power.R -t 1-205 -tc 110 -N JOB_other_est
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -62,7 +62,7 @@ est_power_upstrap <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs, se
   set.seed(seed_val)
   out_value <- numeric(R_rep)
   for (rr in 1 : R_rep){
-    print(rr)
+    # print(rr)
     # simulate sample
     x_rr <- rnorm(n = N_obs, mean = effsize_tru, sd = err_sd)
     # update sample for the target effect size; else, "observed power" is used
@@ -92,7 +92,7 @@ est_power_true <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs, seed_
   set.seed(seed_val)
   out_value <- numeric(R_rep)
   for (rr in 1 : R_rep){
-    print(rr)
+    # print(rr)
     x_rr <- rnorm(n = N_obs, mean = effsize_tru, sd = err_sd)
     out_value[rr] <- (t.test(x_rr)$p.value < 0.05)
   }
