@@ -2,6 +2,7 @@
 
 #' Notes: 
 #' cd $ups 
+#' git pull
 #' cd numerical_experiments/R
 #' Rnosave adhoc_test_glmm_testcoef.R -t 1-50 -tc 50 -N JOB_adhoc_glmm
 #' ls -l -d *adhoc*
@@ -36,12 +37,13 @@ N_tar   <- 50
 eff_tar <- 0.6
 
 # number of boot repetitions within one experiment, one setup
-B_boot  <- 500
-R_rep   <- 20
+B_boot  <- 50
+R_rep   <- 2
 
 result_glmm      <- rep(NA, R_rep)
 power_upstrap_v1 <- rep(NA, R_rep)
 power_upstrap_v2 <- rep(NA, R_rep)
+power_upstrap_v3 <- rep(NA, R_rep)
 power_simr       <- rep(NA, R_rep)
 
 
@@ -133,8 +135,47 @@ for (rr_rep in 1 : R_rep){
   # [ v2 ]
   # ESTIMATE POWER WITH upstrap, for fixed target effect size 
   
-  message(paste0("upstrap -- v2"))
+  # message(paste0("upstrap -- v2"))
+  # 
+  # rm(fit_obs)
+  # mat_boot <- numeric( B_boot)
+  # for (bb in 1 : B_boot){ # bb <- 1; rr <- 1
+  #   if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
+  #   # resample data indices for current boot repetition (upstrap up to N target max)
+  #   dat_bb_idx_x1_is1 <- sample(x = dat_subjid_x1_is1, size = N_tar, replace = TRUE)
+  #   dat_bb_idx_x1_is0 <- sample(x = dat_subjid_x1_is0, size = N_tar, replace = TRUE)
+  #   dat_bb_x1_is1     <- lapply(dat_bb_idx_x1_is1, function(subjid_tmp) dat %>% filter(subjid == subjid_tmp)) %>% do.call("rbind", .)
+  #   dat_bb_x1_is0     <- lapply(dat_bb_idx_x1_is0, function(subjid_tmp) dat %>% filter(subjid == subjid_tmp)) %>% do.call("rbind", .)
+  #   ## make new subj ID so as to treat resampled subjects as new ones
+  #   dat_bb_x1_is1$subjid <- rep(1 : N_tar, each = ni)
+  #   dat_bb_x1_is0$subjid <- rep((N_tar + 1) : (2 * N_tar), each = ni)
+  #   dat_bb_x1_is1$subjid_arm <- rep(1 : N_tar, each = ni)
+  #   dat_bb_x1_is0$subjid_arm <- rep(1 : N_tar, each = ni)
+  #   # length(unique(c(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjid)))
+  #   # intersect(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjidy)
+  #   dat_bb <- rbind(dat_bb_x1_is1, dat_bb_x1_is0)
+  #   fit_bb <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb, family = binomial)  
+  #   dat_bb$link_orig <- predict(fit_bb, type = "link") 
+  #   dat_bb$link_upd  <- dat_bb$link_orig  + (eff_tar - fixef(fit_bb)["x1"]) * dat_bb$x1
+  #   dat_bb$res_upd   <- 1/(1 + exp(-dat_bb$link_upd))
+  #   dat_bb$y         <- rbinom(n = nrow(dat_bb), size = 1, prob = dat_bb$res_upd)
+  #   # iterate over target sample (here: only one)
+  #   dat_bb_rr    <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
+  #   fit_bb_rr    <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr, family = binomial)  
+  #   pval_bb_rr   <- summary(fit_bb_rr)$coef["x1", 4]
+  #   mat_boot[bb] <- (pval_bb_rr < 0.05) * 1
+  #   # summary(fit_bb)
+  #   # summary(fit_bb_rr)
+  # }
+  # power_upstrap_v2[rr_rep] <- mean(mat_boot)
   
+  
+  # ------------------------------------------------------------------------------
+  # [ v3 ]
+  # ESTIMATE POWER WITH upstrap, for fixed target effect size 
+  
+  message(paste0("upstrap -- v3"))
+
   rm(fit_obs)
   mat_boot <- numeric( B_boot)
   for (bb in 1 : B_boot){ # bb <- 1; rr <- 1
@@ -149,23 +190,21 @@ for (rr_rep in 1 : R_rep){
     dat_bb_x1_is0$subjid <- rep((N_tar + 1) : (2 * N_tar), each = ni)
     dat_bb_x1_is1$subjid_arm <- rep(1 : N_tar, each = ni)
     dat_bb_x1_is0$subjid_arm <- rep(1 : N_tar, each = ni)
+    dat_bb <- rbind(dat_bb_x1_is1, dat_bb_x1_is0)
     # length(unique(c(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjid)))
     # intersect(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjidy)
-    dat_bb <- rbind(dat_bb_x1_is1, dat_bb_x1_is0)
+    #ee
     fit_bb <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb, family = binomial)  
-    dat_bb$link_orig <- predict(fit_bb, type = "link") 
-    dat_bb$link_upd  <- dat_bb$link_orig  + (eff_tar - fixef(fit_bb)["x1"]) * dat_bb$x1
-    dat_bb$res_upd   <- 1/(1 + exp(-dat_bb$link_upd))
-    dat_bb$y         <- rbinom(n = nrow(dat_bb), size = 1, prob = dat_bb$res_upd)
-    # iterate over target sample (here: only one)
-    dat_bb_rr    <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
-    fit_bb_rr    <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr, family = binomial)  
-    pval_bb_rr   <- summary(fit_bb_rr)$coef["x1", 4]
+    fixef(fit_bb)["x1"] <- eff_tar
+    # update y
+    dat_bb$y   <- simulate(fit_bb, nsim = 1)[[1]]
+    # subset target sample (starts from max)
+    dat_bb_rr  <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
+    fit_bb_rr  <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr, family = binomial)  
+    pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
     mat_boot[bb] <- (pval_bb_rr < 0.05) * 1
-    # summary(fit_bb)
-    # summary(fit_bb_rr)
   }
-  power_upstrap_v2[rr_rep] <- mean(mat_boot)
+  power_upstrap_v3[rr_rep] <- mean(mat_boot)
   
   
   # ------------------------------------------------------------------------------
@@ -187,9 +226,10 @@ for (rr_rep in 1 : R_rep){
   df <- data.frame(result_glmm = result_glmm, 
                    power_upstrap_v1 = power_upstrap_v1, 
                    power_upstrap_v2 = power_upstrap_v2,
+                   power_upstrap_v3 = power_upstrap_v3,
                    power_simr = power_simr)
   df$arrayjob_idx <- arrayjob_idx
-  df$lanuch <- 1
+  df$lanuch <- 2
   saveRDS(object = df, file = paste0(dir_out, "/arrayjob_", arrayjob_idx, ".rds"))
   
   rm(fit_obs)
