@@ -22,7 +22,7 @@ dir.create(out_dir)
 
 # parameters
 B_boot <- 1000
-R_rep  <- 100
+R_rep  <- 1000 * 10
 
 # grid of parameters
 err_sd_grid      <- c(0.01, 0.1, 1, 10)
