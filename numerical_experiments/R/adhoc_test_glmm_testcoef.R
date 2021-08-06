@@ -3,8 +3,8 @@
 #' Notes: 
 #' cd $ups 
 #' git pull
-#' cd $ups/numerical_experiments/R
 #' rm $ups/numerical_experiments/results_CL_shared/2021-08-04-glmm_adhoc_test/*
+#' cd $ups/numerical_experiments/R
 #' ls -l -d *adhoc*
 #' rm JOB_adhoc_glmm*
 #' 

@@ -11,6 +11,8 @@
 #' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_other2_est
 #' 
 #' rm $ups/other_experiments/results_CL/2021-08-06-estimate_power/*
+#' 
+#' Rnosave 2021-08-06-estimate_power.R -t 39-39 -N JOB_other2_est
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
