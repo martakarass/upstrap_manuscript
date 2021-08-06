@@ -8,7 +8,7 @@
 #' ls -l -d *other_est*
 #' rm JOB_other_est*
 #' 
-#' Rnosave 2021-08-05-estimate_power.R -t 1-205 -tc 110 -N JOB_other_est
+#' Rnosave 2021-08-06-estimate_power.R -t 1-205 -tc 110 -N JOB_otherB_est
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -21,8 +21,8 @@ out_dir <- paste0(here::here(), "/other_experiments/results_CL_shared/2021-08-06
 dir.create(out_dir)
 
 # parameters
-B_boot <- 100
-R_rep  <- 2
+B_boot <- 5000
+R_rep  <- 1000 * 10
 
 # grid of parameters
 err_sd_grid      <- c(0.01, 0.1, 1, 10)
