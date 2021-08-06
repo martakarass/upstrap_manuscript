@@ -13,6 +13,8 @@ numerical_experiments/Rmd/
 numerical_experiments/.DS_Store
 Icon
 
+other_experiments/results_CL/
+
 # ignore all files starting with
 JB*
 jb*
