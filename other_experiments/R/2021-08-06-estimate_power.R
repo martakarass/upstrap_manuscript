@@ -159,7 +159,6 @@ est_power_powerttest <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs,
 # run estimation for current cluster job index 
 
 # pull parameters specific to this job iteration
-arrayjob_idx <- 200
 err_sd      <- params_df[arrayjob_idx, "err_sd"]
 effsize_tru <- params_df[arrayjob_idx, "effsize_tru"]
 effsize_tar <- params_df[arrayjob_idx, "effsize_tar"]
