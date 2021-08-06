@@ -10,8 +10,8 @@
 #' 
 #' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_other2_est
 #' 
-#' rm $ups/other_experiments/results_CL_shared/2021-08-06-estimate_power/*
-
+#' rm $ups/other_experiments/results_CL/2021-08-06-estimate_power/*
+cd $u
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
 
@@ -19,7 +19,7 @@ arrayjob_idx <- as.numeric(arg_str)
 library(tidyverse)
 message(paste0("arrayjob_idx: ", arrayjob_idx))
 
-out_dir <- paste0(here::here(), "/other_experiments/results_CL_shared/2021-08-06-estimate_power")
+out_dir <- paste0(here::here(), "/other_experiments/results_CL/2021-08-06-estimate_power")
 dir.create(out_dir)
 
 # parameters
