@@ -6,6 +6,7 @@
 #' cd $ups/other_experiments/R
 #' 
 #' ls -l -d *JOB_other2_est*
+#' ls -l -d *JOB_other3_est*
 #' rm JOB_other2_est*
 #' 
 #' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_other2_est
@@ -13,7 +14,7 @@
 #' rm $ups/other_experiments/results_CL/2021-08-06-estimate_power/*
 #' 
 #' Rnosave 2021-08-06-estimate_power.R -t 39-39 -N JOB_other2_est
-#' Rnosave 2021-08-06-estimate_power.R -t 385-396 -N JOB_other3_est
+#' Rnosave 2021-08-06-estimate_power.R -t 385-416 -N JOB_other4_est
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -62,7 +63,7 @@ params_df_tru <- list(
   effsize_tru = effsize_tru_grid,
   effsize_tar = NA,
   N_tar = NA,
-  N_obs = N_obs_grid
+  N_obs = N_tar_grid
 ) %>% expand.grid() %>%
   mutate(name = "true")
 
@@ -72,10 +73,10 @@ params_df <-
   rbind(params_df_ptt) %>%
   rbind(params_df_tru)
 # dim(params_df)
-# 396   6
+# 416   6
 
 # which(params_df$name == "true")
-# 385 386 387 388 389 390 391 392 393 394 395 396
+# 385 416
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
