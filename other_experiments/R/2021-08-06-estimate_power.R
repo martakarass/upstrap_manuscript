@@ -5,10 +5,12 @@
 #' git pull
 #' cd $ups/other_experiments/R
 #' 
-#' ls -l -d *other_est*
-#' rm JOB_other_est*
+#' ls -l -d *otherB_est*
+#' rm JOB_otherB_est*
 #' 
-#' Rnosave 2021-08-06-estimate_power.R -t 1-205 -tc 110 -N JOB_otherB_est
+#' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_otherB_est
+#' 
+#' rm $ups/other_experiments/results_CL_shared/2021-08-06-estimate_power/*
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
