@@ -108,25 +108,26 @@ est_power_true <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs, seed_
 }
 
 # pull parameters specific to this job iteration
-params_vec <- params_df[arrayjob_idx, ] 
-
-err_sd      <- params_vec[arrayjob_idx, "err_sd"]
-effsize_tru <- params_vec[arrayjob_idx, "effsize_tru"]
-effsize_tar <- params_vec[arrayjob_idx, "effsize_tar"]
-N_tar       <- params_vec[arrayjob_idx, "N_tar"]
-N_obs       <- params_vec[arrayjob_idx, "N_obs"]
-name_tmp    <- params_vec[arrayjob_idx, "name"]
+err_sd      <- params_df[arrayjob_idx, "err_sd"]
+effsize_tru <- params_df[arrayjob_idx, "effsize_tru"]
+effsize_tar <- params_df[arrayjob_idx, "effsize_tar"]
+N_tar       <- params_df[arrayjob_idx, "N_tar"]
+N_obs       <- params_df[arrayjob_idx, "N_obs"]
+name_tmp    <- params_df[arrayjob_idx, "name"]
 
 # run experiment
 if (name_tmp == "upstrap"){
+  message("Running est_power_upstrap()")
   out <- est_power_upstrap(err_sd, effsize_tru, effsize_tar, N_tar, N_obs)
 } else {
+  message("Running est_power_true()")
   out <- est_power_true(err_sd, effsize_tru, effsize_tar, N_tar, N_obs)
 }
 message("EXPERIMENT COMPLETED")
 
 # save results to file 
 saveRDS(object = out, file =  paste0(out_dir, "/arrayjob_", arrayjob_idx, ".rds"))
+message("DATA SAVED")
 
 
 
