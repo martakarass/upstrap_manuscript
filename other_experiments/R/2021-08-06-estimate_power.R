@@ -5,10 +5,10 @@
 #' git pull
 #' cd $ups/other_experiments/R
 #' 
-#' ls -l -d *otherB_est*
-#' rm JOB_otherB_est*
+#' ls -l -d *JOB_other2_est*
+#' rm JOB_other2_est*
 #' 
-#' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_otherB_est
+#' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_other2_est
 #' 
 #' rm $ups/other_experiments/results_CL_shared/2021-08-06-estimate_power/*
 
@@ -77,12 +77,14 @@ params_df <-
 # ------------------------------------------------------------------------------
 # util functions
 
+t1 <- Sys.time()
+
 # function to estimate power with upstrap
 est_power_upstrap <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs, seed_val = 1){
   set.seed(seed_val)
   out_value <- numeric(R_rep)
   for (rr in 1 : R_rep){
-    # print(rr)
+    if (rr %% 100 == 0) message(paste0("rr: ", rr, " [", round(rr / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
     # simulate sample
     x_rr <- rnorm(n = N_obs, mean = effsize_tru, sd = err_sd)
     # update sample for the target effect size; else, "observed power" is used
@@ -132,7 +134,7 @@ est_power_powerttest <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs,
   set.seed(seed_val)
   out_value <- numeric(R_rep)
   for (rr in 1 : R_rep){
-    # print(rr)
+    if (rr %% 100 == 0) message(paste0("rr: ", rr, " [", round(rr / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
     x_rr <- rnorm(n = N_obs, mean = effsize_tru, sd = err_sd)
     if (!is.na(effsize_tar)){ 
       out <- power.t.test(delta = effsize_tar, sd=sd(x_rr), n=N_tar, type="one.sample")
