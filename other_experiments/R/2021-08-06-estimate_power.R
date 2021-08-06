@@ -23,8 +23,8 @@ out_dir <- paste0(here::here(), "/other_experiments/results_CL_shared/2021-08-06
 dir.create(out_dir)
 
 # parameters
-B_boot <- 5000
-R_rep  <- 1000 * 10
+B_boot <- 1000
+R_rep  <- 1000 
 
 # grid of parameters
 err_sd_grid      <- c(0.01, 0.1, 1, 10)
