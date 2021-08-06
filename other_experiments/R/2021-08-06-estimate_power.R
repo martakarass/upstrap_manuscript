@@ -13,6 +13,7 @@
 #' rm $ups/other_experiments/results_CL/2021-08-06-estimate_power/*
 #' 
 #' Rnosave 2021-08-06-estimate_power.R -t 39-39 -N JOB_other2_est
+#' Rnosave 2021-08-06-estimate_power.R -t 385-396 -N JOB_other3_est
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
 arrayjob_idx <- as.numeric(arg_str)
@@ -73,6 +74,8 @@ params_df <-
 # dim(params_df)
 # 396   6
 
+# which(params_df$name == "true")
+# 385 386 387 388 389 390 391 392 393 394 395 396
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
@@ -126,8 +129,8 @@ est_power_true <- function(err_sd, effsize_tru, effsize_tar, N_tar, N_obs, seed_
   res_df$name = "true"
   res_df$effsize_tru = effsize_tru
   res_df$effsize_tar = NA
-  res_df$N_tar = N_tar
-  res_df$N_obs = NA
+  res_df$N_tar = NA
+  res_df$N_obs = N_obs
   return(res_df)
 }
 
