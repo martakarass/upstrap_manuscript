@@ -8,6 +8,7 @@
 #' ls -l -d *JOB_other2_est*
 #' ls -l -d *JOB_other3_est*
 #' rm JOB_other2_est*
+#' rm JOB_other3_est*
 #' 
 #' Rnosave 2021-08-06-estimate_power.R -t 1-397 -tc 110 -N JOB_other2_est
 #' 
