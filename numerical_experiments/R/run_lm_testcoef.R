@@ -42,7 +42,7 @@ eff_tar_grid  <- c(0.5, 1)
 eff_tru       <- coef_x1
 
 # number of boot repetitions within one experiment, one setup
-B_boot  <- 3
+B_boot  <- 1000
 
 # simulate sample (for maximum sample size first)
 subjid_arm_i <- rep(1 : N_obs, each = 2)
