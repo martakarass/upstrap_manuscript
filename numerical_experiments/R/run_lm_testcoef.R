@@ -46,6 +46,7 @@ eff_tru       <- coef_x1
 
 # number of boot repetitions within one experiment, one setup
 B_boot  <- 1000
+R_powertrue  <- 1000 * 10
 
 # simulate sample (for maximum sample size first)
 subjid_arm_i <- rep(1 : N_obs, each = 2)
@@ -230,7 +231,7 @@ for (eff_tar in eff_tar_grid){
 if (arrayjob_idx == 1){
 
   # number of repetitions
-  for (bb in 1 : 1000){
+  for (bb in 1 : R_powertrue){
     set.seed(bb)
     # print(bb)
     

@@ -13,7 +13,8 @@
 #' cd $ups/numerical_experiments/R
 #' 
 #' ls -l -d *JOB_glm*
-#' rm JOB_glm*
+#' rm JOB_glm.e*
+#' rm JOB_glm.o*
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))

@@ -104,6 +104,7 @@ rm(fdir_raw, fpath_out, out_tmp)
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 
+
 #' Function to read and aggregate data for simulation problems 3-6
 read_and_agg_B <- function(fdir_raw){
   # read and combine data 
@@ -138,7 +139,7 @@ read_and_agg_B <- function(fdir_raw){
       ups_cmp_power_diff = upstrap_power - simr_power,
       ups_cmp_power_pe = 100 * (upstrap_power - simr_power)/simr_power,
       ups_cmp_power_ape = abs(ups_cmp_power_pe)) %>%
-    select(-c(upstrap_power, simr_power, true_power)) %>%
+    select(-c(upstrap_power, simr_power)) %>%
     pivot_longer(cols = starts_with("ups_cmp_power"))
   dat_agg_diff <- 
     dat_diff %>%
@@ -147,9 +148,9 @@ read_and_agg_B <- function(fdir_raw){
       cnt = sum(!is.na(value)),
       value_mean = mean(value),
       value_sd = sd(value),
-      value_q25 = quantile(value, 0.25, na.rm = TRUE),
-      value_q50 = median(value, na.rm = TRUE),
-      value_q75 = quantile(value, 0.75, na.rm = TRUE)
+      value_q25 = quantile(value),
+      value_q50 = median(value),
+      value_q75 = quantile(value)
     ) %>%
     ungroup()
   dat_out <- rbind(dat_agg, dat_agg_diff)
@@ -176,13 +177,13 @@ rm(fdir_raw, fpath_out, out_tmp)
 # ------------------------------------------------------------------------------
 # SIMULATION PROBLEM 4 -- glm
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-02-glm_testcoef_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-02-glm_testcoef_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-07-glm_testcoef_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-07-glm_testcoef_agg.rds")
 out_tmp   <- read_and_agg_B(fdir_raw)
 head(out_tmp)
-Sys.time()
-# "2021-08-02 18:53:11 EDT"; Raw files count: 122
-# "2021-08-04 13:41:31 EDT"; Raw files count: 970
+out_tmp %>% filter(name == "true_power")
+
+# Raw files count: 989
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -194,13 +195,11 @@ rm(fdir_raw, fpath_out, out_tmp)
 # ------------------------------------------------------------------------------
 # SIMULATION PROBLEM 5 -- lmm
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-07-08-lmm_testcoef_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-07-08-lmm_testcoef_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-07-lmm_testcoef_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-07-lmm_testcoef_agg.rds")
 out_tmp   <- read_and_agg_B(fdir_raw)
-head(out_tmp)
-Sys.time()
-# "2021-08-02 18:53:11 EDT"; Raw files count: 450
-# "2021-08-04 13:41:31 EDT"; Raw files count: 544
+
+# Raw files count: 65
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -212,13 +211,11 @@ rm(fdir_raw, fpath_out, out_tmp)
 # ------------------------------------------------------------------------------
 # SIMULATION PROBLEM 6 -- glmm
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-02-glmm_testcoef_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-02-glmm_testcoef_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-07-glmm_testcoef_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-07-glmm_testcoef_agg.rds")
 out_tmp   <- read_and_agg_B(fdir_raw)
-head(out_tmp)
-Sys.time()
 
-# "2021-08-04 13:41:31 EDT"; Raw files count: 57
+# Raw files count: 33
 
 # save to file
 saveRDS(out_tmp, fpath_out)
