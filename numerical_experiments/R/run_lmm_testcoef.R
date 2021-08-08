@@ -6,6 +6,7 @@
 #' cd numerical_experiments/R
 #' 
 #' Rnosave run_lmm_testcoef.R -t 1-1000 -tc 50 -N JOB_lmm
+#' Rnosave run_lmm_testcoef.R -t 1-1 -tc 50 -N JOB_lmm
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
@@ -251,53 +252,56 @@ t2 - t1
 
 if (arrayjob_idx == 1){
 
-  set.seed(1)
-  for (eff_tar in eff_tar_grid){ 
-    mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
-    message(paste0("TRUE POWER -- eff_tar = ", eff_tar))
-    for (bb in 1 : B_boot){ # bb <- 100
-      if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
-      # subject-specific
-      x1_i      <- rep(c(0, 1), times = N_tar_max)
-      x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
-      x3_i      <- runif(n = N_tar_max * 2, min = 0, max = 1)
-      b0_i      <- rnorm(n = (N_tar_max * 2), mean = 0, sd = tau2)
-      subjid_i     <- 1 : (N_tar_max * 2)           # subject ID unique in data set 
-      subjid_arm_i <- rep(1 : N_tar_max, each = 2)  # subject ID unique within "treatment arm" 
-      # observation-specific
-      x1_ij     <- rep(x1_i, each = ni) 
-      x2_ij     <- rep(x2_i, each = ni) 
-      x3_ij     <- rep(x3_i, each = ni) 
-      b0_ij     <- rep(b0_i, each = ni) 
-      eps_ij    <- rnorm(n = (N_tar_max * 2 * ni), mean = 0, sd = sigma2)
-      subjid_ij     <- rep(subjid_i, each = ni)            
-      subjid_arm_ij <- rep(subjid_arm_i, each = ni) 
-      rm(x1_i, x2_i, x3_i, b0_i, subjid_i, subjid_arm_i)
-      # data set 
-      y_ij      <- (b0_ij + coef_x0) + (eff_tar * x1_ij) + (coef_x2 * x2_ij) +  (coef_x3 * x3_ij) + eps_ij
-      dat_N_tar_max       <- data.frame(y = y_ij, x1 = x1_ij, x2 = x2_ij,  x3 = x3_ij,
-                              subjid = subjid_ij, subjid_arm = subjid_arm_ij)
-      for (rr in 1 : N_tar_grid_l){  # rr <- 10
-        tryCatch({
-          N_tar      <- N_tar_grid[rr]
-          dat_bb_rr  <- dat_N_tar_max[dat_N_tar_max$subjid_arm <= N_tar, ]
-          fit_bb_rr  <- lmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr)  
-          pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 5]
-          mat_boot[rr, bb] <- (pval_bb_rr < 0.05) * 1
-        }, error = function(e) {message(e)})
+  for (rr in 1 : 1000){
+    set.seed(rr)
+  
+    for (eff_tar in eff_tar_grid){ 
+      mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
+      message(paste0("TRUE POWER -- eff_tar = ", eff_tar))
+      for (bb in 1 : B_boot){ # bb <- 100
+        if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
+        # subject-specific
+        x1_i      <- rep(c(0, 1), times = N_tar_max)
+        x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
+        x3_i      <- runif(n = N_tar_max * 2, min = 0, max = 1)
+        b0_i      <- rnorm(n = (N_tar_max * 2), mean = 0, sd = tau2)
+        subjid_i     <- 1 : (N_tar_max * 2)           # subject ID unique in data set 
+        subjid_arm_i <- rep(1 : N_tar_max, each = 2)  # subject ID unique within "treatment arm" 
+        # observation-specific
+        x1_ij     <- rep(x1_i, each = ni) 
+        x2_ij     <- rep(x2_i, each = ni) 
+        x3_ij     <- rep(x3_i, each = ni) 
+        b0_ij     <- rep(b0_i, each = ni) 
+        eps_ij    <- rnorm(n = (N_tar_max * 2 * ni), mean = 0, sd = sigma2)
+        subjid_ij     <- rep(subjid_i, each = ni)            
+        subjid_arm_ij <- rep(subjid_arm_i, each = ni) 
+        rm(x1_i, x2_i, x3_i, b0_i, subjid_i, subjid_arm_i)
+        # data set 
+        y_ij      <- (b0_ij + coef_x0) + (eff_tar * x1_ij) + (coef_x2 * x2_ij) +  (coef_x3 * x3_ij) + eps_ij
+        dat_N_tar_max       <- data.frame(y = y_ij, x1 = x1_ij, x2 = x2_ij,  x3 = x3_ij,
+                                subjid = subjid_ij, subjid_arm = subjid_arm_ij)
+        for (rr in 1 : N_tar_grid_l){  # rr <- 10
+          tryCatch({
+            N_tar      <- N_tar_grid[rr]
+            dat_bb_rr  <- dat_N_tar_max[dat_N_tar_max$subjid_arm <= N_tar, ]
+            fit_bb_rr  <- lmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr)  
+            pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 5]
+            mat_boot[rr, bb] <- (pval_bb_rr < 0.05) * 1
+          }, error = function(e) {message(e)})
+        }
       }
+      value <- rowMeans(mat_boot, na.rm = TRUE)
+      ##
+      mat_out_tmp               <- data.frame(N_tar = N_tar_grid)
+      mat_out_tmp$N_obs         <- rep(N_obs, N_tar_grid_l)
+      mat_out_tmp$arrayjob_idx  <- rep(rr, N_tar_grid_l)
+      mat_out_tmp$name          <- "true_power"
+      mat_out_tmp$eff_tru       <- eff_tar
+      mat_out_tmp$eff_tar       <- eff_tar
+      mat_out_tmp$value         <- value
+      mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
+      rm(mat_out_tmp, value, mat_boot)
     }
-    value <- rowMeans(mat_boot, na.rm = TRUE)
-    ##
-    mat_out_tmp               <- data.frame(N_tar = N_tar_grid)
-    mat_out_tmp$N_obs         <- rep(N_obs, N_tar_grid_l)
-    mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
-    mat_out_tmp$name          <- "true_power"
-    mat_out_tmp$eff_tru       <- eff_tar
-    mat_out_tmp$eff_tar       <- eff_tar
-    mat_out_tmp$value         <- value
-    mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
-    rm(mat_out_tmp, value, mat_boot)
   }
 }
 
