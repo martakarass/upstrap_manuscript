@@ -6,7 +6,7 @@
 #' rm $ups/numerical_experiments/results_CL/2021-08-07-lm_testcoef_raw/*
 #' 
 #' cd $ups/numerical_experiments/R
-#' Rnosave run_lm_testcoef.R -N JOB_twosample
+#' Rnosave run_lm_testcoef.R -N JOB_lm
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*
@@ -235,8 +235,8 @@ if (arrayjob_idx == 1){
       subjid_arm_i <- rep(1 : N_tar_max, each = 2)
       subjid_i  <- 1 : (N_tar_max * 2)   # subject ID unique in data set
       x1_i      <- rep(c(0, 1), times = N_tar_max)
-      x2_i      <- rbinom(n = N_obs * 2, size = 1, prob = 0.5)
-      x3_i      <- runif(n = N_obs * 2, min = 0, max = 1)
+      x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
+      x3_i      <- runif(n = N_tar_max * 2, min = 0, max = 1)
       eps_i     <- rnorm(N_tar_max * 2, sd = sqrt(sigma2))
       # use eff_tar
       y_i       <- coef_x0 + (eff_tar * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i

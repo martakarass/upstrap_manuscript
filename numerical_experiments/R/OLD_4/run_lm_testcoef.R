@@ -6,7 +6,7 @@
 #' rm $ups/numerical_experiments/results_CL/2021-08-07-lm_testcoef_raw/*
 #' 
 #' cd $ups/numerical_experiments/R
-#' Rnosave run_lm_testcoef.R -N JOB_twosample
+#' Rnosave run_lm_testcoef.R -N JOB_lm
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*
