@@ -48,6 +48,7 @@ eff_tru       <- coef_x1
 
 # number of boot repetitions within one experiment, one setup
 B_boot  <- 1000
+R_powertrue  <- 1000 * 10
 
 # simulate sample (for maximum sample size first)
 subjid_arm_i <- rep(1 : N_obs, each = 2)
@@ -87,8 +88,6 @@ mat_out_all <- data.frame()
 # ------------------------------------------------------------------------------
 # ESTIMATE POWER WITH upstrap, for observed effect size 
 
-# update sample to represent target effect (here: no update)
-dat_upd <- dat
 # define object to store values across B resamplings
 mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
 ##
@@ -98,7 +97,7 @@ for (bb in 1 : B_boot){ # bb <- 1; rr <- 1
   # resample data indices for current boot repetition (upstrap up to N target max)
   dat_bb_idx <- c(sample(dat_1_idx, size = N_tar_max, replace = TRUE), 
                   sample(dat_0_idx, size = N_tar_max, replace = TRUE))
-  dat_bb            <- dat_upd[dat_bb_idx, ]
+  dat_bb            <- dat[dat_bb_idx, ]
   dat_bb$subjid     <- 1 : (2 * N_tar_max)                # subject's ID -- unique in data set
   dat_bb$subjid_arm <- c(1 : N_tar_max, 1 : N_tar_max)    # subject's ID -- unique within a "treatment arm"
   for (rr in 1 : N_tar_grid_l){ 
@@ -131,24 +130,27 @@ rm(mat_out_tmp, value, mat_boot)
 
 for (eff_tar in eff_tar_grid){ # eff_tar <- eff_tar_grid[1]
   message(paste0("eff_tar = ", eff_tar))
-  # update fit
-  fit_obs_upd <- fit_obs
-  coef(fit_obs_upd)["x1"] <- eff_tar
+  dat_upd <- dat
+  # define link term value
+  dat_upd$link_orig <- predict(fit_obs, type = "link") 
+  # define link term value for  target effect size
+  dat_upd$link_upd  <- dat_upd$link_orig  + (eff_tar - coef(fit_obs)["x1"]) * dat_upd$x1
+  dat_upd$res_upd   <- 1/(1 + exp(-dat_upd$link_upd))
+  
   # define object to store values across B resamplings
   mat_boot <- matrix(NA, nrow = N_tar_grid_l, ncol = B_boot)
   for (bb in 1:B_boot){ # bb <- 100
-    # print(bb)
-    if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
+    # if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
     # resample data for current boot repetition (upstrap up to N target max)
     dat_bb_idx <- c(sample(dat_1_idx, size = N_tar_max, replace = TRUE), 
                     sample(dat_0_idx, size = N_tar_max, replace = TRUE))
-    dat_bb     <- dat[dat_bb_idx, ]
-    # simulate new Y 
-    dat_bb$y <- simulate(fit_obs_upd, nsim = 1, newdata = dat_bb)[[1]]
+    dat_bb     <- dat_upd[dat_bb_idx, ]
+    # simulate response on resampled data, assuming target effect size  
+    dat_bb$y <- rbinom(n = nrow(dat_bb), size = 1, prob = dat_bb$res_upd)
     dat_bb$subjid     <- 1 : (2 * N_tar_max)                # subject's ID -- unique in data set
     dat_bb$subjid_arm <- c(1 : N_tar_max, 1 : N_tar_max)    # subject's ID -- unique within a "treatment arm"
     for (rr in 1 : N_tar_grid_l){ 
-      tryCatch({
+      tryCatch({ # rr <- 4
         N_tar      <- N_tar_grid[rr]
         dat_bb_rr  <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
         fit_bb_rr  <- glm(y ~ x1 + x2 + x3, data = dat_bb_rr, family = binomial(link = "logit"))
@@ -237,13 +239,13 @@ message(paste0("COMPLETED. Time difference of ", t_diff, " minutes."))
 if (arrayjob_idx == 1){
   
   # number of repetitions
-  for (bb in 1 : 1000){
+  for (bb in 1 : R_powertrue){
     set.seed(bb)
-    print(bb)
+    # print(bb)
     
     for (ee in 1 : length(eff_tar_grid)){  # bb <- 1; ee <- 1
       eff_tar <- eff_tar_grid[ee]
-      message(paste0("true power -- eff_tar = ", eff_tar))
+      # message(paste0("true power -- eff_tar = ", eff_tar))
       
       subjid_arm_i <- rep(1 : N_tar_max, each = 2)
       subjid_i  <- 1 : (N_tar_max * 2)   # subject ID unique in data set 
