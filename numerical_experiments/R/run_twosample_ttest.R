@@ -180,7 +180,7 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
       value[rr] <- (t.test(x = sample_1_i, y = sample_2_i, var.equal = TRUE)$p.value < 0.05)
     }
     mat_out_tmp               <- data.frame(N_tar = N_tar_grid)
-    mat_out_tmp$N_obs         <- rep(N_obs, N_tar_grid_l)
+    mat_out_tmp$N_obs         <- N_tar_grid
     mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
     mat_out_tmp$name          <- "true_power"
     mat_out_tmp$eff_tru       <- NA
