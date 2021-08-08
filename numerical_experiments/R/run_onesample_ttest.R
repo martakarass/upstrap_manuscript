@@ -2,6 +2,7 @@
 #' Notes: 
 #' cd $ups 
 #' git pull
+#' rm $ups/numerical_experiments/results_CL/2021-08-07-onesample_ttest_raw/*
 #' cd numerical_experiments/R
 #' Rnosave run_onesample_ttest.R -N JOB_onesample
 #' 
@@ -156,21 +157,24 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
   
   # ------------------------------------------------------------------------------
   # ESTIMATE "TRUE POWER"
-  value <- numeric(N_tar_grid_l)
-  for (rr in 1 : N_tar_grid_l){
-    N_obs <- N_tar_grid[rr]
-    sample_i <- rnorm(n = N_obs, mean = eff_tru, sd = sqrt(simga2))
-    value[rr] <- (t.test(sample_i)$p.value < 0.05)
+  
+  for (eff_tar in eff_tar_grid){
+    value <- numeric(N_tar_grid_l)
+    for (rr in 1 : N_tar_grid_l){
+      N_obs <- N_tar_grid[rr]
+      sample_i <- rnorm(n = N_obs, mean = eff_tar, sd = sqrt(simga2))
+      value[rr] <- (t.test(sample_i)$p.value < 0.05)
+    }
+    mat_out_tmp               <- data.frame(N_tar = N_tar_grid)
+    mat_out_tmp$N_obs         <- rep(N_obs, N_tar_grid_l)
+    mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
+    mat_out_tmp$name          <- "true_power"
+    mat_out_tmp$eff_tru       <- NA
+    mat_out_tmp$eff_tar       <- eff_tar
+    mat_out_tmp$value         <- value
+    mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
+    rm(mat_out_tmp, value)
   }
-  mat_out_tmp               <- data.frame(N_tar = rep(NA, N_tar_grid_l))
-  mat_out_tmp$N_obs         <- N_tar_grid
-  mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
-  mat_out_tmp$name          <- "true_power"
-  mat_out_tmp$eff_tru       <- eff_tru
-  mat_out_tmp$eff_tar       <- NA
-  mat_out_tmp$value         <- value
-  mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
-  rm(mat_out_tmp, value)
   
   
   # ------------------------------------------------------------------------------
