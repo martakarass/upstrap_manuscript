@@ -2,8 +2,10 @@
 
 #' Notes: 
 #' cd $ups 
+#' git pull
+#' 
 #' cd numerical_experiments/R
-#' Rnosave run_glmm_testcoef.R -t 1-1000 -tc 100 -N JOB_glmm
+#' Rnosave run_glmm_testcoef.R -t 1-1000 -tc 50 -N JOB_glmm
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
@@ -41,7 +43,7 @@ eff_tar_grid  <- c(0.5, 1)
 eff_tru       <- coef_x1
 
 # number of boot repetitions within one experiment, one setup
-B_boot  <- 2
+B_boot  <- 1000
 
 # simulate sample (for maximum sample size first)
 # subject-specific
