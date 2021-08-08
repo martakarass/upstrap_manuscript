@@ -177,7 +177,7 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
         value <- numeric(N_tar_grid_l)
         for (rr in 1 : N_tar_grid_l){
           N_obs <- N_tar_grid[rr]
-          ample_1_i <- rnorm(n = N_obs, mean = 0)
+          sample_1_i <- rnorm(n = N_obs, mean = 0)
           sample_2_i <- rnorm(n = N_obs, mean = eff_tar)
           value[rr] <- (t.test(x = sample_1_i, y = sample_2_i, var.equal = TRUE)$p.value < 0.05)
         }
