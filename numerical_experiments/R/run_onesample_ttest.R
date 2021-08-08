@@ -69,7 +69,8 @@ vals_cum_reject_H0 <- function(vals){
 for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
   set.seed(arrayjob_idx)
   message(paste0("arrayjob_idx: ", arrayjob_idx))
-
+  mat_out_all <- data.frame()
+  
   # iterate over observed sample size N_obs
   for (N_obs in N_obs_grid){ # N_obs <- N_obs_grid[1]
 
@@ -77,9 +78,6 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
     sample_i <- rnorm(n = N_obs, mean = eff_tru, sd = sqrt(simga2))
     sample_i_mean <- mean(sample_i)
     sample_i_sd   <- sd(sample_i)
-    
-    mat_out_all <- data.frame()
-    
     
     # ------------------------------------------------------------------------------
     # ESTIMATE POWER WITH power.t.test(), for observed effect size 

@@ -3,8 +3,14 @@
 #' 
 #' Notes: 
 #' cd $ups 
+#' git pull
+#' 
 #' cd numerical_experiments/R
 #' Rnosave run_twosample_ttest.R -N JOB_twosample
+#' 
+#' ls -l -d *JOB_twosample*
+#' rm JOB_twosample*
+
 
 rm(list = ls())
 library(here)
@@ -62,6 +68,7 @@ cum_rejectH0_twosample_ttest <- function(vals1, vals2){
 for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
   set.seed(arrayjob_idx)
   message(paste0("arrayjob_idx: ", arrayjob_idx))
+  mat_out_all <- data.frame()
   
   # iterate over observed sample size N_obs
   for (N_obs in N_obs_grid){ # N_obs <- N_obs_grid[1]
@@ -73,9 +80,6 @@ for (arrayjob_idx in 1 : R_rep){ # arrayjob_idx <- 1
     sample_i_meandiff   <-  mean(sample_2_i) - mean(sample_1_i)
     sample_i_var_pooled <- (var(sample_1_i) * (N_obs - 1) + var(sample_2_i) * (N_obs - 1)) / (N_obs + N_obs - 2)
     sample_i_sd_pooled  <- sqrt(sample_i_var_pooled)
-    
-    mat_out_all <- data.frame()
-    
     
     # ------------------------------------------------------------------------------
     # ESTIMATE POWER WITH power.t.test(), for observed effect size 
