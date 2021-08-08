@@ -4,12 +4,12 @@
 #' cd $ups 
 #' git pull
 #' cd numerical_experiments/R
+#' 
 #' Rnosave run_glm_testcoef.R -t 1-1000 -tc 40 -N JOB_glm
 #' 
-#' #' rm $ups/numerical_experiments/results_CL/2021-08-07-glm_testcoef_raw/*
+#' rm $ups/numerical_experiments/results_CL/2021-08-07-glm_testcoef_raw/*
 #' 
 #' cd $ups/numerical_experiments/R
-#' Rnosave run_glm_testcoef.R -N JOB_glm
 #' 
 #' ls -l -d *JOB_glm*
 #' rm JOB_glm*
