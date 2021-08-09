@@ -81,7 +81,6 @@ dat_subjid_x1_is0 <- unique(dat %>% filter(x1 == 0) %>% pull(subjid))
 
 message(paste0("nrow(dat): ", nrow(dat)))
 message(paste0("mean(dat$y): ", round(mean(dat$y), 2)))
-message(paste0("fixef(fit_obs)['x1']: ", round(fixef(fit_obs)["x1"], 2)))
 
 
 # ------------------------------------------------------------------------------
@@ -117,16 +116,17 @@ for (eff_tar in eff_tar_grid){ # eff_tar <- eff_tar_grid[1]
     # length(unique(c(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjid)))
     # intersect(dat_bb_x1_is1$subjid, dat_bb_x1_is0$subjidy)
     dat_bb <- rbind(dat_bb_x1_is1, dat_bb_x1_is0)
-    # estimate fit observed, fit updated
-    fit_obs  <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat, family = binomial)
-    fit_obs_upd <- fit_obs
-    fixef(fit_obs_upd)["x1"] <- eff_tar
-    # simulate new Y 
-    dat_bb$y <- simulate(fit_obs_upd, nsim = 1, newdata = dat_bb)[[1]]
     for (rr in 1 : N_tar_grid_l){ 
       tryCatch({
         N_tar      <- N_tar_grid[rr]
         dat_bb_rr  <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
+        # estimate fit observed, fit updated
+        fit_obs  <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr, family = binomial)
+        fit_obs_upd <- fit_obs
+        fixef(fit_obs_upd)["x1"] <- eff_tar
+        # simulate new Y 
+        dat_bb_rr$y <- simulate(fit_obs_upd, nsim = 1, newdata = dat_bb_rr)[[1]]
+        # refit 
         fit_bb_rr  <- glmer(y ~ x1 + x2 + x3 + (1 | subjid), data = dat_bb_rr, family = binomial)  
         pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
         mat_boot[rr, bb] <- (pval_bb_rr < 0.05) * 1
