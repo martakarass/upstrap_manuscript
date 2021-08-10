@@ -5,7 +5,7 @@
 #' git pull
 #' 
 #' cd numerical_experiments/R
-#' Rnosave run_glmm_testcoef.R -t 1-1000 -tc 50 -N JOB_glmm
+#' Rnosave run_glmm_testcoef.R -t 1-1000 -tc 100 -N JOB_glmm
 #' Rnosave run_glmm_testcoef.R -t 1-1 -tc 50 -N JOB_glmm0
 #' 
 #' ls -l -d *JOB_glmm0*
@@ -80,7 +80,7 @@ dat_subjid_x1_is0 <- unique(dat %>% filter(x1 == 0) %>% pull(subjid))
 
 message(paste0("nrow(dat): ", nrow(dat)))
 message(paste0("mean(dat$y): ", round(mean(dat$y), 2)))
-message(paste0("fixef(fit_obs)['x1']: ", round(fixef(fit_obs)["x1"], 2)))
+# message(paste0("fixef(fit_obs)['x1']: ", round(fixef(fit_obs)["x1"], 2)))
 
 
 t1 <- Sys.time()
