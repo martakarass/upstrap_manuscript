@@ -69,6 +69,8 @@ numerical_experiments/R/OLD_5/
 numerical_experiments/R/*simr*
 ##
 numerical_experiments/R/*JOB*
+##
+numerical_experiments/R_tables/OLD/
 
 numerical_experiments/R/other_experiments/results_CL_shared/2021-08-06-estimate_power/* 
 numerical_experiments/R/other_experiments/results_CL_shared/2021-08-05-estimate_power/* 
