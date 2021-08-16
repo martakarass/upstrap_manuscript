@@ -1,0 +1,271 @@
+---
+title: "Physical Activity Case Study"
+author: "Lacey Etzkorn, Marta Karas"
+date: "8/18/2020"
+output: html_document
+---
+
+```{r leroux, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+# The folowing code chunk was pulled (and slightly modified) from https://andrew-leroux.github.io/rnhanesdata/articles/NHANES_accelerometry_introduction.html
+
+#############################################################################
+# Process Accelerometer Data
+#############################################################################
+#install.packages("devtools")
+#devtools::install_github("andrew-leroux/rnhanesdata")
+library(tidyverse)
+if(!file.exists("NHANES_Summaries.rdata")){
+library(rnhanesdata)
+## load the data
+data("PAXINTEN_C");data("PAXINTEN_D")
+data("Flags_C");data("Flags_D")
+data("Mortality_2015_C");data("Mortality_2015_D")
+data("Covariate_C");data("Covariate_D")
+
+## re-code activity counts which are considered "non-wear" to be 0
+## this doesn't impact many data points, most estimated non-wear times correspond to 0 counts
+col_vars = paste0("MIN",1:1440)
+PAXINTEN_C[, col_vars] <- PAXINTEN_C[, col_vars]*Flags_C[, col_vars]
+PAXINTEN_D[, col_vars] <- PAXINTEN_D[, col_vars]*Flags_D[, col_vars]
+
+## Merge covariate, mortality, and accelerometry data
+## note that both PAXINTEN_* and Covariate_* have a column
+## called "SDDSRVYR" indicating which NHANES wave the data is associated with.
+## To avoid duplicating this column in the merged data, we add this variable to the "by"
+## argument in left_join()
+AllAct_C <- left_join(PAXINTEN_C, Mortality_2015_C, by = "SEQN") %>%
+        left_join(Covariate_C, by=c("SEQN", "SDDSRVYR"))
+AllAct_D <- left_join(PAXINTEN_D, Mortality_2015_D, by = "SEQN") %>%
+        left_join(Covariate_D, by=c("SEQN", "SDDSRVYR"))
+
+AllFlags_C <- left_join(Flags_C, Mortality_2015_C, by = "SEQN") %>%
+        left_join(Covariate_C, by=c("SEQN", "SDDSRVYR"))
+AllFlags_D <- left_join(Flags_D, Mortality_2015_D, by = "SEQN") %>%
+        left_join(Covariate_D, by=c("SEQN", "SDDSRVYR"))
+
+## clean up the workspace for memory purposes
+rm(list=c(paste0(c("PAXINTEN_", "Covariate_","Mortality_2015_","Flags_"),rep(LETTERS[3:4],each=4))))
+AllAct   <- bind_rows(AllAct_C,AllAct_D)
+rm(list = c("AllAct_C","AllAct_D"))
+AllFlags <- bind_rows(AllFlags_C,AllFlags_D)
+rm(list = c("AllFlags_C","AllFlags_D"))
+
+#############################################################################
+# Calculate Summary Measures (Step 4)
+#############################################################################
+
+## Assign just the activity and wear/non-wear flag data to matrices.
+## This makes computing the features faster but is technically required.
+act_mat  <- as.matrix(AllAct[,paste0("MIN",1:1440)])
+flag_mat <- as.matrix(AllFlags[,paste0("MIN",1:1440)])
+
+## replace NAs with 0s
+act_mat[is.na(act_mat)]   <- 0
+flag_mat[is.na(flag_mat)] <- 0
+
+AllAct$TAC   <- AllFlags$TAC   <- rowSums(act_mat)
+AllAct$TLAC  <- AllFlags$TLAC  <- rowSums(log(1 + act_mat))
+AllAct$WT    <- AllFlags$WT    <- rowSums(flag_mat)
+
+# compute total log activity count in each 2-hr window, 
+# 2 hour (120 minutes) binning window 
+tlen <- 120
+nt   <- floor(1440/tlen)
+# create a list of indices for binning into 2-hour windows
+inx_col_ls <- split(1:1440, rep(1:nt,each=tlen))
+Act_2hr    <- sapply(inx_col_ls, function(x) rowSums(log(1+act_mat[,x,drop=FALSE])))
+colnames(Act_2hr) <- paste0("TLAC_",c(1:12))
+AllAct   <- cbind(AllAct, Act_2hr)
+AllFlags <- cbind(AllFlags, Act_2hr)
+
+rm(list=c("tlen","nt","inx_col_ls","Act_2hr","act_mat","flag_mat"))
+#tail(colnames(AllAct), 50)
+
+df <-
+AllAct %>%
+select(SEQN,WT, WEEKDAY, SDDSRVYR, BMI:TLAC_12) %>%
+filter(WT > 10*60)
+
+colnames(df) <-tolower(colnames(df))
+
+save(df, file =  "NHANES_Summaries.rdata")
+rm(list = ls())
+}else{
+load("NHANES_Summaries.rdata")
+}
+```
+
+# Exploratory analysis
+
+I have retained any participant with at least one valid day. This gives us additional heterogeneity in cluster size.
+
+```{r}
+length(unique(df$seqn)); nrow(df)
+```
+
+```{r}
+df %>% group_by(seqn) %>% summarise(n = n()) %>% summary
+```
+
+```{r, echo = FALSE, message = FALSE}
+colnames(df) <- tolower(colnames(df))
+
+set.seed(650)
+id.sample <- sample(unique(df$seqn), 9)
+filter(df, seqn%in%id.sample) %>%
+mutate(id = as.numeric(factor(seqn))) %>%
+ggplot() +
+geom_line(aes(x = weekday, y = tlac)) +
+geom_point(aes(x = weekday, y = tlac)) +
+facet_wrap("id")+
+theme_bw() +
+scale_x_continuous(breaks = 1:7)+
+ggtitle("Daily Activity Patterns for 9 Individuals") + 
+ylab("Total Log Activity Counts (TLAC)") + xlab("Day of Week")
+```
+
+# Formulation
+
+In this hypothetical analysis scenario, we want to estimate the population average weekly total log activity counts (TLAC), where our population of interest is the NHANES participants with at least one day of valid data (n = 13,718). We define population average weekly TLAC as
+
+$$ \mu := \frac17\sum_{j=1}^7 \frac 1{n_j}\sum_{i=1}^{n_j}  TLAC_{ij} $$
+
+where $j = 1 ... 7$ indexes the day of the week, $i = 1...N$ indexes the individuals, and $n_j$ are the number of individuals we measure activity for weekday $j$.
+
+Suppose we can take a sample of size 50 from the NHANES population to produce an estimate $\hat{\mu}_{250}$, but we would like to infer the sampling characteristics of $\hat{\mu}_{500}$, the estimate given a random draw of 500 individuals from our NHANES population. To do so, we first draw our observed data: a sample of 250 participant ids without replacement from our population and compute $\hat{\mu}_{250}$. Second, we repeatedly (r = 1...1,000) draw a sample of 500 individuals with replacement from the observed sample of 250, and compute our estimate for each replicate. 
+
+This procedure is implemented with the following code.
+
+```{r, echo =FALSE}
+mu <- df %>% group_by(weekday) %>% 
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac)) %>% unlist
+	
+sample.250.ids <- sample(unique(df$seqn), 250)
+upstrap.replicates250.500 <- 
+	df %>% 
+	select(seqn, weekday, tlac) %>%
+    # filter population to sample of 50
+	filter(seqn %in% sample.250.ids) %>% 
+	nest(data = c(tlac,weekday)) %>%
+    # sample with replacement from observed data
+	sample_n(500000, replace = T) %>%
+	mutate(replicate = rep(1:1000, each = 500)) %>%
+	unnest(cols = data) %>%
+    # compute estimate
+	group_by(replicate, weekday) %>%
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac))
+
+mu250 <- df %>% 
+    # filter population to sample of 50
+	filter(seqn %in% sample.250.ids) %>% 
+    # compute estimate
+	group_by(weekday) %>%
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac)) %>%
+	unlist
+```
+
+The estimated sampling distribution from this procedure is depicted below.
+
+```{r}
+ggplot(upstrap.replicates250.500) + 
+geom_histogram(aes(x = weekly.tlac)) +
+geom_vline(aes(xintercept = mu), color = "red")+
+geom_vline(aes(xintercept = mu250), color = "blue")
+
+summary(upstrap.replicates250.500$weekly.tlac)
+```
+
+For comparison, we perform three more procedures. First, we sample groups of 500 individuals without replacement from the population. This gives us the "true" sampling distribution of our estimator for a sample size of 500. Second, we sample a group of 500 individuals from the population, and then perform the multi-level bootstrap procedure. This gives us a sense of the suboptimality of our sample size: how poor is our estimate of the sampling distribution of $\hat{\mu}_{500}$ given a sample size of 50 compared to a sample size of 500? Third, we compute a basic upstrap, ignoring the multilevel structure of the data. This will give us a sense of the importance of accounting for the multi-level structure in the upstrap resampling procedure. 
+
+```{r}
+# Comparison (1): Samples of size 500 from the population
+sample.replicates500 <- 
+	df %>% 
+	select(seqn, weekday, tlac) %>%
+	nest(data = c(tlac,weekday)) %>%
+    # sample with replacement from population data
+	sample_n(500000, replace = T) %>%
+	mutate(replicate = rep(1:1000, each = 500)) %>%
+	unnest(cols = data) %>%
+    # compute estimate
+	group_by(replicate, weekday) %>%
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac))
+
+# Comparison (2): Multilevel Bootstrap of single sample of 500
+sample.500.ids <- c(sample(unique(df$seqn), 250), sample.250.ids)
+mu500 <- df %>% 
+    # filter population to sample of 250
+	filter(seqn %in% sample.500.ids) %>% 
+    # compute estimate
+	group_by(weekday) %>%
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac)) %>%
+	unlist
+bootstrap.replicates500 <- 
+	df %>% 
+	select(seqn, weekday, tlac) %>%
+    # filter population to sample of 500
+	filter(seqn %in% sample.500.ids) %>% 
+	nest(data = c(tlac,weekday)) %>%
+    # sample with replacement from observed data
+	sample_n(500000, replace = T) %>%
+	mutate(replicate = rep(1:1000, each = 500)) %>%
+	unnest(cols = data) %>%
+	group_by(replicate, weekday) %>%
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac))
+
+# Comparison (3): Basic (non-clustered) Upstrap of single sample of 500 {same as in (2)}
+upstrap.replicates250 <- 
+	df %>% 
+	select(seqn, weekday, tlac) %>%
+    # filter population to sample of 500
+	filter(seqn %in% sample.250.ids) %>% 
+    # sample with replacement from observed data
+	sample_n(n()*2*1000, replace = T) %>% 
+	# sample ten times as much data to approx sample size of 500 people
+	mutate(replicate = rep(1:1000, length.out = n())) %>% 
+    # compute estimate
+	group_by(replicate, weekday) %>%
+	summarise(daily.tlac = mean(tlac)) %>%
+	summarise(weekly.tlac = mean(daily.tlac))
+```
+
+
+```{r}
+bind_rows(upstrap.replicates250.500, 
+          sample.replicates500, 
+          bootstrap.replicates500,
+          upstrap.replicates250) %>%
+mutate(label = rep(c("Cluster Upstrap Resampling (n = 250)",
+	         "(1) True Cluster Sampling (n = 13,718)", 
+	         "(2) Cluster Boostrap Resampling (n = 500)", 
+	         "(3) Basic Upstrap Resampling (n = 250)"), 
+	       each = 1000),
+       estimate = rep(c(mu250, mu, mu500, mu250), each = 1000)) %>%
+ggplot()+
+geom_histogram(aes(x = weekly.tlac))+
+geom_vline(aes(xintercept = estimate), color = "blue")+
+geom_vline(aes(xintercept = mu), color = "red")+
+facet_wrap("label", ncol = 1) +
+theme_bw() + 
+xlab("Total Log Activity Counts") +
+ggtitle("Distribution of Mu Hat given sample of n and replacement samples of 500")
+```
+
+
+If we estimate the standard error of our estimators from our upstrap distribution, we see that it is very similar to the standard error of the true sampling distribution.
+
+```{r}
+c(
+Truth = sd(sample.replicates500$weekly.tlac),
+Upstrap = sd(upstrap.replicates250.500$weekly.tlac),
+Bootstrap = sd(bootstrap.replicates500$weekly.tlac),
+NonClusteredUpstrap = sd(upstrap.replicates250$weekly.tlac)
+)
+```
