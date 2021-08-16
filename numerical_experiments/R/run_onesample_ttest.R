@@ -3,6 +3,7 @@
 #' cd $ups 
 #' git pull
 #' rm $ups/numerical_experiments/results_CL/2021-08-07-onesample_ttest_raw/*
+#' 
 #' cd numerical_experiments/R
 #' Rnosave run_onesample_ttest.R -N JOB_onesample
 #' 

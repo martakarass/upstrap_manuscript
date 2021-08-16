@@ -83,28 +83,24 @@ mean(out)
 # ------------------------------------------------------------------------------
 # target sample size: 100, target effect size: 1.2
 
-dat_upd <- dat
-# set re.form = NULL to condition on all random effects when "predicting" the link response
-dat_upd$link_orig <- predict(fit, type = "link", re.form = NULL) 
-# update link function to express the assumed target effect size 
-dat_upd$link_upd  <- dat_upd$link_orig + (1.2 - fixef(fit)["x1"]) * dat_upd$x1
-# update fitted response (probability of Y=1)
-dat_upd$res_upd   <- 1/(1 + exp(-dat_upd$link_upd))
+set.seed(1)
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
   print(rr)
-  dat_rr_subj_id <- sample(unique(dat_upd$subjid), size = 100, replace = TRUE)
-  dat_rr  <- lapply(dat_rr_subj_id, function(subjid_tmp) dat_upd[dat_upd$subjid == subjid_tmp, ]) 
+  dat_rr_subj_id <- sample(unique(dat$subjid), size = 100, replace = TRUE)
+  dat_rr  <- lapply(dat_rr_subj_id, function(subjid_tmp) dat[dat$subjid == subjid_tmp, ]) 
   dat_rr  <- do.call("rbind", dat_rr)
   # make new subject ID so as to treat subjects resampled >1 as unique ones
   dat_rr$subjid <- rep(1 : 100, each = ni)
-  # simulate response on resampled data, assuming target effect size  
-  dat_rr$y <- rbinom(n = nrow(dat_rr), size = 1, prob = dat_rr$res_upd)
-  fit_rr   <- glmer(y ~ x1 + x2 + (1 | subjid), data = dat_rr, family = binomial)
-  pval_rr  <- summary(fit_rr)$coef["x1", 4]
-  out[rr]  <- (pval_rr < 0.05)
+  # fit model, update coefficient for the size effect of interest 
+  fit_rr_sim_y  <- glmer(y ~ x1 + x2 + (1 | subjid), data = dat_rr, family = binomial)
+  fixef(fit_rr_sim_y)["x1"] <- 1.2
+  # simulate new outcome 
+  dat_rr$y <- simulate(fit_rr_sim_y, nsim = 1, newdata = dat_rr)[[1]]
+  # fit "final" model 
+  fit_rr  <- glmer(y ~ x1 + x2 + (1 | subjid), data = dat_rr, family = binomial)  
+  pval_rr <- summary(fit_rr)$coef["x1", 4]
+  out[rr] <- (pval_rr < 0.05)
 }
 mean(out)
-# [1] 0.992
-
-
+# [1] 0.957

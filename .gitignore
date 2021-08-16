@@ -48,6 +48,9 @@ numerical_experiments/bash_CL/2021-02-15-onesample_ttest/*
 
 # figures
 numerical_experiments/R_figures/
+numerical_experiments/R_figures/OLD/
+numerical_experiments/R_figures/OLD_2/
+numerical_experiments/R_figures/OLD_3/
 
 # Use case exmples
 use_case_examples/_OLD/

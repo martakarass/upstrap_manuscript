@@ -5,10 +5,10 @@
 #' git pull
 #' 
 #' cd numerical_experiments/R
-#' Rnosave run_glmmB_testcoef.R -t 1-1000 -tc 50 -N JOB_glmm
-#' Rnosave run_glmmB_testcoef.R -t 1-1 -tc 50 -N JOB_glmm0
+#' Rnosave run_glmmB_testcoef.R -t 1-1000 -tc 80 -N JOB_glmmB
 #' 
 #' ls -l -d *JOB_glmmB*
+#' ls -l -d *glmmB*
 #' rm JOB_glmmB*
 
 

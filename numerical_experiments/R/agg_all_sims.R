@@ -47,19 +47,28 @@ read_and_agg <- function(fdir_raw){
     pivot_wider(names_from = name, values_from = value) %>%
     ungroup() %>%
     select(-N_obs)
-  dat_diff <- 
+  dat_diff_A <- 
     dat %>%
     filter(name != "true_power", eff_tar != "observed") %>% 
     pivot_wider(names_from = name, values_from = value) %>%
     left_join(dat_truepower_agg, by = c("N_tar", "eff_tar")) %>%
     mutate(
-      # upstrap
       pe_ups_true =  100 * (upstrap_power - true_power)/true_power,
       pe_cmp_true =  100 * (comparator_power - true_power)/true_power,
       pe_ups_cmp  =  100 * (upstrap_power - comparator_power)/comparator_power
       ) %>%
     select(-c(upstrap_power, comparator_power, true_power)) %>%
     pivot_longer(cols = starts_with("pe"))
+  dat_diff_B <- 
+    dat %>%
+    filter(name != "true_power", eff_tar == "observed") %>% 
+    pivot_wider(names_from = name, values_from = value) %>%
+    mutate(
+     pe_ups_cmp  =  100 * (upstrap_power - comparator_power)/comparator_power
+    ) %>%
+    select(-c(upstrap_power, comparator_power)) %>%
+    pivot_longer(cols = starts_with("pe"))
+  dat_diff <- rbind(dat_diff_A, dat_diff_B)
   dat_agg_diff <- 
     dat_diff %>%
     group_by(N_tar, N_obs, name, eff_tru, eff_tar) %>%
@@ -153,7 +162,7 @@ fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021
 out_tmp   <- read_and_agg(fdir_raw)
 # head(out_tmp)
 
-# Raw files count: 811
+# Raw files count: 971
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -168,9 +177,9 @@ rm(fdir_raw, fpath_out, out_tmp)
 fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-07-glmm_testcoef_raw")
 fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-08-07-glmm_testcoef_agg.rds")
 out_tmp   <- read_and_agg(fdir_raw)
-head(out_tmp) 
+# head(out_tmp) 
 
-# Raw files count: 390
+# Raw files count: 552
 
 # save to file
 saveRDS(out_tmp, fpath_out)

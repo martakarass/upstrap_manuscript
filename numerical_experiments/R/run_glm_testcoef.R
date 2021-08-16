@@ -6,7 +6,7 @@
 #' cd numerical_experiments/R
 #' 
 #' Rnosave run_glm_testcoef.R -t 1-1000 -tc 40 -N JOB_glm
-#' Rnosave run_glm_testcoef.R -t 1-1 -tc 40 -N JOB_glm
+#' Rnosave run_glm_testcoef.R -t 1-1 -tc 40 -N JOB_glm0
 #' 
 #' rm $ups/numerical_experiments/results_CL/2021-08-07-glm_testcoef_raw/*
 #' 

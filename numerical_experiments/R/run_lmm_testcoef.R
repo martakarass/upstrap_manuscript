@@ -6,7 +6,7 @@
 #' cd numerical_experiments/R
 #' 
 #' Rnosave run_lmm_testcoef.R -t 1-1000 -tc 50 -N JOB_lmm
-#' Rnosave run_lmm_testcoef.R -t 1-1 -tc 50 -N JOB_lmm
+#' Rnosave run_lmm_testcoef.R -t 1-1 -tc 50 -N JOB_lmm0
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))

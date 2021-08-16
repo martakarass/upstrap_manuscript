@@ -9,7 +9,8 @@
 #' 
 #' Rnosave run_lm_testcoef.R -t 1-1000 -tc 40 -N JOB_lm
 #' 
-#' Rnosave run_lm_testcoef.R -t 1-1 -tc 40 -N JOB_lm
+#' Rnosave run_lm_testcoef.R -t 1-1 -tc 40 -N JOB_lm0
+#' Rnosave run_lm_testcoef.R -t 314-314 -tc 40 -N JOB_lm314
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*
