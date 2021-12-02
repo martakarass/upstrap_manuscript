@@ -3,11 +3,11 @@
 #' Notes: 
 #' cd $ups 
 #' git pull
-#' rm $ups/numerical_experiments/results_CL/2021-08-07-lm_testcoef_case_corr_raw/*
+#' rm $ups/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_corr_raw/*
 #' 
 #' cd $ups/numerical_experiments/R
 #' 
-#' Rnosave run_lm_testcoef_case_corr.R -t 1-1000 -tc 40 -N JOB_lm
+#' Rnosave run_lm_testcoef_case_corr.R -t 1-1000 -tc 40 -N JOB_lm_case_corr
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*
@@ -32,13 +32,13 @@ res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12
 dir.create(path = res_fdir_raw)
 
 # experiment parameters
-N_obs   <- 50   # size of each of the two "treatment arms" 
+N_obs   <- 100   # total sample size
 coef_x0 <- 0 
 coef_x1 <- 0.5
 coef_x2 <- 1
 coef_x3 <- 0.7
 sigma2  <- 1
-N_tar_grid    <- seq(20, 100, by = 30)
+N_tar_grid    <- seq(20, 100, by = 30) * 2
 N_tar_max     <- max(N_tar_grid)
 N_tar_grid_l  <- length(N_tar_grid)
 eff_tar_grid  <- c(0.5)
@@ -49,28 +49,23 @@ B_boot  <- 1000
 R_powertrue  <- 1000 * 10
 
 # simulate sample (for maximum sample size first)
-subjid_arm_i <- rep(1 : N_obs, each = 2)
-subjid_i  <- 1 : (N_obs * 2)   # subject ID unique in data set 
-x1_i      <- rep(c(0, 1), times = N_obs)
-
-Sigma <- matrix(c(1,0.4,0.4,1),2,2)
-x2_3_i <- mvrnorm(n = N_obs * 2, c(0.5, 0.5), Sigma)
-x2_i      <- x2_3_i[, 1]
-x3_i      <- x2_3_i[, 2]
-eps_i     <- rnorm(N_obs * 2, sd = sqrt(sigma2))
+subjid_i  <- 1 : N_obs   
+Sigma <- matrix(c(1,0.4,0.2,
+                  0.4, 1, 0.4,
+                  0.2, 0.4, 1), 3, 3, byrow = TRUE)
+xs_i <- mvrnorm(n = N_obs, c(0.5, 0.5, 0.5), Sigma)
+x1_i      <- xs_i[, 1]
+x2_i      <- xs_i[, 2]
+x3_i      <- xs_i[, 3]
+eps_i     <- rnorm(N_obs, sd = sqrt(sigma2))
 y_i       <- coef_x0 + (coef_x1 * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i
-dat       <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, 
-                        subjid = subjid_i, subjid_arm = subjid_arm_i)
+dat       <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, subjid = subjid_i)
 dim(dat)
-
-# indexes of individuals in each two "treatment arms" 
-dat_0_idx <- which(dat$x1 == 0)
-dat_1_idx <- which(dat$x1 == 1)
 
 # get observed effect 
 fit_obs  <- lm(y ~ x1 + x2 + x3, data = dat)
 coef(fit_obs)["x1"]
-# 0.5093013
+# 0.6332802
 
 
 
@@ -79,7 +74,6 @@ coef(fit_obs)["x1"]
 # ------------------------------------------------------------------------------
 # RUN SIMULATIONS
 
-t1 <- Sys.time()
 mat_out_all <- data.frame()
 
 
@@ -98,15 +92,13 @@ for (eff_tar in eff_tar_grid){ # eff_tar <- eff_tar_grid[1]
     # print(bb)
     if (bb %% 100 == 0) message(paste0("bb: ", bb, " [", round(bb / B_boot * 100, 2), "%], ",  round(as.numeric(Sys.time() - t1, unit = "mins")), " mins"))
     # resample data for current boot repetition (upstrap up to N target max)
-    dat_bb_idx <- c(sample(dat_1_idx, size = N_tar_max, replace = TRUE), 
-                    sample(dat_0_idx, size = N_tar_max, replace = TRUE))
+    dat_bb_idx        <- sample(1 : N_obs, size = N_tar_max, replace = TRUE)
     dat_bb            <- dat_upd[dat_bb_idx, ]
-    dat_bb$subjid     <- 1 : (2 * N_tar_max)                # subject's ID -- unique in data set
-    dat_bb$subjid_arm <- c(1 : N_tar_max, 1 : N_tar_max)    # subject's ID -- unique within a "treatment arm"
+    dat_bb$subjid     <- 1 : N_tar_max           # subject's ID -- unique in data set
     for (rr in 1 : N_tar_grid_l){ 
       tryCatch({
         N_tar      <- N_tar_grid[rr]
-        dat_bb_rr  <- dat_bb[dat_bb$subjid_arm <= N_tar, ]
+        dat_bb_rr  <- dat_bb[dat_bb$subjid <= N_tar, ]
         fit_bb_rr  <- lm(y ~ x1 + x2 + x3, data = dat_bb_rr)
         pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
         mat_boot[rr, bb] <- (pval_bb_rr < 0.05) * 1
@@ -142,23 +134,26 @@ if (arrayjob_idx == 1){
     for (ee in 1 : length(eff_tar_grid)){  # bb <- 1; ee <- 1
       eff_tar <- eff_tar_grid[ee]
       # message(paste0("true power -- eff_tar = ", eff_tar))
-      
-      subjid_arm_i <- rep(1 : N_tar_max, each = 2)
-      subjid_i  <- 1 : (N_tar_max * 2)   # subject ID unique in data set
-      x1_i      <- rep(c(0, 1), times = N_tar_max)
-      x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
-      x3_i      <- runif(n = N_tar_max * 2, min = 0, max = 1)
-      eps_i     <- rnorm(N_tar_max * 2, sd = sqrt(sigma2))
+
+      subjid_i  <- 1 : N_tar_max   
+      Sigma <- matrix(c(1,0.4,0.2,
+                        0.4, 1, 0.4,
+                        0.2, 0.4, 1), 3, 3, byrow = TRUE)
+      xs_i <- mvrnorm(n = N_tar_max, c(0.5, 0.5, 0.5), Sigma)
+      x1_i      <- xs_i[, 1]
+      x2_i      <- xs_i[, 2]
+      x3_i      <- xs_i[, 3]
+      eps_i     <- rnorm(N_tar_max, sd = sqrt(sigma2))
       # use eff_tar
       y_i       <- coef_x0 + (eff_tar * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i
       dat_N_tar_max <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, 
-                                  subjid = subjid_i, subjid_arm = subjid_arm_i)
+                                  subjid = subjid_i)
       
       value <- rep(NA, N_tar_grid_l)
       for (rr in 1 : N_tar_grid_l){  # rr <- 10
         tryCatch({
           N_tar      <- N_tar_grid[rr]
-          dat_bb_rr  <- dat_N_tar_max[dat_N_tar_max$subjid_arm <= N_tar, ]
+          dat_bb_rr  <- dat_N_tar_max[dat_N_tar_max$subjid <= N_tar, ]
           fit_bb_rr  <- lm(y ~ x1 + x2 + x3, data = dat_bb_rr)
           pval_bb_rr <- summary(fit_bb_rr)$coef["x1", 4]
           value[rr] <- (pval_bb_rr < 0.05) * 1
