@@ -162,7 +162,7 @@ fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021
 out_tmp   <- read_and_agg(fdir_raw)
 # head(out_tmp)
 
-# Raw files count: 971
+# Raw files count: 1000
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -179,7 +179,7 @@ fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021
 out_tmp   <- read_and_agg(fdir_raw)
 # head(out_tmp) 
 
-# Raw files count: 552
+# Raw files count: 1000
 
 # save to file
 saveRDS(out_tmp, fpath_out)
@@ -187,9 +187,10 @@ saveRDS(out_tmp, fpath_out)
 # remove files 
 rm(fdir_raw, fpath_out, out_tmp)
 
+
+
 #' cd $ups
 #' git add --all
 #' git commit -m 'add updated results from the cluster'
 #' git push
-
 

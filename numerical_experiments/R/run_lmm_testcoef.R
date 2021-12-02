@@ -7,6 +7,11 @@
 #' 
 #' Rnosave run_lmm_testcoef.R -t 1-1000 -tc 50 -N JOB_lmm
 #' Rnosave run_lmm_testcoef.R -t 1-1 -tc 50 -N JOB_lmm0
+#' 
+#' Aug 19, 2021
+#' Rnosave run_lmm_testcoef.R -t 72-102 -tc 50 -N JOB_lmm72
+#' Rnosave run_lmm_testcoef.R -t 146-146 -tc 50 -N JOB_lmm146
+
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
