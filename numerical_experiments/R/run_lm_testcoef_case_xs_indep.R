@@ -3,12 +3,12 @@
 #' Notes: 
 #' cd $ups 
 #' git pull
-#' rm $ups/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_corr_raw/*
+#' rm $ups/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_xs_indep_raw/*
 #' 
 #' cd $ups/numerical_experiments/R
 #' 
-#' Rnosave run_lm_testcoef_case_corr.R -t 1-1000 -tc 40 -N JOB_lm_case_corr
-#' Rnosave run_lm_testcoef_case_corr.R -t 1-1000 -N JOB_lm_case_corr
+#' Rnosave run_lm_testcoef_case_xs_indep.R -t 1-1000 -tc 40 -N JOB_lm_case_corr
+#' Rnosave run_lm_testcoef_case_xs_indep.R -t 1-1000 -N JOB_lm_case_corr
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*
@@ -28,8 +28,8 @@ library(simr)
 library(MASS)
 
 # dir to save results 
-# res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-07-lm_testcoef_case_corr_raw")
-res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_corr_raw")
+# res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-08-07-lm_testcoef_case_xs_indep_raw")
+res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_xs_indep_raw")
 dir.create(path = res_fdir_raw)
 
 # experiment parameters
@@ -51,9 +51,9 @@ R_powertrue  <- 1000 * 10
 
 # simulate sample (for maximum sample size first)
 subjid_i  <- 1 : N_obs   
-Sigma <- matrix(c(1,0.4,0.2,
-                  0.4, 1, 0.4,
-                  0.2, 0.4, 1), 3, 3, byrow = TRUE)
+Sigma <- matrix(c(1,0,0,
+                  0, 1, 0,
+                  0, 0, 1), 3, 3, byrow = TRUE)
 xs_i <- mvrnorm(n = N_obs, c(0.5, 0.5, 0.5), Sigma)
 x1_i      <- xs_i[, 1]
 x2_i      <- xs_i[, 2]
@@ -138,9 +138,6 @@ if (arrayjob_idx == 1){
       # message(paste0("true power -- eff_tar = ", eff_tar))
 
       subjid_i  <- 1 : N_tar_max   
-      Sigma <- matrix(c(1,0.4,0.2,
-                        0.4, 1, 0.4,
-                        0.2, 0.4, 1), 3, 3, byrow = TRUE)
       xs_i <- mvrnorm(n = N_tar_max, c(0.5, 0.5, 0.5), Sigma)
       x1_i      <- xs_i[, 1]
       x2_i      <- xs_i[, 2]
