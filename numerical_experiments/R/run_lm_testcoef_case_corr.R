@@ -76,6 +76,7 @@ coef(fit_obs)["x1"]
 
 mat_out_all <- data.frame()
 
+t1 <- Sys.time()
 
 # ------------------------------------------------------------------------------
 # ESTIMATE POWER WITH upstrap, for fixed target effect size 
