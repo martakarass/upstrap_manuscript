@@ -32,13 +32,13 @@ res_fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12
 dir.create(path = res_fdir_raw)
 
 # experiment parameters
-N_obs   <- 100   # total sample size
+N_obs   <- 50   # total sample size
 coef_x0 <- 0 
 coef_x1 <- 0.5
 coef_x2 <- 1
 coef_x3 <- 0.7
 sigma2  <- 1
-N_tar_grid    <- seq(20, 100, by = 30) * 2
+N_tar_grid    <- seq(20, 100, by = 30) 
 N_tar_max     <- max(N_tar_grid)
 N_tar_grid_l  <- length(N_tar_grid)
 eff_tar_grid  <- c(0.5)
