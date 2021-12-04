@@ -7,8 +7,8 @@
 #' 
 #' cd $ups/numerical_experiments/R
 #' 
-#' Rnosave run_lm_testcoef_case_xs_indep.R -t 1-1000 -tc 40 -N JOB_lm_case_corr
-#' Rnosave run_lm_testcoef_case_xs_indep.R -t 1-1000 -N JOB_lm_case_corr
+#' Rnosave run_lm_testcoef_case_xs_indep.R -t 1-1000 -tc 40 -N JOB_lm_case_xs_indep
+#' Rnosave run_lm_testcoef_case_xs_indep.R -t 1-1000 -N JOB_lm_case_xs_indep
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*

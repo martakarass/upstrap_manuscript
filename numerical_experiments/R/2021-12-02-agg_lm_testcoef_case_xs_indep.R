@@ -13,8 +13,8 @@ options(dplyr.summarise.inform = FALSE)
 
 # SIMULATION PROBLEM 
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_corr_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-02-lm_testcoef_case_corr_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-02-lm_testcoef_case_xs_indep_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-02-lm_testcoef_case_xs_indep_agg.rds")
 
 # read and combine data 
 fnames <- list.files(fdir_raw, full.names = TRUE)

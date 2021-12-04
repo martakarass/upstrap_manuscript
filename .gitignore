@@ -52,6 +52,7 @@ numerical_experiments/R_figures/
 numerical_experiments/R_figures/OLD/
 numerical_experiments/R_figures/OLD_2/
 numerical_experiments/R_figures/OLD_3/
+numerical_experiments/R_figures/OLD_4/
 
 # Use case exmples
 use_case_examples/_OLD/
@@ -72,6 +73,7 @@ numerical_experiments/R/OLD_2/
 numerical_experiments/R/OLD_3/
 numerical_experiments/R/OLD_4/
 numerical_experiments/R/OLD_5/
+numerical_experiments/R/OLD_6/
 numerical_experiments/R/*simr*
 ##
 numerical_experiments/R/*JOB*
