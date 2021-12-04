@@ -7,7 +7,7 @@
 #' 
 #' cd $ups/numerical_experiments/R
 #' 
-#' Rnosave run_lm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 40 -N JOB_lm
+#' Rnosave run_lm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 40 -N JOB_lm_testcoef_vary_nobs_sd
 #' 
 #' ls -l -d *JOB_lm*
 #' rm JOB_lm*
@@ -46,10 +46,10 @@ eff_tar       <- 0.5
 eff_tru       <- coef_x1
 
 # number of boot repetitions within one experiment, one setup
-# B_boot  <- 1000
-# R_powertrue  <- 1000 * 10
-B_boot  <- 3
-R_powertrue  <- 3
+B_boot  <- 1000
+R_powertrue  <- 1000 * 10
+# B_boot  <- 3
+# R_powertrue  <- 3
 
 
 
