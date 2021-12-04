@@ -61,7 +61,7 @@ R_powertrue  <- 1000 * 10
 mat_out_all <- data.frame()
 
 message(paste0("ESTIMATE POWER WITH upstrap, for fixed target effect size = ", eff_tar))
-# N_obs  <- N_obs_grid[3]; sigma2 <- sigma2_grid[2]
+# N_obs  <- N_obs_grid[1]; sigma2 <- sigma2_grid[2]
 for (N_obs in N_obs_grid){
   for (sigma2 in sigma2_grid){
     print(paste0("N_obs = ", N_obs, ", sigma2 = ", sigma2))
@@ -120,6 +120,7 @@ for (N_obs in N_obs_grid){
     mat_out_tmp$eff_tar       <- eff_tar
     mat_out_tmp$sigma2        <- sigma2
     mat_out_tmp$value         <- value
+    mat_out_tmp$prop_success  <- mean(!is.na(mat_boot))
     mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
     rm(mat_out_tmp, value, mat_boot)
 
@@ -131,7 +132,8 @@ for (N_obs in N_obs_grid){
 # ADDITIONAL SIMULATIONS TO BE RUN ONCE 
 
 if (arrayjob_idx == 1){
-
+  message(paste0("RUN ADDITIONAL SIMULATIONS TO BE RUN ONCE"))
+  
   # number of repetitions
   for (sigma2 in sigma2_grid){
     print(paste0("sigma2 = ", sigma2))
@@ -170,6 +172,7 @@ if (arrayjob_idx == 1){
       mat_out_tmp$eff_tar       <- eff_tar
       mat_out_tmp$sigma2        <- sigma2
       mat_out_tmp$value         <- value
+      mat_out_tmp$prop_success  <- as.numeric(!is.na(value))
       mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
       rm(mat_out_tmp, value)
     }
@@ -183,6 +186,8 @@ if (arrayjob_idx == 1){
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # SAVE TO FILE 
+
+message(paste0("*** COMPLETED ***"))
 
 out_fpath_raw <- paste0(res_fdir_raw, "/arrayjob_", arrayjob_idx, ".rds")
 saveRDS(object = mat_out_all, file = out_fpath_raw)
