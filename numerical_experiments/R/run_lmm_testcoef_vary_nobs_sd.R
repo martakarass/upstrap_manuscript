@@ -8,7 +8,7 @@
 #' Rnosave run_lmm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 75 -N JOB_lmm_testcoef_vary_nobs_sd
 #' 
 #' ls -l -d *JOB_lmm_testcoef_vary_nobs_sd*
-#' rm JOB_*
+#' rm JOB_lmm_testcoef_vary_nobs_sd*
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
@@ -38,8 +38,8 @@ coef_x0 <- 0
 coef_x1 <- 0.5
 coef_x2 <- 1
 coef_x3 <- -1
-# tau2    <- 1
-sigma2_grid  <- c(0.7, 1, 1.3)
+# sd_tau    <- 1
+sd_sigma_grid  <- c(0.7, 1, 1.3)
 N_tar_grid    <- seq(20, 200, by = 30)
 N_tar_max     <- max(N_tar_grid)
 N_tar_grid_l  <- length(N_tar_grid)
@@ -59,14 +59,14 @@ R_powertrue <- 1000 * 10
 # ------------------------------------------------------------------------------
 # RUN SIMULATIONS
 
-# N_obs <- 50; sigma2 <- 0.5; tau2 <- sigma2
+# N_obs <- 50; sd_sigma <- 0.5; sd_tau <- sd_sigma
 
 mat_out_all <- data.frame()
 
 for (N_obs in N_obs_grid){
-  for (sigma2 in sigma2_grid){
-    tau2 <- sigma2
-    print(paste0("N_obs = ", N_obs, ", sigma2 = ", sigma2, ", tau2 = ", tau2))
+  for (sd_sigma in sd_sigma_grid){
+    sd_tau <- sd_sigma
+    print(paste0("N_obs = ", N_obs, ", sd_sigma = ", sd_sigma, ", sd_tau = ", sd_tau))
     
     # ------------------------------------------------------------------------------
     # SIMULATE OBSERVED SAMPLE
@@ -75,7 +75,7 @@ for (N_obs in N_obs_grid){
     x1_i      <- rep(c(0, 1), times = N_obs)
     x2_i      <- rbinom(n = N_obs * 2, size = 1, prob = 0.5)
     x3_i      <- runif(n = N_obs * 2, min = 0, max = 1)
-    b0_i      <- rnorm(n = (N_obs * 2), mean = 0, sd = tau2)
+    b0_i      <- rnorm(n = (N_obs * 2), mean = 0, sd = sd_tau)
     subjid_i     <- 1 : (N_obs * 2)           # subject ID unique in data set 
     subjid_arm_i <- rep(1 : N_obs, each = 2)  # subject ID unique within "treatment arm" 
     # observation-specific
@@ -83,7 +83,7 @@ for (N_obs in N_obs_grid){
     x2_ij     <- rep(x2_i, each = ni) 
     x3_ij     <- rep(x3_i, each = ni) 
     b0_ij     <- rep(b0_i, each = ni) 
-    eps_ij    <- rnorm(n = (N_obs * 2 * ni), mean = 0, sd = sigma2)
+    eps_ij    <- rnorm(n = (N_obs * 2 * ni), mean = 0, sd = sd_sigma)
     subjid_ij     <- rep(subjid_i, each = ni)            
     subjid_arm_ij <- rep(subjid_arm_i, each = ni) 
     rm(x1_i, x2_i, x3_i, b0_i, subjid_i, subjid_arm_i)
@@ -143,8 +143,8 @@ for (N_obs in N_obs_grid){
     mat_out_tmp$eff_tru       <- eff_tru
     mat_out_tmp$eff_tar       <- eff_tar
     mat_out_tmp$value         <- value
-    mat_out_tmp$sigma2        <- sigma2
-    mat_out_tmp$tau2          <- tau2
+    mat_out_tmp$sd_sigma        <- sd_sigma
+    mat_out_tmp$sd_tau          <- sd_tau
     mat_out_tmp$prop_success  <- mean(!is.na(mat_boot))
     mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
     rm(mat_out_tmp, value, mat_boot)
@@ -159,9 +159,9 @@ if (arrayjob_idx == 1){
   message(paste0("RUN ADDITIONAL SIMULATIONS TO BE RUN ONCE"))
   
   # number of repetitions
-  for (sigma2 in sigma2_grid){
-    tau2 <- sigma2
-    print(paste0("sigma2 = ", sigma2, ", tau2 = ", tau2))
+  for (sd_sigma in sd_sigma_grid){
+    sd_tau <- sd_sigma
+    print(paste0("sd_sigma = ", sd_sigma, ", sd_tau = ", sd_tau))
     
     # number of repetitions
     for (bb in 1 : R_powertrue){
@@ -171,7 +171,7 @@ if (arrayjob_idx == 1){
       x1_i      <- rep(c(0, 1), times = N_tar_max)
       x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
       x3_i      <- runif(n = N_tar_max * 2, min = 0, max = 1)
-      b0_i      <- rnorm(n = (N_tar_max * 2), mean = 0, sd = tau2)
+      b0_i      <- rnorm(n = (N_tar_max * 2), mean = 0, sd = sd_tau)
       subjid_i     <- 1 : (N_tar_max * 2)           # subject ID unique in data set 
       subjid_arm_i <- rep(1 : N_tar_max, each = 2)  # subject ID unique within "treatment arm" 
       # observation-specific
@@ -179,7 +179,7 @@ if (arrayjob_idx == 1){
       x2_ij     <- rep(x2_i, each = ni) 
       x3_ij     <- rep(x3_i, each = ni) 
       b0_ij     <- rep(b0_i, each = ni) 
-      eps_ij    <- rnorm(n = (N_tar_max * 2 * ni), mean = 0, sd = sigma2)
+      eps_ij    <- rnorm(n = (N_tar_max * 2 * ni), mean = 0, sd = sd_sigma)
       subjid_ij     <- rep(subjid_i, each = ni)            
       subjid_arm_ij <- rep(subjid_arm_i, each = ni) 
       rm(x1_i, x2_i, x3_i, b0_i, subjid_i, subjid_arm_i)
@@ -206,8 +206,8 @@ if (arrayjob_idx == 1){
       mat_out_tmp$eff_tru       <- eff_tar
       mat_out_tmp$eff_tar       <- eff_tar
       mat_out_tmp$value         <- value
-      mat_out_tmp$sigma2        <- sigma2
-      mat_out_tmp$tau2          <- tau2
+      mat_out_tmp$sd_sigma      <- sd_sigma
+      mat_out_tmp$sd_tau        <- sd_tau
       mat_out_tmp$prop_success  <- as.numeric(!is.na(value))
       mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
       rm(mat_out_tmp, value)
