@@ -31,7 +31,7 @@ dir.create(path = res_fdir_raw)
 
 # experiment parameters
 # N_obs   <- 50   # size of each of the two "treatment arms" 
-N_obs_grid <- c(5, 20, 50)
+N_obs_grid <- c(5, 10, 20, 50)
 coef_x0 <- 0 
 coef_x1 <- 0.5
 coef_x2 <- 1
