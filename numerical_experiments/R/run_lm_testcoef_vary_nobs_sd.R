@@ -10,7 +10,7 @@
 #' Rnosave run_lm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 40 -N JOB_lm_testcoef_vary_nobs_sd
 #' 
 #' ls -l -d *JOB_lm*
-#' rm JOB_lm_testcoef_vary_nobs_sd*
+#' rm JOB_lm*
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
