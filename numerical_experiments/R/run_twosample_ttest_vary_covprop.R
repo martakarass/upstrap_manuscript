@@ -40,10 +40,10 @@ eff_tru       <- 0.3
 cov_prop_grid <- c(0.5, 0.3, 0.1, 0.05)
 
 # number of boot repetitions within one experiment, one setup
-# B_boot  <- 1000
-# R_powertrue  <- 1000 * 10
-B_boot  <- 3
-R_powertrue  <- 3
+B_boot  <- 1000
+R_powertrue  <- 1000 * 10
+# B_boot  <- 3
+# R_powertrue  <- 3
 
 
 # ------------------------------------------------------------------------------
