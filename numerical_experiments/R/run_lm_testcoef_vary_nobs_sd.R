@@ -10,7 +10,7 @@
 #' Rnosave run_lm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 40 -N JOB_lm_testcoef_vary_nobs_sd
 #' 
 #' ls -l -d *JOB_lm*
-#' rm JOB_*
+#' rm JOB_lm_testcoef_vary_nobs_sd*
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
@@ -36,8 +36,8 @@ coef_x0 <- 0
 coef_x1 <- 0.5
 coef_x2 <- 1
 coef_x3 <- -1
-# sigma2  <- 1
-sigma2_grid   <- c(0.5, 1, 1.5)
+# sd_sigma  <- 1
+sd_sigma_grid   <- c(0.7, 1, 1.3)
 N_tar_grid    <- seq(20, 200, by = 30)
 N_tar_max     <- max(N_tar_grid)
 N_tar_grid_l  <- length(N_tar_grid)
@@ -61,10 +61,10 @@ R_powertrue  <- 1000 * 10
 mat_out_all <- data.frame()
 
 message(paste0("ESTIMATE POWER WITH upstrap, for fixed target effect size = ", eff_tar))
-# N_obs  <- N_obs_grid[1]; sigma2 <- sigma2_grid[2]
+# N_obs  <- N_obs_grid[1]; sd_sigma <- sd_sigma_grid[2]
 for (N_obs in N_obs_grid){
-  for (sigma2 in sigma2_grid){
-    print(paste0("N_obs = ", N_obs, ", sigma2 = ", sigma2))
+  for (sd_sigma in sd_sigma_grid){
+    print(paste0("N_obs = ", N_obs, ", sd_sigma = ", sd_sigma))
     
     # ------------------------------------------------------------------------------
     # SIMULATE OBSERVED SAMPLE
@@ -74,7 +74,7 @@ for (N_obs in N_obs_grid){
     x1_i      <- rep(c(0, 1), times = N_obs)
     x2_i      <- rbinom(n = N_obs * 2, size = 1, prob = 0.5)
     x3_i      <- runif(n = N_obs * 2, min = 0, max = 1)
-    eps_i     <- rnorm(N_obs * 2, sd = sqrt(sigma2))
+    eps_i     <- rnorm(N_obs * 2, sd = sd_sigma)
     y_i       <- coef_x0 + (coef_x1 * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i
     dat       <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, 
                             subjid = subjid_i, subjid_arm = subjid_arm_i)
@@ -118,7 +118,7 @@ for (N_obs in N_obs_grid){
     mat_out_tmp$name          <- "upstrap_power"
     mat_out_tmp$eff_tru       <- eff_tru
     mat_out_tmp$eff_tar       <- eff_tar
-    mat_out_tmp$sigma2        <- sigma2
+    mat_out_tmp$sd_sigma        <- sd_sigma
     mat_out_tmp$value         <- value
     mat_out_tmp$prop_success  <- mean(!is.na(mat_boot))
     mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
@@ -135,8 +135,8 @@ if (arrayjob_idx == 1){
   message(paste0("RUN ADDITIONAL SIMULATIONS TO BE RUN ONCE"))
   
   # number of repetitions
-  for (sigma2 in sigma2_grid){
-    print(paste0("sigma2 = ", sigma2))
+  for (sd_sigma in sd_sigma_grid){
+    print(paste0("sd_sigma = ", sd_sigma))
     
     for (bb in 1 : R_powertrue){
       set.seed(bb)
@@ -147,7 +147,7 @@ if (arrayjob_idx == 1){
       x1_i      <- rep(c(0, 1), times = N_tar_max)
       x2_i      <- rbinom(n = N_tar_max * 2, size = 1, prob = 0.5)
       x3_i      <- runif(n = N_tar_max * 2, min = 0, max = 1)
-      eps_i     <- rnorm(N_tar_max * 2, sd = sqrt(sigma2))
+      eps_i     <- rnorm(N_tar_max * 2, sd = sd_sigma)
       # use eff_tar
       y_i       <- coef_x0 + (eff_tar * x1_i) + (coef_x2 * x2_i) +  (coef_x3 * x3_i) + eps_i
       dat_N_tar_max <- data.frame(y = y_i, x1 = x1_i, x2 = x2_i, x3 = x3_i, 
@@ -170,7 +170,7 @@ if (arrayjob_idx == 1){
       mat_out_tmp$name          <- "true_power"
       mat_out_tmp$eff_tru       <- eff_tar
       mat_out_tmp$eff_tar       <- eff_tar
-      mat_out_tmp$sigma2        <- sigma2
+      mat_out_tmp$sd_sigma      <- sd_sigma
       mat_out_tmp$value         <- value
       mat_out_tmp$prop_success  <- as.numeric(!is.na(value))
       mat_out_all               <- rbind(mat_out_all, mat_out_tmp)
