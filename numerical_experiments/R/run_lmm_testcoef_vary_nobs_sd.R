@@ -5,9 +5,9 @@
 #' git pull
 #' cd numerical_experiments/R
 #' rm $ups/numerical_experiments/results_CL/2021-12-03-lmm_testcoef_vary_nobs_sd_raw/*
-#' Rnosave run_lmm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 50 -N JOB_lmm
+#' Rnosave run_lmm_testcoef_vary_nobs_sd.R -t 1-1000 -tc 75 -N JOB_lmm_testcoef_vary_nobs_sd
 #' 
-#' ls -l -d *JOB_lm*
+#' ls -l -d *JOB_lmm_testcoef_vary_nobs_sd*
 #' rm JOB_*
 
 
@@ -32,7 +32,7 @@ dir.create(path = res_fdir_raw)
 
 # experiment parameters
 # N_obs   <- 50 # number of subjects in each of the two "treatment arms" 
-N_obs_grid <- c(5, 20, 50)
+N_obs_grid <- c(5, 10, 20, 50)
 ni      <- 3  # number of observations per subject 
 coef_x0 <- 0 
 coef_x1 <- 0.5
@@ -101,7 +101,7 @@ for (N_obs in N_obs_grid){
     
     
     # ------------------------------------------------------------------------------
-    # ESTIMATE POWER WITH upstrap, for observed effect size 
+    # ESTIMATE POWER WITH upstrap, for fixed target effect size
     message(paste0("ESTIMATE POWER WITH upstrap, for fixed target effect size = ", eff_tar))
     
     # update sample to represent target effect (here: no update)
@@ -141,7 +141,7 @@ for (N_obs in N_obs_grid){
     mat_out_tmp$arrayjob_idx  <- rep(arrayjob_idx, N_tar_grid_l)
     mat_out_tmp$name          <- "upstrap_power"
     mat_out_tmp$eff_tru       <- eff_tru
-    mat_out_tmp$eff_tar       <- NA # observed power case
+    mat_out_tmp$eff_tar       <- eff_tar
     mat_out_tmp$value         <- value
     mat_out_tmp$sigma2        <- sigma2
     mat_out_tmp$tau2          <- tau2
