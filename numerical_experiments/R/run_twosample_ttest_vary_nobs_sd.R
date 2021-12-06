@@ -10,7 +10,7 @@
 #' Rnosave run_twosample_ttest_vary_nobs_sd.R -t 1-1000 -tc 40 -N JOB_twosample_ttest_vary_nobs_sd
 #' 
 #' ls -l -d *JOB_twosample*
-#' rm JOB_twosample*
+#' rm JOB_twosample_ttest_vary_nobs_sd*
 
 
 arg_str <- as.character(Sys.getenv("SGE_TASK_ID"))
