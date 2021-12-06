@@ -141,6 +141,7 @@ if (arrayjob_idx == 1){
       value <- rep(NA, N_tar_grid_l)
       for (rr in 1 : N_tar_grid_l){  
         tryCatch({
+          N_tar  <- N_tar_grid[rr]
           size_0 <- round(N_tar * 2 * (1-cov_prop))
           size_1 <- (N_tar * 2) - size_0  # subjid_arm_i <- rep(1 : N_tar_max, each = 2)
           # subjid_i  <- 1 : (N_tar_max * 2)   # subject ID unique in data set
