@@ -35,7 +35,7 @@ N_obs_grid    <- c(5, 10, 20, 50)
 N_tar_grid    <- seq(20, 200, by = 30)
 N_tar_max     <- max(N_tar_grid)
 N_tar_grid_l  <- length(N_tar_grid)
-sd_sigma_grid <- c(0.7, 1, 1.3)
+sd_sigma_grid <- c(0.4, 0.7, 1)
 eff_tar       <- 0.3
 eff_tru       <- 0.3
 
