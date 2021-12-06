@@ -9,7 +9,7 @@
 #' 
 #' Rnosave run_twosample_ttest_vary_covprop.R -t 1-1000 -tc 40 -N JOB_twosample_ttest_vary_covprop
 #' 
-#' ls -l -d *JOB_twosample_ttest_vary_covprop*
+#' ls -l -d *JOB_twosample*
 #' rm JOB_twosample*
 
 
