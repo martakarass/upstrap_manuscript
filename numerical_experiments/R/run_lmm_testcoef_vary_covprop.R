@@ -5,7 +5,7 @@
 #' git pull
 #' cd numerical_experiments/R
 #' rm $ups/numerical_experiments/results_CL/2021-12-03-lmm_testcoef_vary_covprop_raw/*
-#' Rnosave run_lmm_testcoef_vary_covprop.R -t 1-1000 -tc 75 -N JOB_lmm_testcoef_vary_covprop
+#' Rnosave run_lmm_testcoef_vary_covprop.R -t 1-1000 -tc 50 -N JOB_lmm_testcoef_vary_covprop
 #' 
 #' ls -l -d *JOB_lmm_testcoef_vary_covprop*
 #' rm JOB_lmm_testcoef_vary_covprop*

@@ -7,15 +7,13 @@ library(tidyverse)
 options(dplyr.summarise.inform = FALSE)
 
 
-
-
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # TWO-SAMPLE T-TEST: vary N_obs and error(s) sd 
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-03-twosample_ttest_vary_nobs_sd_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-03-twosample_ttest_vary_nobs_sd_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-03-twosample_ttest_vary_covprop_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-03-twosample_ttest_vary_covprop_agg.rds")
 
 # read and combine data 
 fnames <- list.files(fdir_raw, full.names = TRUE)
@@ -25,14 +23,10 @@ dat_l  <- lapply(fnames, readRDS)
 dat    <- do.call("rbind", dat_l)
 dim(dat)
 head(dat)
-# mutate the data 
-# dat    <- mutate(dat, eff_tar = ifelse(is.na(eff_tar), "observed", eff_tar))
-# dat    <- mutate(dat, name = recode(name, powerttest_power = "comparator_power"))
-# dat    <- mutate(dat, name = recode(name, simr_power = "comparator_power"))
 # aggregate data: estimated power  
 dat_agg <- 
   dat %>%
-  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma) %>%
+  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, cov_prop) %>%
   summarise(
     cnt = sum(!is.na(value)),
     value_mean = mean(value),
@@ -53,7 +47,7 @@ dim(dat_agg)
 dat_truepower_agg <- 
   dat %>%
   filter(name == "true_power") %>% 
-  group_by(N_tar, N_obs, name, eff_tar, sd_sigma) %>%
+  group_by(N_tar, N_obs, name, eff_tar, sd_sigma, cov_prop) %>%
   summarise(value = mean(value)) %>% 
   pivot_wider(names_from = name, values_from = value) %>%
   ungroup() %>%
@@ -63,7 +57,7 @@ dat_diff_A <-
   dat %>%
   filter(name != "true_power", eff_tar != "observed") %>% 
   pivot_wider(names_from = name, values_from = value) %>%
-  left_join(dat_truepower_agg, by = c("N_tar", "eff_tar", "sd_sigma")) %>%
+  left_join(dat_truepower_agg, by = c("N_tar", "eff_tar", "sd_sigma", "cov_prop")) %>%
   mutate(
     pe_ups_true =  100 * (upstrap_power - true_power)/true_power
   ) %>%
@@ -73,7 +67,7 @@ dim(dat_diff_A)
 dat_diff <- dat_diff_A
 dat_agg_diff <- 
   dat_diff %>%
-  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma) %>%
+  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, cov_prop) %>%
   summarise(
     cnt = sum(!is.na(value)),
     value_mean = mean(value),
@@ -96,8 +90,8 @@ rm(dat_out)
 # ------------------------------------------------------------------------------
 # LM: vary N_obs and error(s) sd 
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-03-lm_testcoef_vary_nobs_sd_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-03-lm_testcoef_vary_nobs_sd_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-03-lm_testcoef_vary_covprop_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-03-lm_testcoef_vary_covprop_agg.rds")
 
 # read and combine data 
 fnames <- list.files(fdir_raw, full.names = TRUE)
@@ -107,14 +101,10 @@ dat_l  <- lapply(fnames, readRDS)
 dat    <- do.call("rbind", dat_l)
 dim(dat)
 head(dat)
-# mutate the data 
-# dat    <- mutate(dat, eff_tar = ifelse(is.na(eff_tar), "observed", eff_tar))
-# dat    <- mutate(dat, name = recode(name, powerttest_power = "comparator_power"))
-# dat    <- mutate(dat, name = recode(name, simr_power = "comparator_power"))
 # aggregate data: estimated power  
 dat_agg <- 
   dat %>%
-  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma) %>%
+  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, cov_prop) %>%
   summarise(
     cnt = sum(!is.na(value)),
     value_mean = mean(value),
@@ -135,7 +125,7 @@ dim(dat_agg)
 dat_truepower_agg <- 
   dat %>%
   filter(name == "true_power") %>% 
-  group_by(N_tar, N_obs, name, eff_tar, sd_sigma) %>%
+  group_by(N_tar, N_obs, name, eff_tar, sd_sigma, cov_prop) %>%
   summarise(value = mean(value)) %>% 
   pivot_wider(names_from = name, values_from = value) %>%
   ungroup() %>%
@@ -145,7 +135,7 @@ dat_diff_A <-
   dat %>%
   filter(name != "true_power", eff_tar != "observed") %>% 
   pivot_wider(names_from = name, values_from = value) %>%
-  left_join(dat_truepower_agg, by = c("N_tar", "eff_tar", "sd_sigma")) %>%
+  left_join(dat_truepower_agg, by = c("N_tar", "eff_tar", "sd_sigma", "cov_prop")) %>%
   mutate(
     pe_ups_true =  100 * (upstrap_power - true_power)/true_power
   ) %>%
@@ -155,7 +145,7 @@ dim(dat_diff_A)
 dat_diff <- dat_diff_A
 dat_agg_diff <- 
   dat_diff %>%
-  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma) %>%
+  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, cov_prop) %>%
   summarise(
     cnt = sum(!is.na(value)),
     value_mean = mean(value),
@@ -178,8 +168,8 @@ rm(dat_out)
 # ------------------------------------------------------------------------------
 # LMM: vary N_obs and error(s) sd 
 
-fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-03-lmm_testcoef_vary_nobs_sd_raw")
-fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-03-lmm_testcoef_vary_nobs_sd_agg.rds")
+fdir_raw  <- paste0(here::here(), "/numerical_experiments/results_CL/2021-12-03-lmm_testcoef_vary_covprop_raw")
+fpath_out <- paste0(here::here(), "/numerical_experiments/results_CL_shared/2021-12-03-lmm_testcoef_vary_covprop_agg.rds")
 
 # read and combine data 
 fnames <- list.files(fdir_raw, full.names = TRUE)
@@ -194,7 +184,7 @@ table(dat$eff_tar, useNA = "ifany")
 # aggregate data: estimated power  
 dat_agg <- 
   dat %>%
-  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, sd_tau) %>%
+  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, sd_tau, cov_prop) %>%
   summarise(
     cnt = sum(!is.na(value)),
     value_mean = mean(value),
@@ -218,7 +208,7 @@ table(dat_agg$eff_tar, useNA = "ifany")
 dat_truepower_agg <- 
   dat %>%
   filter(name == "true_power") %>% 
-  group_by(N_tar, N_obs, name, eff_tar, sd_sigma, sd_tau) %>%
+  group_by(N_tar, N_obs, name, eff_tar, sd_sigma, sd_tau, cov_prop) %>%
   summarise(value = mean(value)) %>% 
   pivot_wider(names_from = name, values_from = value) %>%
   ungroup() %>%
@@ -230,7 +220,7 @@ dat_diff_A <-
   dat %>%
   filter(name != "true_power") %>% 
   pivot_wider(names_from = name, values_from = value) %>%
-  left_join(dat_truepower_agg, by = c("N_tar", "eff_tar", "sd_sigma", "sd_tau")) %>%
+  left_join(dat_truepower_agg, by = c("N_tar", "eff_tar", "sd_sigma", "sd_tau", "cov_prop")) %>%
   mutate(
     pe_ups_true =  100 * (upstrap_power - true_power)/true_power
   ) %>%
@@ -240,7 +230,7 @@ dim(dat_diff_A)
 dat_diff <- dat_diff_A
 dat_agg_diff <- 
   dat_diff %>%
-  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, sd_tau) %>%
+  group_by(N_tar, N_obs, name, eff_tru, eff_tar, sd_sigma, sd_tau, cov_prop) %>%
   summarise(
     cnt = sum(!is.na(value)),
     value_mean = mean(value),
