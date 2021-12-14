@@ -14,14 +14,6 @@ library(stargazer)
 func_get_table <- function(dat){
   N_obs_tmp <- 50
   name_tmp <- c("upstrap_power", "comparator_power", "pe_ups_true", "pe_cmp_true", "pe_ups_cmp")
-  tbl_true <- 
-    dat %>%
-    filter(name == "true_power") %>%
-    mutate(value_mean_f   = sprintf("%.2f", value_mean)) %>%
-    mutate(value_sd_f     = sprintf("%.2f", value_sd)) %>%
-    mutate(value_f        = paste0(value_mean_f)) %>%
-    select(eff_tar, N_tar, name, value_f) %>%
-    pivot_wider(names_from = name, values_from = value_f) 
   tbl <- 
     dat %>%
     filter(N_obs == N_obs_tmp, name %in% name_tmp) %>%
@@ -30,8 +22,9 @@ func_get_table <- function(dat){
     mutate(value_f        = paste0(value_mean_f, " (", value_sd_f, ")")) %>%
     select(eff_tar, N_tar, name, value_f) %>%
     pivot_wider(names_from = name, values_from = value_f) %>%
-    # left_join(tbl_true, by = c("eff_tar", "N_tar")) %>%
     arrange(eff_tar, N_tar) %>%
+    # fix 2021-12-11 to have "sample size" denote all units (not: units per treatment arm)
+    mutate(N_tar = 2 * N_tar) %>% 
     as.data.frame() %>%
     select(eff_tar, N_tar, upstrap_power, comparator_power, pe_ups_cmp, pe_ups_true, pe_cmp_true)
   tbl[is.na(tbl)] <- "-"
