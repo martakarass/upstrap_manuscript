@@ -18,7 +18,7 @@ numerical experiments.
 The aggregated data output files are stored within this repository and
 can be used to reproduce tables and files included in the manuscript.
 
-### R code scripts ran on the JHPCE cluster
+#### R code scripts – run simulations (ran on the JHPCE cluster)
 
 -   [run\_onesample\_ttest.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R/run_onesample_ttest.R)
     – R script to run code for simulation problem 1
@@ -54,16 +54,69 @@ can be used to reproduce tables and files included in the manuscript.
     – R script to aggregate results from independent experiment
     repetitions for simulation problems 10-12
 
-### Aggregated simulation results
+#### Aggregated simulation results
 
 -   [/results\_CL\_shared](https://github.com/martakarass/upstrap_manuscript/tree/master/numerical_experiments/results_CL_shared)
     – directory with files containing aggregated results from
     independent experiment repetitions for simulation problems 1-12
 
-### R code scripts – figures
+#### R code scripts – generate Figures from aggregated simulation results
 
--   [/results\_CL\_shared](https://github.com/martakarass/upstrap_manuscript/tree/master/numerical_experiments/results_CL_shared)
-    – directory with files containing aggregated results from
-    independent experiment repetitions for simulation problems 1-12
+-   [plot\_sim\_12.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_figures/plot_sim_12.R)
+    – R script to generate Figure with results from simulation problems
+    1-2
+-   [plot\_sim\_3456.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_figures/plot_sim_3456.R)
+    – R script to generate Figure with results from simulation problems
+    3-6
+-   [plot\_sim\_vary\_covprop.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_figures/plot_sim_vary_covprop.R)
+    – R script to generate Figure with results from simulation problems
+    7-9
+-   [plot\_sim\_vary\_nobs\_sd.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_figures/plot_sim_vary_nobs_sd.R)
+    – R script to generate Figure with results from simulation problems
+    10-12
 
-### R code scripts – tables
+#### R code scripts – generate Tables from aggregated simulation results
+
+-   [table\_sim\_PE.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_tables/table_sim_PE.R)
+    – R script to generate Table with results from simulation problems
+    1-6
+-   [table\_sim\_PE\_vary\_covprop.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_tables/table_sim_PE_vary_covprop.R)
+    – R script to generate Table with results from simulation problems
+    7-9
+-   [table\_sim\_PE\_vary\_nobs\_sd.R](https://github.com/martakarass/upstrap_manuscript/blob/master/numerical_experiments/R_tables/table_sim_PE_vary_nobs_sd.R)
+    – R script to generate Table with results from simulation problems
+    10-12
+
+#### Figures – results
+
+-   [/results\_figures/2021-12-04](https://github.com/martakarass/upstrap_manuscript/tree/master/numerical_experiments/results_figures/2021-12-04)
+    – directory with Figures with results from simulation problems 1-12
+
+## Real data application example
+
+#### R code scripts – run analysis
+
+-   [2021-04-22-replicate\_main\_results.R](https://github.com/martakarass/upstrap_manuscript/blob/master/use_case_examples/bausema2016/R/2021-04-22-replicate_main_results.R)
+    – R script to reproduce main analysis/results from Bausema (2016)
+    paper
+-   [2021-04-22-get\_upstrap\_main\_results.R](https://github.com/martakarass/upstrap_manuscript/blob/master/use_case_examples/bausema2016/R/2021-04-22-get_upstrap_main_results.R)
+    – R script to run upstrap for main analysis/results from
+    Bausema (2016) paper
+-   [2021-05-02-get\_upstrap\_no\_agg\_results.R](https://github.com/martakarass/upstrap_manuscript/blob/master/use_case_examples/bausema2016/R/2021-05-02-get_upstrap_no_agg_results.R)
+    – R script to run upstrap for analysis that uses individual-level
+    data from Bausema (2016) paper
+-   [2021-05-02-aggregate\_upstrap\_no\_agg\_results.R](https://github.com/martakarass/upstrap_manuscript/blob/master/use_case_examples/bausema2016/R/2021-05-02-aggregate_upstrap_no_agg_results.R)
+    – R script to aggregate upstrap results from analysis that uses
+    individual-level data from Bausema (2016) paper
+
+#### R code scripts – generate Figures from real data application analyses
+
+-   [plot\_bousema\_reanalysis\_results.R](https://github.com/martakarass/upstrap_manuscript/blob/master/use_case_examples/bausema2016/R_figures/plot_bousema_reanalysis_results.R)
+    – R script to generate Figure with results from real data
+    application analyses
+
+#### Figures – results
+
+-   [/results\_figures](https://github.com/martakarass/upstrap_manuscript/tree/master/use_case_examples/bausema2016/results_figures)
+    – directory with Figures with results from eal data application
+    analyses
