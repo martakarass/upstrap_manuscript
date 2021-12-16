@@ -8,6 +8,7 @@ numerical_experiments/data_processed/
 numerical_experiments/results/
 numerical_experiments/results_CL/
 numerical_experiments/results_figures/
+!numerical_experiments/results_figures/2021-12-04/*
 numerical_experiments/utils_CL_notes/
 numerical_experiments/Rmd/
 numerical_experiments/.DS_Store
@@ -48,7 +49,7 @@ numerical_experiments/bash_CL/2021-02-15-onesample_ttest/*
 !numerical_experiments/bash_CL/2021-02-15-onesample_ttest/onesample_ttest
 
 # figures
-numerical_experiments/R_figures/
+# numerical_experiments/R_figures/
 numerical_experiments/R_figures/OLD/
 numerical_experiments/R_figures/OLD_2/
 numerical_experiments/R_figures/OLD_3/
