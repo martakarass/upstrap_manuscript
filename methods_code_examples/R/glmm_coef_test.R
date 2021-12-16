@@ -30,7 +30,11 @@ head(dat, 4)
 # 3 1  0 39.77171      1
 # 4 1  1 48.51416      2
 
-# Get observed effect size (x1 covariate coefficient estimate)
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+
 library(lme4)
 library(lmerTest)
 fit  <- glmer(y ~ x1 + x2 + (1 | subjid), data = dat, family = binomial)
@@ -41,7 +45,8 @@ fixef(fit)["x1"]
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-# target sample size: as observed, target effect size: as observed
+
+
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
   print(rr)
@@ -61,15 +66,16 @@ mean(out)
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-# target sample size: 100, target effect size: as observed
+
+M <- 100
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
   print(rr)
-  dat_rr_subj_id <- sample(unique(dat$subjid), size = 100, replace = TRUE)
+  dat_rr_subj_id <- sample(unique(dat$subjid), size = M, replace = TRUE)
   dat_rr  <- lapply(dat_rr_subj_id, function(subjid_tmp) dat[dat$subjid == subjid_tmp, ]) 
   dat_rr  <- do.call("rbind", dat_rr)
   # make new subject ID so as to treat subjects resampled >1 as unique ones
-  dat_rr$subjid <- rep(1 : 100, each = ni)
+  dat_rr$subjid <- rep(1 : M, each = ni)
   fit_rr  <- glmer(y ~ x1 + x2 + (1 | subjid), data = dat_rr, family = binomial)
   pval_rr <- summary(fit_rr)$coef["x1", 4]
   out[rr] <- (pval_rr < 0.05)
@@ -81,17 +87,17 @@ mean(out)
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-# target sample size: 100, target effect size: 1.2
 
+M <- 100
 set.seed(1)
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
   print(rr)
-  dat_rr_subj_id <- sample(unique(dat$subjid), size = 100, replace = TRUE)
+  dat_rr_subj_id <- sample(unique(dat$subjid), size = M, replace = TRUE)
   dat_rr  <- lapply(dat_rr_subj_id, function(subjid_tmp) dat[dat$subjid == subjid_tmp, ]) 
   dat_rr  <- do.call("rbind", dat_rr)
   # make new subject ID so as to treat subjects resampled >1 as unique ones
-  dat_rr$subjid <- rep(1 : 100, each = ni)
+  dat_rr$subjid <- rep(1 : M, each = ni)
   # fit model, update coefficient for the size effect of interest 
   fit_rr_sim_y  <- glmer(y ~ x1 + x2 + (1 | subjid), data = dat_rr, family = binomial)
   fixef(fit_rr_sim_y)["x1"] <- 1.2

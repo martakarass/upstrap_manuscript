@@ -1,5 +1,9 @@
 rm(list = ls())
 
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+
 # simulation parameters
 N       <- 80
 coef_x0 <- -0.2
@@ -24,7 +28,11 @@ head(dat, 3)
 # 2 0  1  0 76.42620      2
 # 3 0  0  1 50.79954      3
 
-# Get observed effect size (x1 covariate coefficient estimate)
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+
 fit  <- glm(y ~ x1 + x2 + x3, data = dat, family = binomial(link = "logit"))
 coef(fit)["x1"]
 # 0.7354476 
@@ -33,13 +41,12 @@ coef(fit)["x1"]
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-# target sample size: as observed, target effect size: as observed
+
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
   dat_rr_idx <- sample(1 : nrow(dat), replace = TRUE)
   dat_rr  <- dat[dat_rr_idx, ]
-  fit_rr  <- glm(y ~ x1 + x2 + x3, data = dat_rr, 
-                 family = binomial(link = "logit"))
+  fit_rr  <- glm(y ~ x1 + x2 + x3, data = dat_rr, family = binomial(link = "logit"))
   pval_rr <- summary(fit_rr)$coef[2, 4]
   out[rr] <- (pval_rr < 0.05)
 }
@@ -50,10 +57,11 @@ mean(out)
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-# target sample size: 120, target effect size: as observed
+
+M <- 120
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
-  dat_rr_idx <- sample(1 : nrow(dat), size = 120, replace = TRUE)
+  dat_rr_idx <- sample(1 : nrow(dat), size = M, replace = TRUE)
   dat_rr  <- dat[dat_rr_idx, ]
   fit_rr  <- glm(y ~ x1 + x2 + x3, data = dat_rr, family = binomial(link = "logit"))
   pval_rr <- summary(fit_rr)$coef[2, 4]
@@ -66,20 +74,26 @@ mean(out)
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-# target sample size: 80, target effect size: 1.0
+
+
+M <- 120
 dat_upd <- dat
+# define link term value, assuming target effect size 
 dat_upd$link_orig <- predict(fit, type = "link") 
 dat_upd$link_upd  <- dat_upd$link_orig  + (1 - coef(fit)["x1"]) * dat_upd$x1
 dat_upd$res_upd   <- 1/(1 + exp(-dat_upd$link_upd))
 out <- rep(NA, R_boot)
 for (rr in 1 : R_boot){
-  dat_rr_idx <- sample(1 : nrow(dat_upd), size = 80, replace = TRUE)
+  dat_rr_idx <- sample(1 : nrow(dat_upd), size = M, replace = TRUE)
   dat_rr   <- dat_upd[dat_rr_idx, ]
-  # simulate response on resampled data, assuming target effect size  
+  # simulate response for a resample assuming target effect size  
   dat_rr$y <- rbinom(n = nrow(dat_rr), size = 1, prob = dat_rr$res_upd)
   fit_rr   <- glm(y ~ x1 + x2 + x3, data = dat_rr, family = binomial(link = "logit"))
   pval_rr  <- summary(fit_rr)$coef[2, 4]
   out[rr]  <- (pval_rr < 0.05)
 }
 mean(out)
-# [1] 0.565
+# [1] 0.757
+
+
+
