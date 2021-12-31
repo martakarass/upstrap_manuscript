@@ -130,7 +130,7 @@ for (i in 1 : length(sd_sigma_levels)){ # i <- 1
     dat_agg %>% 
     filter(sd_sigma == sd_sigma_tmp, name %in% name_levels) %>%
     mutate(name = factor(name, levels = name_levels, labels = name_labels)) %>%
-    mutate(N_obs = factor(N_obs)) 
+    mutate(N_obs = factor(N_obs, levels = N_obs_levels, labels = N_obs_labels)) 
   plt_df_tru <- 
     dat_agg %>% 
     filter(name == "true_power", sd_sigma == sd_sigma_tmp) 
